@@ -2,6 +2,18 @@
 
 require_once 'travelcase.civix.php';
 
+/**
+ * Display the linked travel case in the case summary
+ * 
+ * Implementatio of hook_civicrm_caseSummary
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_caseSummary
+ */
+function travelcase_civicrm_caseSummary($caseId) {
+  $page = new CRM_Travelcase_Page_Case($caseId);
+  $content = $page->run();
+  return array('travelcase_cases' => array('value' => $content));
+}
+
 function travelcase_civicrm_customFieldOptions( $fieldID, &$options, $detailedFormat = false ) {
   $config = CRM_Travelcase_Config::singleton();
   //auto fill option list for link to case field
@@ -17,7 +29,7 @@ function travelcase_civicrm_customFieldOptions( $fieldID, &$options, $detailedFo
         WHERE civicrm_case.`is_deleted` = 0 AND civicrm_case.status_id != $closedId";
     $dao = CRM_Core_DAO::executeQuery($sql);
     while($dao->fetch()) {
-      $label = $dao->subject.'::'.$dao->display_name.'::'.$dao->case_type_label;
+      $label = $dao->case_type_label.'::'.$dao->display_name.'::'.$dao->subject;
       if ($detailedFormat) {
         $options[$dao->id] = array(
           'id' => $dao->id,
