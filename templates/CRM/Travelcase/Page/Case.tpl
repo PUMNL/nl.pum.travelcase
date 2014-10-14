@@ -22,6 +22,9 @@
         <tr>
             <th class="ui-state-default">{ts}Client{/ts}</th>
             <th class="ui-state-default">{ts}Status{/ts}</th>
+            <th class="ui-state-default">{ts}Destination{/ts}</th>
+            <th class="ui-state-default">{ts}Departure date{/ts}</th>
+            <th class="ui-state-default">{ts}Return date{/ts}</th>
             <th class="no-sort ui-state-default"></th>
         </tr>
      </thead>
@@ -31,6 +34,9 @@
             <tr class="{cycle values="odd,even"}">
                 <td>{$case.display_name}</td>
                 <td>{$case.status}</td>
+                <td>{$case.destination}</td>
+                <td>{$case.departure_date}</td>
+                <td>{$case.return_date}</td>
                 <td>
                     <a href="{crmURL p="civicrm/contact/view/case" q="action=view&reset=1&id=`$case.case_id`&cid=`$case.client_id`&context=case"}">{ts}Manage case{/ts}
                 </td>
