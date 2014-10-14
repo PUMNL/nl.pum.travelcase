@@ -1,0 +1,33 @@
+<?php
+
+function travelcase_views_api() {
+  return array('api' => 3.0);
+}
+
+function travelcase_views_default_views() {
+  $files = file_scan_directory(drupal_get_path('module', 'travelcase'). '/views', '/.inc/');
+  foreach ($files as $filepath => $file) {
+    try {
+      require $filepath;
+      if (isset($view)) {
+        $views[$view->name] = $view;
+      }
+    } catch (Exception $e) {
+      //do nothing
+    }
+  }
+  return $views;
+}
+
+function travelcase_get_role_ids($roles) {
+  $rids = array();
+  $available_roles = user_roles();
+  foreach($roles as $role) {
+    $rid = array_search($role, $available_roles);
+    if ($rid !== false) {
+      $rids[$rid] = $rid;
+    }
+  }
+  
+  return $rids;
+}

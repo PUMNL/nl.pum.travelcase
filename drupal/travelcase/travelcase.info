@@ -1,0 +1,8 @@
+name = nl.pum.travelcase
+description = Functionality for the travel case
+core = 7.x
+package = PUM
+dependencies[] = civicrm (>=4.4)
+dependencies[] = webform_civicrm (>=4.5)
+dependencies[] = webform (>=4.0-beta1)
+dependencies[] = views
