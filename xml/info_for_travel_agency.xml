@@ -23,6 +23,23 @@
   </CustomGroups>
   <CustomFields>
     <CustomField>
+      <name>request_for_booking</name>
+      <label>Request travel agency to book ticket</label>
+      <data_type>Boolean</data_type>
+      <html_type>Radio</html_type>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>1</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>request_for_booking</column_name>
+      <custom_group_name>info_for_travel_agency</custom_group_name>
+    </CustomField>
+    <CustomField>
       <name>requested_departure_date</name>
       <label>Requested departure date</label>
       <data_type>Date</data_type>
@@ -30,7 +47,7 @@
       <is_required>0</is_required>
       <is_searchable>1</is_searchable>
       <is_search_range>1</is_search_range>
-      <weight>1</weight>
+      <weight>2</weight>
       <is_active>1</is_active>
       <is_view>0</is_view>
       <text_length>255</text_length>
@@ -48,7 +65,7 @@
       <is_required>0</is_required>
       <is_searchable>1</is_searchable>
       <is_search_range>1</is_search_range>
-      <weight>1</weight>
+      <weight>3</weight>
       <is_active>1</is_active>
       <is_view>0</is_view>
       <text_length>255</text_length>
