@@ -26,7 +26,7 @@
       <name>case_id</name>
       <label>Link to case</label>
       <data_type>String</data_type>
-      <html_type>Select</html_type>
+      <html_type>Autocomplete-Select</html_type>
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
@@ -44,7 +44,7 @@
       <name>event_id</name>
       <label>Link to event</label>
       <data_type>String</data_type>
-      <html_type>Select</html_type>
+      <html_type>Autocomplete-Select</html_type>
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>

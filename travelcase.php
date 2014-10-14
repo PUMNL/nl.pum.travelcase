@@ -2,6 +2,51 @@
 
 require_once 'travelcase.civix.php';
 
+function travelcase_civicrm_customFieldOptions( $fieldID, &$options, $detailedFormat = false ) {
+  $config = CRM_Travelcase_Config::singleton();
+  //auto fill option list for link to case field
+  if ($fieldID == $config->getCustomFieldCaseId('id')) {
+        $case_type = array();
+        $params =array('name' => 'case_type');
+        CRM_Core_BAO_OptionGroup::retrieve($params, $case_type);
+        $closedId = CRM_Core_OptionGroup::getValue('case_status', 'Closed', 'name');
+    $sql = "SELECT `civicrm_case`.*, civicrm_contact.display_name, ov.label as case_type_label FROM `civicrm_case` 
+        INNER JOIN civicrm_case_contact ON civicrm_case.id = civicrm_case_contact.case_id
+        INNER JOIN civicrm_contact ON civicrm_case_contact.contact_id = civicrm_contact.id
+        INNER JOIN  civicrm_option_value ov ON ( civicrm_case.case_type_id=ov.value AND ov.option_group_id='".$case_type['id']."' )
+        WHERE civicrm_case.`is_deleted` = 0 AND civicrm_case.status_id != $closedId";
+    $dao = CRM_Core_DAO::executeQuery($sql);
+    while($dao->fetch()) {
+      $label = $dao->subject.'::'.$dao->display_name.'::'.$dao->case_type_label;
+      if ($detailedFormat) {
+        $options[$dao->id] = array(
+          'id' => $dao->id,
+          'value' => $dao->id,
+          'label' => $label
+        );
+      } else {
+        $options[$dao->id] = $label;
+      }
+    }
+  }
+  
+  //auto fill option list for link to event field
+  if ($fieldID == $config->getCustomFieldEventId('id')) {
+    $events = CRM_Event_BAO_Event::getEvents();
+    foreach($events as $event_id => $event) {
+      if ($detailedFormat) {
+        $options[$event_id] = array(
+          'id' => $event_id,
+          'value' => $event_id,
+          'label' => $event
+        );
+      } else {
+        $options[$event_id] = $event;
+      }
+    }
+  }
+}
+
 /**
  * Implementation of hook_civicrm_config
  *
