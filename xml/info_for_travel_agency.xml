@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<CustomData>
+  <CustomGroups>
+    <CustomGroup>
+      <name>info_for_travel_agency</name>
+      <title>Info for travel agency</title>
+      <extends>Case</extends>
+      <extends_entity_column_value_option_group>case_type</extends_entity_column_value_option_group>
+      <extends_entity_column_value>TravelCase</extends_entity_column_value>
+      <style>Inline</style>
+      <collapse_display>0</collapse_display>
+      <help_pre></help_pre>
+      <help_post></help_post>
+      <weight>5</weight>
+      <is_active>1</is_active>
+      <table_name>civicrm_value_info_for_travel_agency</table_name>
+      <is_multiple>0</is_multiple>
+      <collapse_adv_display>0</collapse_adv_display>
+      <created_date>20141014131055</created_date>
+      <is_reserved>0</is_reserved>
+    </CustomGroup>
+  </CustomGroups>
+  <CustomFields>
+    <CustomField>
+      <name>requested_departure_date</name>
+      <label>Requested departure date</label>
+      <data_type>Date</data_type>
+      <html_type>Select Date</html_type>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>1</is_search_range>
+      <weight>1</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <date_format>dd-mm-yy</date_format>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>requested_departure_date</column_name>
+      <custom_group_name>info_for_travel_agency</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>requested_return_date</name>
+      <label>Requested return date</label>
+      <data_type>Date</data_type>
+      <html_type>Select Date</html_type>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>1</is_search_range>
+      <weight>1</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <date_format>dd-mm-yy</date_format>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>requested_return_date</column_name>
+      <custom_group_name>info_for_travel_agency</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>notes</name>
+      <label>Remarks for travel agency</label>
+      <data_type>Memo</data_type>
+      <html_type>TextArea</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>100</weight>
+      <attributes>rows=4, cols=60</attributes>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>notes</column_name>
+      <custom_group_name>info_for_travel_agency</custom_group_name>
+    </CustomField>
+  </CustomFields>
+</CustomData>

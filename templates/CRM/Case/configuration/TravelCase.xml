@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<CaseType>
+  <name>TravelCase</name>
+  <ActivityTypes>
+    <ActivityType>
+      <name>Open Case</name>
+      <max_instances>1</max_instances>
+    </ActivityType>
+    <ActivityType>
+      <name>Print PDF Letter</name>
+    </ActivityType>
+	<ActivityType>
+      <name>Email</name>
+    </ActivityType>
+	<ActivityType>
+      <name>DSA</name>
+    </ActivityType>
+	<ActivityType>
+      <name>Pick Up Information Customer</name>
+    </ActivityType>
+	<ActivityType>
+      <name>Letter of Invitation</name>
+    </ActivityType>
+	<ActivityType>
+      <name>Change Case Type</name>
+    </ActivityType>
+    <ActivityType>
+      <name>Change Case Status</name>
+    </ActivityType>
+    <ActivityType>
+      <name>Change Case Start Date</name>
+    </ActivityType>
+    <ActivityType>
+      <name>Link Cases</name>
+    </ActivityType>
+	</ActivityTypes>
+  <ActivitySets>
+    <ActivitySet>
+      <name>standard_timeline</name>
+      <label>Standard Timeline</label>
+      <timeline>true</timeline>
+      <ActivityTypes>
+        <ActivityType>
+          <name>Open Case</name>
+          <status>Completed</status>
+		  </ActivityType>
+        </ActivityTypes>
+		</ActivitySet>
+    	<ActivitySet>
+      <name>Visa</name>
+      <label>Visa Application</label>
+      <timeline>true</timeline>
+      <ActivityTypes>
+        <ActivityType>
+          <name>Visa documents from Expert</name>
+          <status>Scheduled</status>
+		  </ActivityType>
+        <ActivityType>
+          <name>Visa Request</name>
+          <status>Scheduled</status>
+		  </ActivityType>
+		  </ActivityTypes>
+		</ActivitySet>
+		</ActivitySets>
+  <CaseRoles>
+ </CaseRoles>
+</CaseType>

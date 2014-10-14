@@ -3,8 +3,8 @@
 <CustomData>
   <CustomGroups>
     <CustomGroup>
-      <name>travel_information</name>
-      <title>Travel data</title>
+      <name>travel_data</name>
+      <title>Travel Data</title>
       <extends>Case</extends>
       <extends_entity_column_value_option_group>case_type</extends_entity_column_value_option_group>
       <extends_entity_column_value>TravelCase</extends_entity_column_value>
@@ -12,9 +12,9 @@
       <collapse_display>1</collapse_display>
       <help_pre></help_pre>
       <help_post></help_post>
-      <weight>84</weight>
+      <weight>3</weight>
       <is_active>1</is_active>
-      <table_name>civicrm_value_travel_information</table_name>
+      <table_name>civicrm_value_travel_data</table_name>
       <is_multiple>1</is_multiple>
       <collapse_adv_display>0</collapse_adv_display>
       <created_date>20140910142531</created_date>
@@ -30,7 +30,7 @@
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>3</weight>
+      <weight>1</weight>
       <is_active>1</is_active>
       <is_view>0</is_view>
       <text_length>255</text_length>
@@ -38,7 +38,7 @@
       <note_rows>4</note_rows>
       <column_name>type_of_travel</column_name>
       <option_group_name>type_of_travel</option_group_name>
-      <custom_group_name>traveler_information</custom_group_name>
+      <custom_group_name>travel_data</custom_group_name>
     </CustomField>
     <CustomField>
       <name>from</name>
@@ -55,7 +55,7 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>from</column_name>
-      <custom_group_name>travel_information</custom_group_name>
+      <custom_group_name>travel_data</custom_group_name>
     </CustomField>
     <CustomField>
       <name>departure_time</name>
@@ -74,7 +74,7 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>departure_time</column_name>
-      <custom_group_name>travel_information</custom_group_name>
+      <custom_group_name>travel_data</custom_group_name>
     </CustomField>
     <CustomField>
       <name>destination</name>
@@ -91,7 +91,7 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>destination</column_name>
-      <custom_group_name>travel_information</custom_group_name>
+      <custom_group_name>travel_data</custom_group_name>
     </CustomField>
     <CustomField>
       <name>arrival_time</name>
@@ -110,7 +110,7 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>arrival_time</column_name>
-      <custom_group_name>travel_information</custom_group_name>
+      <custom_group_name>travel_data</custom_group_name>
     </CustomField>      
     <CustomField>
       <name>flight_number</name>
@@ -127,7 +127,7 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>flight_number</column_name>
-      <custom_group_name>travel_information</custom_group_name>
+      <custom_group_name>travel_data</custom_group_name>
     </CustomField>
     <CustomField>
       <name>Pickup</name>
@@ -145,7 +145,7 @@
       <note_rows>4</note_rows>
       <column_name>pickup</column_name>
       <filter>action=lookup&amp;contact_type=Individual</filter>
-      <custom_group_name>travel_information</custom_group_name>
+      <custom_group_name>travel_data</custom_group_name>
     </CustomField>      
     <CustomField>
       <name>accommodation_name</name>
@@ -162,7 +162,7 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>accommodation_name</column_name>
-      <custom_group_name>travel_information</custom_group_name>
+      <custom_group_name>travel_data</custom_group_name>
     </CustomField>
     <CustomField>
       <name>accommodation_telephone</name>
@@ -179,7 +179,7 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>accommodation_telephone</column_name>
-      <custom_group_name>travel_information</custom_group_name>
+      <custom_group_name>travel_data</custom_group_name>
     </CustomField>
     <CustomField>
       <name>notes</name>
@@ -196,7 +196,7 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>notes</column_name>
-      <custom_group_name>travel_information</custom_group_name>
+      <custom_group_name>travel_data</custom_group_name>
     </CustomField>
   </CustomFields>
   <OptionGroups>
@@ -224,7 +224,7 @@
       <value>Train</value>
       <name>Train</name>
       <is_default>0</is_default>
-      <weight>1</weight>
+      <weight>2</weight>
       <is_optgroup>0</is_optgroup>
       <is_reserved>1</is_reserved>
       <is_active>1</is_active>
@@ -235,7 +235,7 @@
       <value>Ferry</value>
       <name>Ferry</name>
       <is_default>0</is_default>
-      <weight>1</weight>
+      <weight>3</weight>
       <is_optgroup>0</is_optgroup>
       <is_reserved>1</is_reserved>
       <is_active>1</is_active>
@@ -246,7 +246,7 @@
       <value>Bus</value>
       <name>Bus</name>
       <is_default>0</is_default>
-      <weight>1</weight>
+      <weight>4</weight>
       <is_optgroup>0</is_optgroup>
       <is_reserved>1</is_reserved>
       <is_active>1</is_active>
@@ -257,7 +257,7 @@
       <value>Taxi</value>
       <name>Taxi</name>
       <is_default>0</is_default>
-      <weight>1</weight>
+      <weight>5</weight>
       <is_optgroup>0</is_optgroup>
       <is_reserved>1</is_reserved>
       <is_active>1</is_active>
@@ -268,7 +268,7 @@
       <value>Other</value>
       <name>Other</name>
       <is_default>0</is_default>
-      <weight>1</weight>
+      <weight>100</weight>
       <is_optgroup>0</is_optgroup>
       <is_reserved>1</is_reserved>
       <is_active>1</is_active>

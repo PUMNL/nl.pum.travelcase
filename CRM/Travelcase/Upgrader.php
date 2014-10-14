@@ -7,8 +7,28 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
 
   protected $case_type_id;
   
+  protected $activity_type;
+  
   public function install() {
     $this->addCaseTypes();
+    $this->addActivityTYpes();
+    
+    $this->executeCustomDataFile('xml/traveler_information.xml');
+    $this->executeCustomDataFile('xml/travelinformation.xml');
+    $this->executeCustomDataFile('xml/travelcase.xml');
+    $this->executeCustomDataFile('xml/info_for_travel_agency.xml');
+  }
+  
+  protected function addActivityTYpes() {
+    if (empty($this->activity_type)) {
+      $this->activity_type = civicrm_api3('OptionGroup', 'getvalue', array('return' => 'id', 'name' => 'activity_type'));
+    }
+    
+    $this->addOptionValue('DSA', 'DSA', $this->activity_type);
+    $this->addOptionValue('Pick Up Information Customer', 'Pick Up Information Customer', $this->activity_type);
+    $this->addOptionValue('Letter of Invitation', 'Letter of Invitation', $this->activity_type);
+    $this->addOptionValue('Visa documents from Expert', 'Visa documents from Expert', $this->activity_type);
+    $this->addOptionValue('Visa Request', 'Visa Request', $this->activity_type);
   }
   
   protected function addCaseTypes() {

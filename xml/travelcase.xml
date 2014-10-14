@@ -15,7 +15,7 @@
       <weight>1</weight>
       <is_active>1</is_active>
       <table_name>civicrm_value_travel_parent</table_name>
-      <is_multiple>1</is_multiple>
+      <is_multiple>0</is_multiple>
       <collapse_adv_display>0</collapse_adv_display>
       <created_date>20140910142531</created_date>
       <is_reserved>0</is_reserved>
@@ -58,6 +58,7 @@
       <option_group_name>travel_case_to_event</option_group_name>
       <custom_group_name>travel_parent</custom_group_name>
     </CustomField>
+  </CustomFields>
   <OptionGroups>
     <OptionGroup>
       <name>travel_case_to_event</name>
