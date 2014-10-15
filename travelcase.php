@@ -11,7 +11,12 @@ require_once 'travelcase.civix.php';
 function travelcase_civicrm_caseSummary($caseId) {
   $page = new CRM_Travelcase_Page_Case($caseId);
   $content = $page->run();
-  return array('travelcase_cases' => array('value' => $content));
+  $page2 = new CRM_Travelcase_Page_CaseLink($caseId);
+  $content2 = $page2->run();
+  return array(
+    'travelcase_cases' => array('value' => $content),
+    'travelcase_linked_to_case' => array('value' => $content2)
+  );
 }
 
 function travelcase_civicrm_customFieldOptions( $fieldID, &$options, $detailedFormat = false ) {
