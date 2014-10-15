@@ -37,10 +37,10 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
       $this->case_type_id = civicrm_api3('OptionGroup', 'getvalue', array('return' => 'id', 'name' => 'case_type'));
     }
     
-    $this->addOptionValue('TravelCase', 'Travel Case', $this->case_type_id);
+    $this->addOptionValue('TravelCase', 'Travel Case', $this->case_type_id, 1);
   }
   
-  protected function addOptionValue($name, $label, $option_group_id) {
+  protected function addOptionValue($name, $label, $option_group_id,$is_reserved=0) {
     try {
       $exist_id = civicrm_api3('OptionValue', 'getvalue', array('return' => 'id', 'name' => $name, 'option_group_id' => $option_group_id));
       return; //aleardy exist
@@ -50,6 +50,8 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     
     $params['name'] = $name;
     $params['label'] = $label;
+    $params['is_active'] = 1;
+    $params['is_reserved'] = $is_reserved;
     $params['option_group_id'] = $option_group_id;
     civicrm_api3('OptionValue','create', $params);
   }
