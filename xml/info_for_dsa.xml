@@ -101,7 +101,7 @@
       <label>Yes</label>
       <value>1</value>
       <name>Yes</name>
-      <is_default>0</is_default>
+      <is_default>1</is_default>
       <weight>1</weight>
       <is_optgroup>0</is_optgroup>
       <is_reserved>0</is_reserved>
