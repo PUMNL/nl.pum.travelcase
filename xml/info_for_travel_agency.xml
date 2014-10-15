@@ -45,7 +45,7 @@
       <data_type>String</data_type>
       <html_type>Text</html_type>
       <is_required>0</is_required>
-      <is_searchable>0</is_searchable>
+      <is_searchable>1</is_searchable>
       <is_search_range>0</is_search_range>
       <weight>2</weight>
       <is_active>1</is_active>
@@ -90,6 +90,23 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>requested_return_date</column_name>
+      <custom_group_name>info_for_travel_agency</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>invoice_info</name>
+      <label>Invoice</label>
+      <data_type>String</data_type>
+      <html_type>Text</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>2</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>invoice_info</column_name>
       <custom_group_name>info_for_travel_agency</custom_group_name>
     </CustomField>
     <CustomField>

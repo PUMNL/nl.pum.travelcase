@@ -18,6 +18,16 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     $this->executeCustomDataFile('xml/travelcase.xml');
     $this->executeCustomDataFile('xml/info_for_travel_agency.xml');
     $this->executeCustomDataFile('xml/info_for_dsa.xml');
+    $this->executeCustomDataFile('xml/travelcase_status.xml');
+  }
+  
+  public function upgrade_1001() {
+    $this->removeCustomField('manually_count_days', 'Info_for_DSA');
+    $this->removeCustomField('number_of_days', 'Info_for_DSA');
+    $this->removeOptionGroup('travel_case_dsa_manually_count_days');
+    $this->executeCustomDataFile('xml/info_for_travel_agency.xml');
+    $this->executeCustomDataFile('xml/travelcase_status.xml');
+    return true;
   }
   
   protected function addActivityTYpes() {
@@ -54,6 +64,40 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     $params['is_reserved'] = $is_reserved;
     $params['option_group_id'] = $option_group_id;
     civicrm_api3('OptionValue','create', $params);
+  }
+  
+  protected function removeOptionGroup($name) {
+    try {
+      $option_group_id = civicrm_api3('OptionGroup', 'getvalue', array('return' => 'id', 'name' => $name));
+      
+      $option_values = civicrm_api3('OptionValue', 'get', array('option_group_id' => $option_group_id));
+      foreach($option_values as $option_value) {
+        try {
+          civicrm_api3('OptionValue', 'delete', array('id' => $option_value['id']));
+        } catch (Exception $e) {
+          //do nothing
+        }
+      }
+      
+      civicrm_api3('OptionGroup', 'delete', array('id' => $option_group_id));
+      
+      return; //aleardy exist
+    } catch (Exception $e) {
+      //do nothing
+    }
+  }
+  
+  protected function removeCustomField($field_name, $custom_group_name) {
+    try {
+      $custom_group_id = civicrm_api3('CustomGroup', 'getvalue', array('return' => 'id', 'name' => $custom_group_name));
+      $custom_field_id = civicrm_api3('CustomField', 'getvalue', array('custom_group_id' => $custom_group_id, 'name' => $field_name, 'return' => 'id'));
+      
+      civicrm_api3('CustomField', 'delete', array('id' => $custom_field_id));
+      
+      return; //aleardy exist
+    } catch (Exception $e) {
+      //do nothing
+    }
   }
 
 }
