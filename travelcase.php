@@ -19,6 +19,21 @@ function travelcase_civicrm_caseSummary($caseId) {
   );
 }
 
+/**
+ * Update invoice number for a case
+ * 
+ */
+function travelcase_civicrm_custom( $op, $groupID, $entityID, &$params ) {
+  CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::custom($op, $groupID, $entityID, $params);
+}
+
+/**
+ * Options for event link and case link
+ * 
+ * @param type $fieldID
+ * @param type $options
+ * @param type $detailedFormat
+ */
 function travelcase_civicrm_customFieldOptions( $fieldID, &$options, $detailedFormat = false ) {
   $config = CRM_Travelcase_Config::singleton();
   //auto fill option list for link to case field
