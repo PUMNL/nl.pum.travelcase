@@ -20,6 +20,8 @@ $passport_number = civicrm_api3('CustomField', 'getvalue', array('name' => 'Pass
 $passport_valid = civicrm_api3('CustomField', 'getvalue', array('name' => 'Passport_Valid_until', 'return' => 'column_name', 'custom_group_id' => $passport_info['id']));
 $partner_name = civicrm_api3('CustomField', 'getvalue', array('name' => 'Passport_Name_Partner_Last_Name', 'return' => 'column_name', 'custom_group_id' => $passport_info['id']));
 
+$case_coordinator_rel_type_id = civicrm_api3('RelationshipType', 'getvalue', array('name_a_b' => 'Case Coordinator is', 'return' => 'id'));
+
 $view = new view();
 $view->name = 'travel_request_detail_for_bcd_';
 $view->description = '';
@@ -49,6 +51,18 @@ $handler->display->display_options['relationships']['contact_id']['table'] = 'ci
 $handler->display->display_options['relationships']['contact_id']['field'] = 'contact_id';
 $handler->display->display_options['relationships']['contact_id']['label'] = 'Client';
 $handler->display->display_options['relationships']['contact_id']['required'] = TRUE;
+/* Relationship: CiviCRM Cases: CiviCRM Relationship (starting from contact case ID) */
+$handler->display->display_options['relationships']['relationship_id']['id'] = 'relationship_id';
+$handler->display->display_options['relationships']['relationship_id']['table'] = 'civicrm_case';
+$handler->display->display_options['relationships']['relationship_id']['field'] = 'relationship_id';
+$handler->display->display_options['relationships']['relationship_id']['label'] = 'Coordinator relationship';
+$handler->display->display_options['relationships']['relationship_id']['relationship_type'] = $case_coordinator_rel_type_id;
+/* Relationship: CiviCRM Relationships: Contact ID B */
+$handler->display->display_options['relationships']['contact_id_b_']['id'] = 'contact_id_b_';
+$handler->display->display_options['relationships']['contact_id_b_']['table'] = 'civicrm_relationship';
+$handler->display->display_options['relationships']['contact_id_b_']['field'] = 'contact_id_b_';
+$handler->display->display_options['relationships']['contact_id_b_']['relationship'] = 'relationship_id';
+$handler->display->display_options['relationships']['contact_id_b_']['label'] = 'Coordinator';
 /* Field: CiviCRM Custom: Info for travel agency: Destination */
 $handler->display->display_options['fields']['destination']['id'] = 'destination';
 $handler->display->display_options['fields']['destination']['table'] = $ta_info['table_name'];
@@ -130,6 +144,35 @@ $handler->display->display_options['fields']['notes']['id'] = 'notes';
 $handler->display->display_options['fields']['notes']['table'] = $ta_info['table_name'];
 $handler->display->display_options['fields']['notes']['field'] = $notes;
 $handler->display->display_options['fields']['notes']['element_label_type'] = 'strong';
+/* Field: CiviCRM Contacts: Display Name */
+$handler->display->display_options['fields']['display_name']['id'] = 'display_name';
+$handler->display->display_options['fields']['display_name']['table'] = 'civicrm_contact';
+$handler->display->display_options['fields']['display_name']['field'] = 'display_name';
+$handler->display->display_options['fields']['display_name']['relationship'] = 'contact_id_b_';
+$handler->display->display_options['fields']['display_name']['label'] = 'Coordinator';
+$handler->display->display_options['fields']['display_name']['link_to_civicrm_contact'] = 0;
+$handler->display->display_options['fields']['display_name']['element_label_type'] = 'strong';
+/* Field: CiviCRM Email: Email Address */
+$handler->display->display_options['fields']['email']['id'] = 'email';
+$handler->display->display_options['fields']['email']['table'] = 'civicrm_email';
+$handler->display->display_options['fields']['email']['field'] = 'email';
+$handler->display->display_options['fields']['email']['relationship'] = 'contact_id_b_';
+$handler->display->display_options['fields']['email']['label'] = 'E-mail (coordinator)';
+$handler->display->display_options['fields']['email']['location_type'] = '0';
+$handler->display->display_options['fields']['email']['location_op'] = '0';
+$handler->display->display_options['fields']['email']['is_primary'] = 1;
+$handler->display->display_options['fields']['email']['element_label_type'] = 'strong';
+/* Field: CiviCRM Phone Details: Phone Number */
+$handler->display->display_options['fields']['phone']['id'] = 'phone';
+$handler->display->display_options['fields']['phone']['table'] = 'civicrm_phone';
+$handler->display->display_options['fields']['phone']['field'] = 'phone';
+$handler->display->display_options['fields']['phone']['relationship'] = 'contact_id_b_';
+$handler->display->display_options['fields']['phone']['label'] = 'Phone (coordinator)';
+$handler->display->display_options['fields']['phone']['location_type'] = '0';
+$handler->display->display_options['fields']['phone']['location_op'] = '0';
+$handler->display->display_options['fields']['phone']['is_primary'] = 1;
+$handler->display->display_options['fields']['phone']['phone_type'] = '0';
+$handler->display->display_options['fields']['phone']['element_label_type'] = 'strong';
 /* Sort criterion: CiviCRM Custom: Info for travel agency: Requested departure date */
 $handler->display->display_options['sorts']['requested_departure_date']['id'] = 'requested_departure_date';
 $handler->display->display_options['sorts']['requested_departure_date']['table'] = $ta_info['table_name'];
