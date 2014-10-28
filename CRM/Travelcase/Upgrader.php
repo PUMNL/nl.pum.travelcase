@@ -30,6 +30,12 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     return true;
   }
   
+  public function upgrade_1002() {
+    $sql = "UPDATE `civicrm_custom_group` SET `collapse_display` = '0', `is_multiple` = '0' WHERE `name` = 'travel_data'";
+    CRM_Core_DAO::executeQuery($sql);
+    return true;
+  }
+  
   protected function addActivityTYpes() {
     if (empty($this->activity_type)) {
       $this->activity_type = civicrm_api3('OptionGroup', 'getvalue', array('return' => 'id', 'name' => 'activity_type'));
