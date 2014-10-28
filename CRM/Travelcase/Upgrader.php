@@ -36,16 +36,28 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     return true;
   }
   
+  public function upgrade_1003() {
+    $this->removeOptionValue('Pick Up Information Customer', $this->activity_type);
+    $this->addActivityTYpes();    
+    return true;
+  }
+  
+  public function upgrade_1004() {
+    $this->removeCustomField('Pickup', 'travel_data');
+    $this->executeCustomDataFile('xml/travelinformation.xml');
+    return true;
+  }
+  
   protected function addActivityTYpes() {
     if (empty($this->activity_type)) {
       $this->activity_type = civicrm_api3('OptionGroup', 'getvalue', array('return' => 'id', 'name' => 'activity_type'));
     }
     
-    $this->addOptionValue('DSA', 'DSA', $this->activity_type);
-    $this->addOptionValue('Pick Up Information Customer', 'Pick Up Information Customer', $this->activity_type);
-    $this->addOptionValue('Letter of Invitation', 'Letter of Invitation', $this->activity_type);
-    $this->addOptionValue('Visa documents from Expert', 'Visa documents from Expert', $this->activity_type);
-    $this->addOptionValue('Visa Request', 'Visa Request', $this->activity_type);
+    $this->addOptionValue('DSA', 'DSA', $this->activity_type, 0, 7);
+    $this->addOptionValue('Letter of Invitation', 'Letter of Invitation', $this->activity_type, 0, 7);
+    $this->addOptionValue('Visa documents from Expert', 'Visa documents from Expert', $this->activity_type, 0, 7);
+    $this->addOptionValue('Visa Request', 'Visa Request', $this->activity_type, 0, 7);
+    $this->addOptionValue('Pick Up Information', 'Pick Up Information', $this->activity_type, 1, 7);
   }
   
   protected function addCaseTypes() {
@@ -56,10 +68,10 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     $this->addOptionValue('TravelCase', 'Travel Case', $this->case_type_id, 1);
   }
   
-  protected function addOptionValue($name, $label, $option_group_id,$is_reserved=0) {
+  protected function addOptionValue($name, $label, $option_group_id,$is_reserved=0, $component_id=false) {
     try {
       $exist_id = civicrm_api3('OptionValue', 'getvalue', array('return' => 'id', 'name' => $name, 'option_group_id' => $option_group_id));
-      return; //aleardy exist
+      $params['id'] = $exist_id;
     } catch (Exception $e) {
       //do nothing
     }
@@ -69,7 +81,20 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     $params['is_active'] = 1;
     $params['is_reserved'] = $is_reserved;
     $params['option_group_id'] = $option_group_id;
+    if ($component_id) {
+      $params['component_id'] = $component_id;
+    }
     civicrm_api3('OptionValue','create', $params);
+  }
+  
+  protected function removeOptionValue($name, $option_group_id) {
+    try {
+      $exist_id = civicrm_api3('OptionValue', 'getvalue', array('return' => 'id', 'name' => $name, 'option_group_id' => $option_group_id));
+      civicrm_api3('OptionValue', 'delete', array('id' => $exist_id));
+      return; //aleardy exist
+    } catch (Exception $e) {
+      //do nothing
+    }
   }
   
   protected function removeOptionGroup($name) {
