@@ -19,12 +19,19 @@ function travelcase_civicrm_caseSummary($caseId) {
   );
 }
 
+function travelcase_civicrm_postSave_civicrm_donor_link($dao) {
+  if ($dao->entity == 'Case') {
+    CRM_Travelcase_Utils_AddDonorFromParentCase::copyDonorLinkFromCase($dao->entity_id);
+  }
+}
+
 /**
  * Update invoice number for a case
  * 
  */
 function travelcase_civicrm_custom( $op, $groupID, $entityID, &$params ) {
   CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::custom($op, $groupID, $entityID, $params);
+  CRM_Travelcase_Utils_AddDonorFromParentCase::custom($op, $groupID, $entityID, $params);
 }
 
 /**

@@ -37,9 +37,10 @@ class CRM_Travelcase_Utils_AddPumCaseNumberToInvoice {
         2 => array($dao->id, 'Integer')
       ));
     } else {
-      $sql = "INSERT INTO `".$ti_config->getInfoForTravelAgencyCustomGroup('table_name')."` (`".$ti_config->getInvoiceInfoCustomField('column_name')."`) VALUES (%1)";
+      $sql = "INSERT INTO `".$ti_config->getInfoForTravelAgencyCustomGroup('table_name')."` (`entity_id`, `".$ti_config->getInvoiceInfoCustomField('column_name')."`) VALUES (%1, %2)";
       CRM_Core_DAO::executeQuery($sql, array(
-        1 => array($invoice, 'String'),
+        1 => array($entityID, 'Integer'),
+        2 => array($invoice, 'String'),
       ));
     }
     
