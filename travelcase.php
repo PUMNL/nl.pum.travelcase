@@ -13,9 +13,12 @@ function travelcase_civicrm_caseSummary($caseId) {
   $content = $page->run();
   $page2 = new CRM_Travelcase_Page_CaseLink($caseId);
   $content2 = $page2->run();
+  $page3 = new CRM_Travelcase_Page_ParentCaseRoles($caseId);
+  $content3 = $page3->run();
   return array(
     'travelcase_cases' => array('value' => $content),
-    'travelcase_linked_to_case' => array('value' => $content2)
+    'travelcase_linked_to_case' => array('value' => $content2),
+    'travelcase_parent_case_roles' => array('value' => $content3),
   );
 }
 
