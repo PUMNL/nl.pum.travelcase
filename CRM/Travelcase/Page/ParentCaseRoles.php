@@ -33,7 +33,7 @@ class CRM_Travelcase_Page_ParentCaseRoles extends CRM_Core_Page {
     $sql = "SELECT `".$case_id_field."` AS `case_id` FROM `".$table."` WHERE `entity_id` = %1";
     $dao = CRM_Core_DAO::executeQuery($sql, array(1=>array($this->caseId, 'Integer')));
     $relationships = array();
-    if ($dao->fetch()) {
+    if ($dao->fetch() && $dao->case_id) {
       $client_sql = "SELECT `c`.id as `contact_id`,`e`.`email` AS `email`, `c`.`display_name` AS `contact_display_name`
           FROM `civicrm_case_contact` `ccc`
           INNER JOIN `civicrm_contact` `c` ON `ccc`.`contact_id` = `c`.`id`
