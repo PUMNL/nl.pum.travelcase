@@ -146,6 +146,12 @@ $handler->display->display_options['fields']['nothing']['alter']['make_link'] = 
 $handler->display->display_options['fields']['nothing']['alter']['path'] = 'enter-pickup-info/form?cid2=[id]&caseid=[id_1]&aid=[id_2]';
 $handler->display->display_options['fields']['nothing']['alter']['absolute'] = TRUE;
 $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
+/* Filter criterion: CiviCRM Activities: Current Revision */
+$handler->display->display_options['filters']['is_current_revision']['id'] = 'is_current_revision';
+$handler->display->display_options['filters']['is_current_revision']['table'] = 'civicrm_activity';
+$handler->display->display_options['filters']['is_current_revision']['field'] = 'is_current_revision';
+$handler->display->display_options['filters']['is_current_revision']['relationship'] = 'activity_id';
+$handler->display->display_options['filters']['is_current_revision']['value'] = '1';
 /* Filter criterion: CiviCRM Activities: Activity Status */
 $handler->display->display_options['filters']['status']['id'] = 'status';
 $handler->display->display_options['filters']['status']['table'] = 'civicrm_activity';
