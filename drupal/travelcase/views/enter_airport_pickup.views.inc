@@ -112,7 +112,7 @@ $handler->display->display_options['fields']['id']['separator'] = '';
 $handler->display->display_options['fields']['display_name']['id'] = 'display_name';
 $handler->display->display_options['fields']['display_name']['table'] = 'civicrm_contact';
 $handler->display->display_options['fields']['display_name']['field'] = 'display_name';
-$handler->display->display_options['fields']['display_name']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['display_name']['relationship'] = 'contact_id_1';
 /* Field: CiviCRM Custom: Travel Data: Arrival date/time */
 $handler->display->display_options['fields']['arrival_time']['id'] = 'arrival_time';
 $handler->display->display_options['fields']['arrival_time']['table'] = $travel_data['table_name'];
