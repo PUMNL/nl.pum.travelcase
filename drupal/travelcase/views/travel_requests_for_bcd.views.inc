@@ -41,6 +41,51 @@ $handler->display->display_options['exposed_form']['type'] = 'basic';
 $handler->display->display_options['pager']['type'] = 'full';
 $handler->display->display_options['pager']['options']['items_per_page'] = '10';
 $handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['columns'] = array(
+  'id' => 'id',
+  'display_name' => 'display_name',
+  'destination' => 'destination',
+  'requested_departure_date' => 'requested_departure_date',
+  'requested_return_date' => 'requested_return_date',
+);
+$handler->display->display_options['style_options']['default'] = 'requested_departure_date';
+$handler->display->display_options['style_options']['info'] = array(
+  'id' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'display_name' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'destination' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'requested_departure_date' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'requested_return_date' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
 /* Relationship: CiviCRM Case Contact: Case Contact's Contact ID */
 $handler->display->display_options['relationships']['contact_id']['id'] = 'contact_id';
 $handler->display->display_options['relationships']['contact_id']['table'] = 'civicrm_case_contact';
@@ -82,16 +127,6 @@ $handler->display->display_options['fields']['requested_return_date']['table'] =
 $handler->display->display_options['fields']['requested_return_date']['field'] = $return_date;
 $handler->display->display_options['fields']['requested_return_date']['label'] = 'Return date';
 $handler->display->display_options['fields']['requested_return_date']['date_format'] = 'd_m_y';
-/* Sort criterion: CiviCRM Custom: Info for travel agency: Requested departure date */
-$handler->display->display_options['sorts']['requested_departure_date']['id'] = 'requested_departure_date';
-$handler->display->display_options['sorts']['requested_departure_date']['table'] = $ta_info['table_name'];
-$handler->display->display_options['sorts']['requested_departure_date']['field'] = $dep_date;
-$handler->display->display_options['sorts']['requested_departure_date']['granularity'] = 'day';
-/* Sort criterion: CiviCRM Custom: Info for travel agency: Requested return date */
-$handler->display->display_options['sorts']['requested_return_date']['id'] = 'requested_return_date';
-$handler->display->display_options['sorts']['requested_return_date']['table'] = $ta_info['table_name'];
-$handler->display->display_options['sorts']['requested_return_date']['field'] = $return_date;
-$handler->display->display_options['sorts']['requested_return_date']['granularity'] = 'day';
 /* Filter criterion: CiviCRM Custom: Info for travel agency: Request travel agency to book ticket */
 $handler->display->display_options['filters']['request_for_booking']['id'] = 'request_for_booking';
 $handler->display->display_options['filters']['request_for_booking']['table'] = $ta_info['table_name'];
