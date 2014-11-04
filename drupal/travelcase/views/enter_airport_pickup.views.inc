@@ -124,6 +124,7 @@ $handler->display->display_options['fields']['departure_time']['id'] = 'departur
 $handler->display->display_options['fields']['departure_time']['table'] = $travel_data['table_name'];
 $handler->display->display_options['fields']['departure_time']['field'] = $departure_time;
 $handler->display->display_options['fields']['departure_time']['relationship'] = 'case_id';
+$handler->display->display_options['fields']['departure_time']['date_format'] = 'short';
 /* Field: CiviCRM Custom: Travel Data: Destination */
 $handler->display->display_options['fields']['destination']['id'] = 'destination';
 $handler->display->display_options['fields']['destination']['table'] = $travel_data['table_name'];
