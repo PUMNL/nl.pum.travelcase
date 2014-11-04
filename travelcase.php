@@ -32,6 +32,16 @@ function travelcase_civicrm_postSave_civicrm_donor_link($dao) {
  * Update invoice number for a case
  * 
  */
+function travelcase_civicrm_pre( $op, $objectName, $id, &$params ) {
+  if ($objectName == 'Case' && $op == 'create') {
+    CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::pre($op, $objectName, $id, $params);
+  }
+}
+
+/**
+ * Update invoice number for a case
+ * 
+ */
 function travelcase_civicrm_custom( $op, $groupID, $entityID, &$params ) {
   CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::custom($op, $groupID, $entityID, $params);
   CRM_Travelcase_Utils_AddDonorFromParentCase::custom($op, $groupID, $entityID, $params);
