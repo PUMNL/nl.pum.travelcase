@@ -69,7 +69,7 @@ function travelcase_civicrm_customFieldOptions( $fieldID, &$options, $detailedFo
         WHERE civicrm_case.`is_deleted` = 0 AND civicrm_case.status_id != $closedId";
     $dao = CRM_Core_DAO::executeQuery($sql);
     while($dao->fetch()) {
-      $label = $dao->case_type_label.'::'.$dao->display_name.'::'.$dao->subject;
+      $label = $dao->subject;
       if ($detailedFormat) {
         $options[$dao->id] = array(
           'id' => $dao->id,
