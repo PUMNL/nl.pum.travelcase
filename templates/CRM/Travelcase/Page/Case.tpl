@@ -9,7 +9,7 @@
 
 <div class="crm-accordion-body">
 {if $permission EQ 'edit' && $expert}
-    {capture assign=newTravelCaseUrl}{crmURL p="civicrm/case/add" q="reset=1&action=add&cid=`$expert.id`&context=case"}{/capture}
+    {capture assign=newTravelCaseUrl}{crmURL p="civicrm/case/add" q="reset=1&action=add&cid=`$expert.id`&context=case&parent_case_id=`$caseId`"}{/capture}
     <div class="action-link">
         <a accesskey="N" href="{$newTravelCaseUrl}" class="button">
             <span><div class="icon add-icon"></div>{ts}New travel case for{/ts} {$expert.display_name}</span>

@@ -22,6 +22,13 @@ function travelcase_civicrm_caseSummary($caseId) {
   );
 }
 
+function travelcase_civicrm_buildForm($formName, &$form) {
+  if ($formName == 'CRM_Case_Form_Case') {
+    //set default values
+    CRM_Travelcase_Utils_SetDefaultValues::buildForm($formName, $form);
+  }
+}
+
 function travelcase_civicrm_postSave_civicrm_donor_link($dao) {
   if ($dao->entity == 'Case') {
     CRM_Travelcase_Utils_AddDonorFromParentCase::copyDonorLinkFromCase($dao->entity_id);
