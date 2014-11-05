@@ -12,7 +12,7 @@
       <collapse_display>1</collapse_display>
       <help_pre></help_pre>
       <help_post></help_post>
-      <weight>1</weight>
+      <weight>104</weight>
       <is_active>1</is_active>
       <table_name>civicrm_value_travel_parent</table_name>
       <is_multiple>0</is_multiple>
