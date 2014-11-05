@@ -44,6 +44,7 @@ function travelcase_civicrm_pre( $op, $objectName, $id, &$params ) {
   if ($objectName == 'Case' && $op == 'create') {
     CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::pre($op, $objectName, $id, $params);
     CRM_Travelcase_Utils_CopyDonorCode::pre($op, $objectName, $id, $params);
+    CRM_Travelcase_Utils_CopyDsaInfo::pre($op, $objectName, $id, $params);
   }
 }
 
@@ -55,6 +56,7 @@ function travelcase_civicrm_custom( $op, $groupID, $entityID, &$params ) {
   CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::custom($op, $groupID, $entityID, $params);
   CRM_Travelcase_Utils_CopyDonorCode::custom($op, $groupID, $entityID, $params);
   CRM_Travelcase_Utils_AddDonorFromParentCase::custom($op, $groupID, $entityID, $params);
+  CRM_Travelcase_Utils_CopyDsaInfo::custom($op, $groupID, $entityID, $params);
 }
 
 /**
