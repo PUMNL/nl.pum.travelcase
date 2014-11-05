@@ -100,6 +100,14 @@ $handler->display->display_options['fields']['id']['label'] = '';
 $handler->display->display_options['fields']['id']['exclude'] = TRUE;
 $handler->display->display_options['fields']['id']['element_label_colon'] = FALSE;
 $handler->display->display_options['fields']['id']['separator'] = '';
+/* Field: CiviCRM Cases: Contact ID */
+$handler->display->display_options['fields']['contact_id']['id'] = 'contact_id';
+$handler->display->display_options['fields']['contact_id']['table'] = 'civicrm_contact';
+$handler->display->display_options['fields']['contact_id']['field'] = 'id';
+$handler->display->display_options['fields']['contact_id']['label'] = '';
+$handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
+$handler->display->display_options['fields']['contact_id']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['contact_id']['separator'] = '';
 /* Field: CiviCRM Contact: Display Name*/
 $handler->display->display_options['fields']['display_name']['id'] = 'display_name';
 $handler->display->display_options['fields']['display_name']['table'] = 'civicrm_contact';
@@ -127,6 +135,16 @@ $handler->display->display_options['fields']['requested_return_date']['table'] =
 $handler->display->display_options['fields']['requested_return_date']['field'] = $return_date;
 $handler->display->display_options['fields']['requested_return_date']['label'] = 'Return date';
 $handler->display->display_options['fields']['requested_return_date']['date_format'] = 'd_m_y';
+/* Field: Global: Custom text */
+$handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+$handler->display->display_options['fields']['nothing']['table'] = 'views';
+$handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+$handler->display->display_options['fields']['nothing']['label'] = '';
+$handler->display->display_options['fields']['nothing']['alter']['text'] = 'Remove from list';
+$handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
+$handler->display->display_options['fields']['nothing']['alter']['path'] = 'bcd/travel-request/remove?cid2=[contact_id]&caseid=[id]';
+$handler->display->display_options['fields']['nothing']['alter']['absolute'] = TRUE;
+$handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
 /* Filter criterion: CiviCRM Custom: Info for travel agency: Request travel agency to book ticket */
 $handler->display->display_options['filters']['request_for_booking']['id'] = 'request_for_booking';
 $handler->display->display_options['filters']['request_for_booking']['table'] = $ta_info['table_name'];
