@@ -20,6 +20,9 @@ $passport_number = civicrm_api3('CustomField', 'getvalue', array('name' => 'Pass
 $passport_valid = civicrm_api3('CustomField', 'getvalue', array('name' => 'Passport_Valid_until', 'return' => 'column_name', 'custom_group_id' => $passport_info['id']));
 $partner_name = civicrm_api3('CustomField', 'getvalue', array('name' => 'Passport_Name_Partner_Last_Name', 'return' => 'column_name', 'custom_group_id' => $passport_info['id']));
 
+$sponsor_code_group = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'sponsor_code'));
+$sponsor_code_field = civicrm_api3('CustomField', 'getvalue', array('name' => 'sponsor_code', 'return' => 'column_name', 'custom_group_id' => $sponsor_code_group['id']));
+
 $case_coordinator_rel_type_id = civicrm_api3('RelationshipType', 'getvalue', array('name_a_b' => 'Case Coordinator is', 'return' => 'id'));
 
 $view = new view();
@@ -139,6 +142,12 @@ $handler->display->display_options['fields']['invoice']['table'] = $ta_info['tab
 $handler->display->display_options['fields']['invoice']['field'] = $invoice;
 $handler->display->display_options['fields']['invoice']['alter']['strip_tags'] = TRUE;
 $handler->display->display_options['fields']['invoice']['element_label_type'] = 'strong';
+/* Field: CiviCRM Custom: Info for travel agency: Sponsor code */
+$handler->display->display_options['fields']['sponsor_code']['id'] = 'sponsor_code';
+$handler->display->display_options['fields']['sponsor_code']['table'] = $sponsor_code_group['table_name'];
+$handler->display->display_options['fields']['sponsor_code']['field'] = $sponsor_code_field;
+$handler->display->display_options['fields']['sponsor_code']['alter']['strip_tags'] = TRUE;
+$handler->display->display_options['fields']['sponsor_code']['element_label_type'] = 'strong';
 /* Field: CiviCRM Custom: Info for travel agency: Remarks for travel agency */
 $handler->display->display_options['fields']['notes']['id'] = 'notes';
 $handler->display->display_options['fields']['notes']['table'] = $ta_info['table_name'];

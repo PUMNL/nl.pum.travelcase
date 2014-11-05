@@ -26,6 +26,7 @@ function travelcase_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Case_Form_Case') {
     //set default values
     CRM_Travelcase_Utils_SetDefaultValues::buildForm($formName, $form);
+    CRM_Travelcase_Utils_AddDonorFromParentCase::buildForm($formName, $form);
   }
 }
 
@@ -42,6 +43,7 @@ function travelcase_civicrm_postSave_civicrm_donor_link($dao) {
 function travelcase_civicrm_pre( $op, $objectName, $id, &$params ) {
   if ($objectName == 'Case' && $op == 'create') {
     CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::pre($op, $objectName, $id, $params);
+    CRM_Travelcase_Utils_CopyDonorCode::pre($op, $objectName, $id, $params);
   }
 }
 
@@ -51,6 +53,7 @@ function travelcase_civicrm_pre( $op, $objectName, $id, &$params ) {
  */
 function travelcase_civicrm_custom( $op, $groupID, $entityID, &$params ) {
   CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::custom($op, $groupID, $entityID, $params);
+  CRM_Travelcase_Utils_CopyDonorCode::custom($op, $groupID, $entityID, $params);
   CRM_Travelcase_Utils_AddDonorFromParentCase::custom($op, $groupID, $entityID, $params);
 }
 

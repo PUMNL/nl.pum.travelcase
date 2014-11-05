@@ -1,6 +1,28 @@
 <?php
 
 class CRM_Travelcase_Utils_AddDonorFromParentCase {
+  
+  public static function post( $op, $objectName, $objectId, &$objectRef ) {
+    if ($op != 'create') {
+      return;
+    }
+    
+    if ($objectName != 'Case') {
+      return;
+    }
+        
+    $config = CRM_Travelcase_Config::singleton();
+    $sql = "SELECT `".$config->getCustomFieldCaseId('column_name')."` AS `case_id` FROM `".$config->getCustomGroupLinkCaseTo('table_name')."` WHERE `entity_id` = %1";
+    $dao = CRM_Core_DAO::executeQuery($sql, array(1 => array($objectId, 'Integer')));
+    if ($dao->fetch()) {
+      $parent_case_id = $dao->case_id;
+    }
+
+    self::dropCurrentDonorLinks($objectId);
+    if ($parent_case_id) {
+      self::copyDonorLink($parent_case_id, $objectId);
+    }
+  }
 
   public static function custom($op, $groupID, $entityID, &$params) {
     if ($op != 'create' && $op != 'edit') {
@@ -26,6 +48,30 @@ class CRM_Travelcase_Utils_AddDonorFromParentCase {
     if ($parent_case_id) {
       self::copyDonorLink($parent_case_id, $entityID);
     } 
+  }
+  
+  public static function buildForm($formName, &$form) {
+    if ($formName != 'CRM_Case_Form_Case') {
+      return;
+    }
+    
+    if (!class_exists('CRM_Threepeas_BAO_PumDonorLink')) {
+      return;
+    }
+    
+    $parent_case_id = CRM_Utils_Request::retrieve('parent_case_id', 'Positive', $form);
+    if (empty($parent_case_id)) {
+      return;
+    }
+      
+    $params = array('entity' => 'Case', 'entity_id' => $parent_case_id, 'donation_entity' => 'Contribution', 'is_active' => 1);
+    $currentContributions = CRM_Threepeas_BAO_PumDonorLink::getValues($params);
+    foreach ($currentContributions as $currentContribution) {
+      $defaults['new_link'][] = $currentContribution['donation_entity_id'];
+    }
+    if (!empty($defaults)) {
+      $form->setDefaults($defaults);
+    }
   }
   
   public static function copyDonorLinkFromCase($from_case_id) {
