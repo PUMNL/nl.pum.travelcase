@@ -56,18 +56,26 @@ class CRM_Travelcase_Page_Case extends CRM_Core_Page {
     $this->assign('travel_cases', $cases);    
     $this->assign('permission', 'edit');
     
+    $relationships_to_check = array (
+      $config->getRelationshipTypeExpert('id'),
+      $config->getRelationshipTypeCC('id'),
+      $config->getRelationshipTypeRep('id'),
+    );
     
-    //find expert
-    $expert_relationship = new CRM_Contact_BAO_Relationship();
-    $expert_relationship->relationship_type_id = $config->getRelationshipTypeExpert('id');
-    $expert_relationship->case_id = $this->caseId;
-    $this->assign('expert', false);
-    if ($expert_relationship->find(TRUE) && $session->get('userID') != $expert_relationship->contact_id_b) {
-      $expert =  array();
-      $params = array('id' => $expert_relationship->contact_id_b);
-      CRM_Contact_BAO_Contact::retrieve($params, $expert);
-      $this->assign('expert', $expert);
+    $related_contacts = array();
+    foreach($relationships_to_check as $rtype_id) {
+      $relationship = new CRM_Contact_BAO_Relationship();
+      $relationship->relationship_type_id = $rtype_id;
+      $relationship->case_id = $this->caseId;
+      if ($relationship->find(TRUE) && $session->get('userID') != $relationship->contact_id_b) {
+        $contact =  array();
+        $params = array('id' => $relationship->contact_id_b);
+        CRM_Contact_BAO_Contact::retrieve($params, $contact);
+        $related_contacts[] = $contact;
+      }
     }
+    $this->assign('related_contacts', $related_contacts);
+    
     
     //render the template
     $content = self::$_template->fetch($pageTemplateFile);

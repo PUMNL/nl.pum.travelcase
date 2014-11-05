@@ -8,14 +8,16 @@
 <div class="crm-accordion-header">{ts}Travel cases{/ts}</div>
 
 <div class="crm-accordion-body">
-{if $permission EQ 'edit' && $expert}
-    {capture assign=newTravelCaseUrl}{crmURL p="civicrm/case/add" q="reset=1&action=add&cid=`$expert.id`&context=case&parent_case_id=`$caseId`"}{/capture}
-    <div class="action-link">
-        <a accesskey="N" href="{$newTravelCaseUrl}" class="button">
-            <span><div class="icon add-icon"></div>{ts}New travel case for{/ts} {$expert.display_name}</span>
-        </a>
-    </div>
-
+{if $permission EQ 'edit' && count($related_contacts)}
+<div class="action-link">
+    {foreach from=$related_contacts item=related_contact}
+        {capture assign=newTravelCaseUrl}{crmURL p="civicrm/case/add" q="reset=1&action=add&cid=`$related_contact.id`&context=case&parent_case_id=`$caseId`"}{/capture}
+        
+            <a accesskey="N" href="{$newTravelCaseUrl}" class="button">
+                <span><div class="icon add-icon"></div>{ts}New travel case for{/ts} {$related_contact.display_name}</span>
+            </a>
+    {/foreach}
+        </div>
 {/if}
 <table>
     <thead>

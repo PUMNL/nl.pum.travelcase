@@ -18,6 +18,12 @@ class CRM_Travelcase_Config {
   
   protected $expert_relationship_type;
   
+  protected $cc_relationship_type;
+  
+  protected $sc_relationship_type;
+  
+  protected $rep_relationship_type;
+  
   protected $travel_case_type;
   
   protected function __construct() {
@@ -31,6 +37,9 @@ class CRM_Travelcase_Config {
     $this->destination = civicrm_api3('CustomField', 'getsingle', array('name' => 'destination', 'custom_group_id' => $this->travel_agency_info['id']));
     
     $this->expert_relationship_type = civicrm_api3('RelationshipType', 'getsingle', array('name_a_b' => 'Expert'));
+    $this->cc_relationship_type = civicrm_api3('RelationshipType', 'getsingle', array('name_a_b' => 'Country Coordinator is'));
+    $this->sc_relationship_type = civicrm_api3('RelationshipType', 'getsingle', array('name_a_b' => 'Sector Coordinator'));
+    $this->rep_relationship_type = civicrm_api3('RelationshipType', 'getsingle', array('name_a_b' => 'Representative is'));
     
     $case_type_id = civicrm_api3('OptionGroup', 'getvalue', array('name' => 'case_type', 'return' => 'id'));
     $this->travel_case_type = civicrm_api3('OptionValue', 'getsingle', array('name' => 'Travelcase', 'option_group_id' => $case_type_id));
@@ -80,5 +89,17 @@ class CRM_Travelcase_Config {
   
   public function getRelationshipTypeExpert($key='id') {
     return $this->expert_relationship_type[$key];
+  }
+  
+  public function getRelationshipTypeCC($key='id') {
+    return $this->cc_relationship_type[$key];
+  }
+  
+  public function getRelationshipTypeSC($key='id') {
+    return $this->sc_relationship_type[$key];
+  }
+  
+  public function getRelationshipTypeRep($key='id') {
+    return $this->rep_relationship_type[$key];
   }
 }
