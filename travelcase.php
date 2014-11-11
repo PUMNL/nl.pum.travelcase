@@ -22,6 +22,10 @@ function travelcase_civicrm_caseSummary($caseId) {
   );
 }
 
+function travelcase_civicrm_validateForm( $formName, &$fields, &$files, &$form, &$errors ) {
+  CRM_Travelcase_Utils_ApplicantPaysValidation::validateForm($formName, $fields, $files, $form, $errors);
+}
+
 function travelcase_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Case_Form_Case') {
     //set default values
