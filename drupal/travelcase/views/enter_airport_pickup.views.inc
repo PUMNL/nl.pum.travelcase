@@ -4,7 +4,7 @@ $activity_type_option_group = civicrm_api3('OptionGroup', 'getvalue', array('ret
 $pick_info_activity = civicrm_api3('OptionValue', 'getvalue', array('return' => 'value', 'name' => 'Pick Up Information', 'option_group_id' => $activity_type_option_group));
 
 $travel_data = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'travel_data'));
-$departure_time = civicrm_api3('CustomField', 'getvalue', array('name' => 'departure_time', 'return' => 'column_name', 'custom_group_id' => $travel_data['id']));
+$departure_time = civicrm_api3('CustomField', 'getvalue', array('name' => 'return_departure_time', 'return' => 'column_name', 'custom_group_id' => $travel_data['id']));
 $arrival_time = civicrm_api3('CustomField', 'getvalue', array('name' => 'arrival_time', 'return' => 'column_name', 'custom_group_id' => $travel_data['id']));
 $destination = civicrm_api3('CustomField', 'getvalue', array('name' => 'destination', 'return' => 'column_name', 'custom_group_id' => $travel_data['id']));
 $flight_nr = civicrm_api3('CustomField', 'getvalue', array('name' => 'flight_number', 'return' => 'column_name', 'custom_group_id' => $travel_data['id']));
@@ -119,12 +119,6 @@ $handler->display->display_options['fields']['arrival_time']['table'] = $travel_
 $handler->display->display_options['fields']['arrival_time']['field'] = $arrival_time;
 $handler->display->display_options['fields']['arrival_time']['relationship'] = 'case_id';
 $handler->display->display_options['fields']['arrival_time']['date_format'] = 'short';
-/* Field: CiviCRM Custom: Travel Data: Departure date/time */
-$handler->display->display_options['fields']['departure_time']['id'] = 'departure_time';
-$handler->display->display_options['fields']['departure_time']['table'] = $travel_data['table_name'];
-$handler->display->display_options['fields']['departure_time']['field'] = $departure_time;
-$handler->display->display_options['fields']['departure_time']['relationship'] = 'case_id';
-$handler->display->display_options['fields']['departure_time']['date_format'] = 'short';
 /* Field: CiviCRM Custom: Travel Data: Destination */
 $handler->display->display_options['fields']['destination']['id'] = 'destination';
 $handler->display->display_options['fields']['destination']['table'] = $travel_data['table_name'];
@@ -137,6 +131,13 @@ $handler->display->display_options['fields']['flight_number']['table'] = $travel
 $handler->display->display_options['fields']['flight_number']['field'] = $flight_nr;
 $handler->display->display_options['fields']['flight_number']['relationship'] = 'case_id';
 $handler->display->display_options['fields']['flight_number']['alter']['strip_tags'] = TRUE;
+/* Field: CiviCRM Custom: Travel Data: Departure date/time */
+$handler->display->display_options['fields']['departure_time']['id'] = 'departure_time';
+$handler->display->display_options['fields']['departure_time']['table'] = $travel_data['table_name'];
+$handler->display->display_options['fields']['departure_time']['field'] = $departure_time;
+$handler->display->display_options['fields']['departure_time']['label'] = '(Return) Departure time';
+$handler->display->display_options['fields']['departure_time']['relationship'] = 'case_id';
+$handler->display->display_options['fields']['departure_time']['date_format'] = 'short';
 /* Field: Global: Custom text */
 $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
 $handler->display->display_options['fields']['nothing']['table'] = 'views';

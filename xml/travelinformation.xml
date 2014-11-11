@@ -101,7 +101,7 @@
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>3</weight>
+      <weight>5</weight>
       <is_active>1</is_active>
       <is_view>0</is_view>
       <text_length>255</text_length>
@@ -130,27 +130,81 @@
       <custom_group_name>travel_data</custom_group_name>
     </CustomField>
     <CustomField>
-      <name>pickup_name</name>
-      <label>Name of pickup person</label>
+      <name>return_type_of_travel</name>
+      <label>(Return) Type of travel</label>
+      <data_type>String</data_type>
+      <html_type>Select</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>7</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>return_type_of_travel</column_name>
+      <option_group_name>type_of_travel</option_group_name>
+      <custom_group_name>travel_data</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>return_from</name>
+      <label>(Return) From</label>
+      <data_type>String</data_type>
+      <html_type>Text</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>8</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>return_travel_from</column_name>
+      <custom_group_name>travel_data</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>return_departure_time</name>
+      <label>(Return) Departure date/time</label>
+      <data_type>Date</data_type>
+      <html_type>Select Date</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>9</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <date_format>dd-mm-yy</date_format>
+      <time_format>2</time_format>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>return_departure_time</column_name>
+      <custom_group_name>travel_data</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>return_destination</name>
+      <label>(Return) Destination</label>
       <data_type>String</data_type>
       <html_type>Text</html_type>
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
       <weight>10</weight>
-      <attributes>rows=4, cols=60</attributes>
       <is_active>1</is_active>
       <is_view>0</is_view>
+      <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>pickup_name</column_name>
+      <column_name>return_destination</column_name>
       <custom_group_name>travel_data</custom_group_name>
     </CustomField>
     <CustomField>
-      <name>pickup_telephone</name>
-      <label>Telephone number of pickup person</label>
-      <data_type>String</data_type>
-      <html_type>Text</html_type>
+      <name>return_arrival_time</name>
+      <label>(Return) Arrival date/time</label>
+      <data_type>Date</data_type>
+      <html_type>Select Date</html_type>
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
@@ -158,46 +212,30 @@
       <is_active>1</is_active>
       <is_view>0</is_view>
       <text_length>255</text_length>
+      <date_format>dd-mm-yy</date_format>
+      <time_format>2</time_format>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>pickup_telephone</column_name>
+      <column_name>return_arrival_time</column_name>
       <custom_group_name>travel_data</custom_group_name>
-    </CustomField>
-      
+    </CustomField>      
     <CustomField>
-      <name>accommodation_name</name>
-      <label>Name and address details of Hotel or Guesthouse</label>
-      <data_type>Memo</data_type>
-      <html_type>TextArea</html_type>
-      <is_required>0</is_required>
-      <is_searchable>0</is_searchable>
-      <is_search_range>0</is_search_range>
-      <weight>20</weight>
-      <attributes>rows=4, cols=60</attributes>
-      <is_active>1</is_active>
-      <is_view>0</is_view>
-      <note_columns>60</note_columns>
-      <note_rows>4</note_rows>
-      <column_name>accommodation_name</column_name>
-      <custom_group_name>travel_data</custom_group_name>
-    </CustomField>
-    <CustomField>
-      <name>accommodation_telephone</name>
-      <label>Telephone number Hotel or Guesthouse</label>
+      <name>return_flight_number</name>
+      <label>(Return) Flight number</label>
       <data_type>String</data_type>
       <html_type>Text</html_type>
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>21</weight>
+      <weight>12</weight>
       <is_active>1</is_active>
       <is_view>0</is_view>
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
-      <column_name>accommodation_telephone</column_name>
+      <column_name>return_flight_number</column_name>
       <custom_group_name>travel_data</custom_group_name>
-    </CustomField>
+    </CustomField>    
     <CustomField>
       <name>notes</name>
       <label>Notes</label>

@@ -19,6 +19,8 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     $this->executeCustomDataFile('xml/info_for_travel_agency.xml');
     $this->executeCustomDataFile('xml/info_for_dsa.xml');
     $this->executeCustomDataFile('xml/travelcase_status.xml');
+    $this->executeCustomDataFile('xml/sponsor_code.xml');
+    $this->executeCustomDataFile('xml/pickup.xml');
   }
   
   public function upgrade_1001() {
@@ -55,6 +57,24 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
   
   public function upgrade_1006() {
     $this->executeCustomDataFile('xml/sponsor_code.xml');
+    return true;
+  }
+  
+  public function upgrade_1007() {    
+    $this->removeCustomField('pickup_name', 'travel_data');
+    $this->removeCustomField('pickup_telephone', 'travel_data');
+    $this->removeCustomField('accommodation_name', 'travel_data');
+    $this->removeCustomField('accommodation_telephone', 'travel_data');
+    return true;
+  }
+  
+  public function upgrade_1008() {
+    $this->executeCustomDataFile('xml/pickup.xml');
+    return true;
+  }
+  
+  public function upgrade_1009() {
+    $this->executeCustomDataFile('xml/travelinformation.xml');
     return true;
   }
   
