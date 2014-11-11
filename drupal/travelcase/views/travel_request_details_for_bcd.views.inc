@@ -20,8 +20,11 @@ $passport_number = civicrm_api3('CustomField', 'getvalue', array('name' => 'Pass
 $passport_valid = civicrm_api3('CustomField', 'getvalue', array('name' => 'Passport_Valid_until', 'return' => 'column_name', 'custom_group_id' => $passport_info['id']));
 $partner_name = civicrm_api3('CustomField', 'getvalue', array('name' => 'Passport_Name_Partner_Last_Name', 'return' => 'column_name', 'custom_group_id' => $passport_info['id']));
 
-$sponsor_code_group = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'sponsor_code'));
-$sponsor_code_field = civicrm_api3('CustomField', 'getvalue', array('name' => 'sponsor_code', 'return' => 'column_name', 'custom_group_id' => $sponsor_code_group['id']));
+$sponsor_case_group = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'sponsor_code'));
+//$sponsor_code_field = civicrm_api3('CustomField', 'getvalue', array('name' => 'sponsor_code', 'return' => 'column_name', 'custom_group_id' => $sponsor_code_group['id']));
+
+$sponsor_code_group = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'Donor_details_FA'));
+$sponsor_code_field = civicrm_api3('CustomField', 'getvalue', array('name' => 'Donor_code', 'return' => 'column_name', 'custom_group_id' => $sponsor_code_group['id']));
 
 $case_coordinator_rel_type_id = civicrm_api3('RelationshipType', 'getvalue', array('name_a_b' => 'Case Coordinator is', 'return' => 'id'));
 
@@ -66,6 +69,11 @@ $handler->display->display_options['relationships']['contact_id_b_']['table'] = 
 $handler->display->display_options['relationships']['contact_id_b_']['field'] = 'contact_id_b_';
 $handler->display->display_options['relationships']['contact_id_b_']['relationship'] = 'relationship_id';
 $handler->display->display_options['relationships']['contact_id_b_']['label'] = 'Coordinator';
+/* Relationship: CiviCRM Cases: CiviCRM Case Sponsor */
+$handler->display->display_options['relationships']['contact_id_1']['id'] = 'contact_id_1';
+$handler->display->display_options['relationships']['contact_id_1']['table'] = $sponsor_case_group['table_name'];
+$handler->display->display_options['relationships']['contact_id_1']['field'] = 'contact_id';
+$handler->display->display_options['relationships']['contact_id_1']['label'] = 'Sponsor';
 /* Field: CiviCRM Custom: Info for travel agency: Destination */
 $handler->display->display_options['fields']['destination']['id'] = 'destination';
 $handler->display->display_options['fields']['destination']['table'] = $ta_info['table_name'];
@@ -124,6 +132,16 @@ $handler->display->display_options['fields']['passport_valid_until_226']['field'
 $handler->display->display_options['fields']['passport_valid_until_226']['relationship'] = 'contact_id';
 $handler->display->display_options['fields']['passport_valid_until_226']['date_format'] = 'd_m_y';
 $handler->display->display_options['fields']['passport_valid_until_226']['element_label_type'] = 'strong';
+/* Field: CiviCRM Email: Email Address */
+$handler->display->display_options['fields']['email_1']['id'] = 'email_1';
+$handler->display->display_options['fields']['email_1']['table'] = 'civicrm_email';
+$handler->display->display_options['fields']['email_1']['field'] = 'email';
+$handler->display->display_options['fields']['email_1']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['email_1']['location_type'] = '0';
+$handler->display->display_options['fields']['email_1']['location_op'] = '0';
+$handler->display->display_options['fields']['email_1']['is_primary'] = 0;
+$handler->display->display_options['fields']['email_1']['link_to_user'] = '0';
+$handler->display->display_options['fields']['email_1']['element_label_type'] = 'strong';
 /* Field: CiviCRM Custom: Flight Preferences: Diet preference */
 $handler->display->display_options['fields']['diet_preference_641']['id'] = 'diet_preference_641';
 $handler->display->display_options['fields']['diet_preference_641']['table'] = $flight_pref['table_name'];
@@ -142,12 +160,26 @@ $handler->display->display_options['fields']['invoice']['table'] = $ta_info['tab
 $handler->display->display_options['fields']['invoice']['field'] = $invoice;
 $handler->display->display_options['fields']['invoice']['alter']['strip_tags'] = TRUE;
 $handler->display->display_options['fields']['invoice']['element_label_type'] = 'strong';
-/* Field: CiviCRM Custom: Info for travel agency: Sponsor code */
+/* Field: code */
 $handler->display->display_options['fields']['sponsor_code']['id'] = 'sponsor_code';
 $handler->display->display_options['fields']['sponsor_code']['table'] = $sponsor_code_group['table_name'];
 $handler->display->display_options['fields']['sponsor_code']['field'] = $sponsor_code_field;
-$handler->display->display_options['fields']['sponsor_code']['alter']['strip_tags'] = TRUE;
-$handler->display->display_options['fields']['sponsor_code']['element_label_type'] = 'strong';
+$handler->display->display_options['fields']['sponsor_code']['relationship'] = 'contact_id_1';
+$handler->display->display_options['fields']['sponsor_code']['ui_name'] = 'code';
+$handler->display->display_options['fields']['sponsor_code']['label'] = '';
+$handler->display->display_options['fields']['sponsor_code']['exclude'] = TRUE;
+$handler->display->display_options['fields']['sponsor_code']['element_label_colon'] = FALSE;
+/* Field: Sponsor */
+$handler->display->display_options['fields']['display_name_1']['id'] = 'display_name_1';
+$handler->display->display_options['fields']['display_name_1']['table'] = 'civicrm_contact';
+$handler->display->display_options['fields']['display_name_1']['field'] = 'display_name';
+$handler->display->display_options['fields']['display_name_1']['relationship'] = 'contact_id_1';
+$handler->display->display_options['fields']['display_name_1']['ui_name'] = 'Sponsor';
+$handler->display->display_options['fields']['display_name_1']['label'] = 'Sponsor';
+$handler->display->display_options['fields']['display_name_1']['alter']['alter_text'] = TRUE;
+$handler->display->display_options['fields']['display_name_1']['alter']['text'] = '[sponsor_code]  - [display_name_1]';
+$handler->display->display_options['fields']['display_name_1']['link_to_civicrm_contact'] = 0;
+$handler->display->display_options['fields']['display_name_1']['element_label_type'] = 'strong';
 /* Field: CiviCRM Custom: Info for travel agency: Remarks for travel agency */
 $handler->display->display_options['fields']['notes']['id'] = 'notes';
 $handler->display->display_options['fields']['notes']['table'] = $ta_info['table_name'];

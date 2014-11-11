@@ -11,7 +11,7 @@ class CRM_Travelcase_SponsorCodeConfig {
   
   protected function __construct() {
     $this->sponsor_code_group = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'sponsor_code'));
-    $this->sponsor_code_field = civicrm_api3('CustomField', 'getsingle', array('name' => 'sponsor_code', 'custom_group_id' => $this->sponsor_code_group['id']));
+    $this->sponsor_code_field = civicrm_api3('CustomField', 'getsingle', array('name' => 'sponsor', 'custom_group_id' => $this->sponsor_code_group['id']));
   }
   
   /**

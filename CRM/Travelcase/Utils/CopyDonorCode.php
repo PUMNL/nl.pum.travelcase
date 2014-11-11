@@ -63,14 +63,14 @@ class CRM_Travelcase_Utils_CopyDonorCode {
           //update
           $sql = "UPDATE `".$sc_config->getCustomGroupSponsorCode('table_name')."` SET `".$sc_config->getCustomFieldSponsorCode('column_name')."`  = %1 WHERE `id` = %2";
           CRM_Core_DAO::executeQuery($sql, array(
-            1 => array($sponsor_code, 'String'),
+            1 => array($sponsor_code, 'Integer'),
             2 => array($dao->id, 'Integer')
           ));
         } else {
           $sql = "INSERT INTO `".$sc_config->getCustomGroupSponsorCode('table_name')."` (`entity_id`, `".$sc_config->getCustomFieldSponsorCode('column_name')."`) VALUES (%1, %2)";
           CRM_Core_DAO::executeQuery($sql, array(
             1 => array($entityID, 'Integer'),
-            2 => array($sponsor_code, 'String'),
+            2 => array($sponsor_code, 'Integer'),
           ));
         }
       }

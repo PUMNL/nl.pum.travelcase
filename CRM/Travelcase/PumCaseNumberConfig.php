@@ -66,4 +66,26 @@ class CRM_Travelcase_PumCaseNumberConfig {
     return $return;
   }
   
+  /**
+   * Returns a case number as an array
+   * 
+   * @param type $case_id
+   * @return string
+   */
+  public function getPumCaseNumberArray($case_id) {
+    $return = false;
+    $sql = "SELECT * FROM `".$this->getCustomGroupPumCaseNumber('table_name')."` WHERE `entity_id` = %1";
+    $dao = CRM_Core_DAO::executeQuery($sql, array(1 => array($case_id, 'Integer')));
+    if ($dao->fetch()) {
+      $return = array();
+      $seq_field = $this->getCustomFieldSequence('column_name');
+      $type_field = $this->getCustomFieldType('column_name');
+      $country_field = $this->getCustomFieldCountry('column_name');
+      $return['sequence'] = $dao->$seq_field;
+      $return['type'] = $dao->$type_field;
+      $return['country'] = $dao->$country_field;
+    }
+    return $return;
+  }
+  
 }

@@ -48,6 +48,16 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     return true;
   }
   
+  public function upgrade_1005() {
+    $this->removeCustomField('sponsor_code', 'sponsor_code');
+    return true;        
+  }
+  
+  public function upgrade_1006() {
+    $this->executeCustomDataFile('xml/sponsor_code.xml');
+    return true;
+  }
+  
   protected function addActivityTYpes() {
     if (empty($this->activity_type)) {
       $this->activity_type = civicrm_api3('OptionGroup', 'getvalue', array('return' => 'id', 'name' => 'activity_type'));

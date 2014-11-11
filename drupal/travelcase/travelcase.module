@@ -4,6 +4,67 @@ function travelcase_views_api() {
   return array('api' => 3.0);
 }
 
+function travelcase_views_data_alter(&$data) {
+  //var_dump($data['civicrm_case']); exit();
+  _travelcase_views_sponsor_relationship($data);
+}
+
+/**
+ * Add a view relationship from case to contact based on sponsor
+ */
+function _travelcase_views_sponsor_relationship(&$data) {
+  //var_dump($data['case']); exit();
+  if (!class_exists('CRM_Travelcase_SponsorCodeConfig')) {
+    return;
+  }
+  
+  $config = CRM_Travelcase_SponsorCodeConfig::singleton();
+  $table = $config->getCustomGroupSponsorCode('table_name');
+  $field = $config->getCustomFieldSponsorCode('column_name');
+  
+  $data[$table]['table'] = array(
+    'group' => 'CiviCRM Cases',
+  );  
+  
+  $data[$table]['table']["base"]= array(
+      "field" => "id",
+      "title" => "CiviCRM Case Sponsor",
+      "help" => "CiviCRM Case Sponsor",
+  );
+  $data[$table]['table']["join"] = array(
+    "civicrm_case" => array(
+        "left_field" => 'id',
+        "field" => 'entity_id'
+    ),
+    "civicrm_contact" => array(
+        "left_field" => 'id',
+        "field" => $field
+    ),
+  );
+  
+  $data[$table]['entity_id'] = array(
+    'real field' => 'entity_id',
+    'title' => t('CiviCRM Sponsor case'),
+    'help' => t('Connects a case to a sponsor.'),
+    'relationship' => array(
+      'base' => 'civicrm_case',
+      'base field' => 'id',
+      'label' => t('CiviCRM Sponsor Case'),
+    ),
+  );  
+  $data[$table]['contact_id'] = array(
+    'real field' => $field,
+    'title' => t('CiviCRM Case Sponsor'),
+    'help' => t('Connects a sponsor to a case.'),
+    'relationship' => array(
+      'base' => 'civicrm_contact',
+      'base field' => 'id',
+      'label' => t('CiviCRM Case Sponsor'),
+    ),
+  );
+  
+}
+
 function travelcase_views_default_views() {
   $files = file_scan_directory(drupal_get_path('module', 'travelcase'). '/views', '/.inc/');
   foreach ($files as $filepath => $file) {
@@ -30,4 +91,19 @@ function travelcase_get_role_ids($roles) {
   }
   
   return $rids;
+}
+
+function travelcase_module_implements_alter(&$module_list, $context){
+  if($context === "views_data_alter"){
+    $old_module_list = $module_list;
+    $module_list = array();
+    foreach($old_module_list as $module => $key) {
+      if ($module != 'travelcase') {
+        $module_list[$module] = $key;
+      }
+      if ($module == 'civicrm') {
+        $module_list['travelcase'] = $old_module_list['travelcase'];
+      }
+    }
+  }
 }
