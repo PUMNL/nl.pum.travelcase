@@ -177,6 +177,7 @@ $handler->display->display_options['fields']['display_name_1']['relationship'] =
 $handler->display->display_options['fields']['display_name_1']['ui_name'] = 'Sponsor';
 $handler->display->display_options['fields']['display_name_1']['label'] = 'Sponsor';
 $handler->display->display_options['fields']['display_name_1']['alter']['alter_text'] = TRUE;
+$handler->display->display_options['fields']['display_name_1']['alter']['strip_tags'] = TRUE;
 $handler->display->display_options['fields']['display_name_1']['alter']['text'] = '[sponsor_code]  - [display_name_1]';
 $handler->display->display_options['fields']['display_name_1']['link_to_civicrm_contact'] = 0;
 $handler->display->display_options['fields']['display_name_1']['element_label_type'] = 'strong';
