@@ -11,7 +11,7 @@ class CRM_Travelcase_ApplicantPaysConfig {
   protected $restrictied_activities;
   
   protected function __construct() {
-    $this->activity_type_id = civicrm_api3('OptionValue', 'getvalue', array('name' => 'Debriefing Expert', 'option_group_id' => 2, 'return' => 'value'));
+    $this->activity_type_id = civicrm_api3('OptionValue', 'getvalue', array('name' => 'Condition: Applicant Pays', 'option_group_id' => 2, 'return' => 'value'));
     $this->loadCustomGroupIds();
     $this->loadRestrictedActivities();
   }
