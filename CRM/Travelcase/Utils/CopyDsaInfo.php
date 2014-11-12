@@ -48,7 +48,7 @@ class CRM_Travelcase_Utils_CopyDsaInfo {
         $end_date = $dsa->getCustomFieldEndDate('id');
         
         $sdate = new DateTime($ma_info['start_date']);
-        $edate = new DateTime($ma_info['start_date']);
+        $edate = new DateTime($ma_info['end_date']);
     
         $params['custom'][$start_date][-1]['value'] = $sdate->format('Ymd');
         $params['custom'][$end_date][-1]['value'] = $edate->format('Ymd');
