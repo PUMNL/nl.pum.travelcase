@@ -49,8 +49,8 @@ class CRM_Travelcase_Utils_CopyPumCaseNumber{
           WHERE `id` = %4";
       CRM_Core_DAO::executeQuery($sql, array(
       1 => array($case_number['sequence'], 'Integer'),
-      2 => array($case_number['type'], 'String'),
-      3 => array($case_number['country'], 'String'),
+      2 => array($case_number['country'], 'String'),
+      3 => array($case_number['type'], 'String'),
       4 => array($dao->id, 'Integer')
     ));
     } else {
@@ -60,8 +60,8 @@ class CRM_Travelcase_Utils_CopyPumCaseNumber{
       CRM_Core_DAO::executeQuery($sql, array(
         1 => array($entityID, 'Integer'),
         2 => array($case_number['sequence'], 'Integer'),
-        3 => array($case_number['type'], 'String'),
-        4 => array($case_number['country'], 'String'),
+        3 => array($case_number['country'], 'String'),
+        4 => array($case_number['type'], 'String'),
       ));
     }
   }
