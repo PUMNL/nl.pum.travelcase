@@ -143,6 +143,46 @@ $handler->display->display_options['fields']['email_1']['location_op'] = '0';
 $handler->display->display_options['fields']['email_1']['is_primary'] = 0;
 $handler->display->display_options['fields']['email_1']['link_to_user'] = '0';
 $handler->display->display_options['fields']['email_1']['element_label_type'] = 'strong';
+/* Field: CiviCRM Address: Full Street Address */
+$handler->display->display_options['fields']['street_address']['id'] = 'street_address';
+$handler->display->display_options['fields']['street_address']['table'] = 'civicrm_address';
+$handler->display->display_options['fields']['street_address']['field'] = 'street_address';
+$handler->display->display_options['fields']['street_address']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['street_address']['label'] = 'Address';
+$handler->display->display_options['fields']['street_address']['location_type'] = '0';
+$handler->display->display_options['fields']['street_address']['location_op'] = '0';
+$handler->display->display_options['fields']['street_address']['is_primary'] = 1;
+$handler->display->display_options['fields']['street_address']['is_billing'] = 0;
+/* Field: CiviCRM Address: ZIP / Postal Code */
+$handler->display->display_options['fields']['postal_code']['id'] = 'postal_code';
+$handler->display->display_options['fields']['postal_code']['table'] = 'civicrm_address';
+$handler->display->display_options['fields']['postal_code']['field'] = 'postal_code';
+$handler->display->display_options['fields']['postal_code']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['postal_code']['label'] = 'Postal Code';
+$handler->display->display_options['fields']['postal_code']['location_type'] = '0';
+$handler->display->display_options['fields']['postal_code']['location_op'] = '0';
+$handler->display->display_options['fields']['postal_code']['is_primary'] = 1;
+$handler->display->display_options['fields']['postal_code']['is_billing'] = 0;
+/* Field: CiviCRM Address: City / Suburb */
+$handler->display->display_options['fields']['city']['id'] = 'city';
+$handler->display->display_options['fields']['city']['table'] = 'civicrm_address';
+$handler->display->display_options['fields']['city']['field'] = 'city';
+$handler->display->display_options['fields']['city']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['city']['label'] = 'City';
+$handler->display->display_options['fields']['city']['location_type'] = '0';
+$handler->display->display_options['fields']['city']['location_op'] = '0';
+$handler->display->display_options['fields']['city']['is_primary'] = 0;
+$handler->display->display_options['fields']['city']['is_billing'] = 0;
+/* Field: CiviCRM Address: Country */
+$handler->display->display_options['fields']['country']['id'] = 'country';
+$handler->display->display_options['fields']['country']['table'] = 'civicrm_address';
+$handler->display->display_options['fields']['country']['field'] = 'country';
+$handler->display->display_options['fields']['country']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['country']['location_type'] = '0';
+$handler->display->display_options['fields']['country']['location_op'] = '0';
+$handler->display->display_options['fields']['country']['is_primary'] = 1;
+$handler->display->display_options['fields']['country']['is_billing'] = 0;
+$handler->display->display_options['fields']['country']['country_display'] = '2';
 /* Field: CiviCRM Custom: Flight Preferences: Diet preference */
 $handler->display->display_options['fields']['diet_preference_641']['id'] = 'diet_preference_641';
 $handler->display->display_options['fields']['diet_preference_641']['table'] = $flight_pref['table_name'];
