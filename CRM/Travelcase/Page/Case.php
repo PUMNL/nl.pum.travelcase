@@ -61,6 +61,7 @@ class CRM_Travelcase_Page_Case extends CRM_Core_Page {
       $config->getRelationshipTypeCC('id'),
       $config->getRelationshipTypeRep('id'),
       $config->getRelationshipTypeProjOff('id'),
+      $config->getRelationshipTypeMtMember('id'),
     );
     
     $related_contacts = array();
