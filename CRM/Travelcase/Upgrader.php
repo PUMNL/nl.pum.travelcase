@@ -185,9 +185,9 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
   protected function updateCustomField($field_name, $custom_group_name, $params) {
     try {
       $custom_group_id = civicrm_api3('CustomGroup', 'getvalue', array('return' => 'id', 'name' => $custom_group_name));
-      $custom_field_id = civicrm_api3('CustomField', 'getvalue', array('custom_group_id' => $custom_group_id, 'name' => $field_name, 'return' => 'id'));
+      $custom_field = civicrm_api3('CustomField', 'getsingle', array('custom_group_id' => $custom_group_id, 'name' => $field_name, 'return' => 'id'));
       
-      $params['id'] = $custom_field_id;
+      $params = $custom_field + $params;
       
       civicrm_api3('CustomField', 'create', $params);
       
