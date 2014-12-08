@@ -66,9 +66,19 @@ class CRM_Travelcase_Utils_AddDonorFromParentCase {
       
     $params = array('entity' => 'Case', 'entity_id' => $parent_case_id, 'donation_entity' => 'Contribution', 'is_active' => 1);
     $currentContributions = CRM_Threepeas_BAO_PumDonorLink::getValues($params);
+    
+    $fa_donor = false;    
     foreach ($currentContributions as $currentContribution) {
       $defaults['new_link'][] = $currentContribution['donation_entity_id'];
+      if ($currentContribution['is_fa_donor']) {
+        $fa_donor = $currentContribution['donation_entity_id'];
+      }
     }
+    
+    if ($fa_donor) {
+      $defaults['fa_donor'] = $fa_donor;
+    }
+    
     if (!empty($defaults)) {
       $form->setDefaults($defaults);
     }
@@ -102,7 +112,9 @@ class CRM_Travelcase_Utils_AddDonorFromParentCase {
       'donation_entity_id' => $dao->donation_entity_id,
       'entity' => 'Case',
       'entity_id' => $to_case_id,
-      'is_active' => $dao->is_active);
+      'is_fa_donor' => $dao->is_fa_donor,
+      'is_active' => $dao->is_active
+      );
       CRM_Threepeas_BAO_PumDonorLink::add($params);
     }
   }
