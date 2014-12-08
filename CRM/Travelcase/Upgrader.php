@@ -85,6 +85,20 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     return true;
   }
   
+  public function upgrade_1011() {
+    $this->executeCustomDataFile('xml/travelcase_status.xml');
+    return true;
+  }
+  
+  public function upgrade_1012() {
+    $this->updateCustomField('visa', 'travelcase_status', array('weight' => 1, 'is_active' => 1));
+    $this->updateCustomField('invitation', 'travelcase_status', array('weight' => 2, 'is_active' => 1));
+    $this->updateCustomField('ticket', 'travelcase_status', array('weight' => 3, 'is_active' => 1));
+    $this->updateCustomField('pickup', 'travelcase_status', array('weight' => 4, 'is_active' => 1));
+    $this->updateCustomField('accomodation', 'travelcase_status', array('weight' => 5, 'is_active' => 1));
+    return true;
+  }
+  
   protected function addActivityTYpes() {
     if (empty($this->activity_type)) {
       $this->activity_type = civicrm_api3('OptionGroup', 'getvalue', array('return' => 'id', 'name' => 'activity_type'));
@@ -161,6 +175,21 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
       $custom_field_id = civicrm_api3('CustomField', 'getvalue', array('custom_group_id' => $custom_group_id, 'name' => $field_name, 'return' => 'id'));
       
       civicrm_api3('CustomField', 'delete', array('id' => $custom_field_id));
+      
+      return; //aleardy exist
+    } catch (Exception $e) {
+      //do nothing
+    }
+  }
+  
+  protected function updateCustomField($field_name, $custom_group_name, $params) {
+    try {
+      $custom_group_id = civicrm_api3('CustomGroup', 'getvalue', array('return' => 'id', 'name' => $custom_group_name));
+      $custom_field_id = civicrm_api3('CustomField', 'getvalue', array('custom_group_id' => $custom_group_id, 'name' => $field_name, 'return' => 'id'));
+      
+      $params['id'] = $custom_field_id;
+      
+      civicrm_api3('CustomField', 'create', $params);
       
       return; //aleardy exist
     } catch (Exception $e) {
