@@ -78,6 +78,13 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     return true;
   }
   
+  public function upgrade_1010() {
+    $this->removeCustomField('sponsor', 'sponsor_code');
+    $custom_group_id = civicrm_api3('CustomGroup', 'getvalue', array('return' => 'id', 'name' => 'sponsor_code'));
+    civicrm_api3('CustomGroup', 'delete', array('id' => $custom_group_id));
+    return true;
+  }
+  
   protected function addActivityTYpes() {
     if (empty($this->activity_type)) {
       $this->activity_type = civicrm_api3('OptionGroup', 'getvalue', array('return' => 'id', 'name' => 'activity_type'));

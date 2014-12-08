@@ -4,67 +4,6 @@ function travelcase_views_api() {
   return array('api' => 3.0);
 }
 
-function travelcase_views_data_alter(&$data) {
-  //var_dump($data['civicrm_case']); exit();
-  _travelcase_views_sponsor_relationship($data);
-}
-
-/**
- * Add a view relationship from case to contact based on sponsor
- */
-function _travelcase_views_sponsor_relationship(&$data) {
-  //var_dump($data['case']); exit();
-  if (!class_exists('CRM_Travelcase_SponsorCodeConfig')) {
-    return;
-  }
-  
-  $config = CRM_Travelcase_SponsorCodeConfig::singleton();
-  $table = $config->getCustomGroupSponsorCode('table_name');
-  $field = $config->getCustomFieldSponsorCode('column_name');
-  
-  $data[$table]['table'] = array(
-    'group' => 'CiviCRM Cases',
-  );  
-  
-  $data[$table]['table']["base"]= array(
-      "field" => "id",
-      "title" => "CiviCRM Case Sponsor",
-      "help" => "CiviCRM Case Sponsor",
-  );
-  $data[$table]['table']["join"] = array(
-    "civicrm_case" => array(
-        "left_field" => 'id',
-        "field" => 'entity_id'
-    ),
-    "civicrm_contact" => array(
-        "left_field" => 'id',
-        "field" => $field
-    ),
-  );
-  
-  $data[$table]['entity_id'] = array(
-    'real field' => 'entity_id',
-    'title' => t('CiviCRM Sponsor case'),
-    'help' => t('Connects a case to a sponsor.'),
-    'relationship' => array(
-      'base' => 'civicrm_case',
-      'base field' => 'id',
-      'label' => t('CiviCRM Sponsor Case'),
-    ),
-  );  
-  $data[$table]['contact_id'] = array(
-    'real field' => $field,
-    'title' => t('CiviCRM Case Sponsor'),
-    'help' => t('Connects a sponsor to a case.'),
-    'relationship' => array(
-      'base' => 'civicrm_contact',
-      'base field' => 'id',
-      'label' => t('CiviCRM Case Sponsor'),
-    ),
-  );
-  
-}
-
 function travelcase_views_default_views() {
   $files = file_scan_directory(drupal_get_path('module', 'travelcase'). '/views', '/.inc/');
   foreach ($files as $filepath => $file) {
@@ -80,6 +19,55 @@ function travelcase_views_default_views() {
   return $views;
 }
 
+function _travelcase_get_fa_sponsor_display_name($case_id) {
+  $contact_id = _travelcase_get_fa_sponsor_contact_id($case_id);
+  if (!$contact_id) {
+    return false;
+  }
+  
+  $contact_params['id'] = $contact_id;
+  $contact_params['return'] = 'display_name';
+  return civicrm_api3('Contact', 'getvalue', $contact_params);
+}
+
+function _travelcase_get_fa_sponsor_code($case_id) {
+  $contact_id = _travelcase_get_fa_sponsor_contact_id($case_id);
+  if (!$contact_id) {
+    return false;
+  }
+  
+  $sponsor_code_group = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'Donor_details_FA'));
+  $sponsor_code_field = civicrm_api3('CustomField', 'getvalue', array('name' => 'Donor_code', 'return' => 'id', 'custom_group_id' => $sponsor_code_group['id']));
+  
+  $contact_params['id'] = $contact_id;
+  $contact_params['return'] = 'custom_'.$sponsor_code_field;
+  return civicrm_api3('Contact', 'getvalue', $contact_params);
+}
+
+function _travelcase_get_fa_sponsor_contact_id($case_id) {
+  static $contact_ids = array();
+  
+  if (!isset($contact_ids[$case_id])) {
+    $fa_donor_params = array(
+      'entity_id' => $case_id,
+      'entity' => 'Case',
+      'is_fa_donor' => 1
+    );
+    $fa_donation = CRM_Threepeas_BAO_PumDonorLink::getValues($fa_donor_params);
+    $fa_donation = reset($fa_donation);
+    $donor_contact_id = false;
+    if ($fa_donation['donation_entity'] == 'Contribution') {
+      $donor_contact_id = civicrm_api3('Contribution', 'getvalue', array(
+        'return' => 'contact_id',
+        'id' => $fa_donation['donation_entity_id'],
+      ));
+    }
+    $contact_ids[$case_id] = $donor_contact_id;
+  }
+  
+  return $contact_ids[$case_id];
+}
+
 function travelcase_get_role_ids($roles) {
   $rids = array();
   $available_roles = user_roles();
@@ -91,19 +79,4 @@ function travelcase_get_role_ids($roles) {
   }
   
   return $rids;
-}
-
-function travelcase_module_implements_alter(&$module_list, $context){
-  if($context === "views_data_alter"){
-    $old_module_list = $module_list;
-    $module_list = array();
-    foreach($old_module_list as $module => $key) {
-      if ($module != 'travelcase') {
-        $module_list[$module] = $key;
-      }
-      if ($module == 'civicrm') {
-        $module_list['travelcase'] = $old_module_list['travelcase'];
-      }
-    }
-  }
 }
