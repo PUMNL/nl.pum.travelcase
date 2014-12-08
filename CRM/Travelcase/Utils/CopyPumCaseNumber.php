@@ -69,7 +69,7 @@ class CRM_Travelcase_Utils_CopyPumCaseNumber{
   
   
   public static function custom($op, $groupID, $entityID, &$params) {
-    if ($op != 'edit') { //create doesn't work, we use the post hook for create
+    if ($op != 'edit' && $op != 'create') { //create doesn't work, we use the post hook for create
       return;
     }
 

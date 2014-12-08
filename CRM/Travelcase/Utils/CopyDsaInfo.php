@@ -59,7 +59,7 @@ class CRM_Travelcase_Utils_CopyDsaInfo {
   
   
   public static function custom($op, $groupID, $entityID, &$params) {
-    if ($op != 'edit') { //create doesn't work, we use the pre hook for create
+    if ($op != 'edit' && $op != 'create') { //create doesn't work, we use the pre hook for create
       return;
     }
 
@@ -95,16 +95,16 @@ class CRM_Travelcase_Utils_CopyDsaInfo {
           //update
           $sql = "UPDATE `".$dsa->getCustomGroupInfoForDsa('table_name')."` SET `".$dsa->getCustomFieldStartDate('column_name')."`  = %1, `".$dsa->getCustomFieldEndDate('column_name')."`  = %2 WHERE `id` = %3";
           CRM_Core_DAO::executeQuery($sql, array(
-            1 => array($ma_info['start_date'], 'String'),
-            2 => array($ma_info['end_date'], 'String'),
+            1 => array($ma_info['start_date'] ? $ma_info['start_date'] : '' , 'String'),
+            2 => array($ma_info['end_date'] ? $ma_info['end_date'] : '', 'String'),
             3 => array($dao->id, 'Integer')
           ));
         } else {
-          $sql = "INSERT INTO `".$dsa->getCustomGroupInfoForDsa('table_name')."` (`entity_id`, `".$dsa->getCustomFieldStartDate('column_name')."`, `".$dsa->getCustomFieldStartDate('column_name')."`) VALUES (%1, %2, %3)";
+          $sql = "INSERT INTO `".$dsa->getCustomGroupInfoForDsa('table_name')."` (`entity_id`, `".$dsa->getCustomFieldStartDate('column_name')."`, `".$dsa->getCustomFieldEndDate('column_name')."`) VALUES (%1, %2, %3)";
           CRM_Core_DAO::executeQuery($sql, array(
             1 => array($entityID, 'Integer'),
-            2 => array($ma_info['start_date'], 'String'),
-            3 => array($ma_info['end_date'], 'String'),
+            2 => array($ma_info['start_date'] ? $ma_info['start_date'] : '', 'String'),
+            3 => array($ma_info['end_date'] ? $ma_info['end_date'] : '', 'String'),
           ));
         }
       }
