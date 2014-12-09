@@ -36,6 +36,7 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
             'required' => TRUE,
           ),
         ),
+        'grouping' => 'travelcase',
       ),
       'civicrm_case' =>
       array(
@@ -92,8 +93,55 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
             'default' => 0,
           ),
         ),
+        'grouping' => 'travelcase',
+      ),
+      'customer' =>
+      array(
+        'dao' => 'CRM_Contact_DAO_Contact',
+        'fields' =>
+        array(
+          'customer_name' =>
+          array(
+            'name' => 'display_name',
+            'title' => ts('Client (parent case)'),
+            'default' => TRUE,
+          ),
+          'customer_id' =>
+          array(
+            'no_display' => TRUE,
+            'required' => TRUE,
+            'name' => 'id',
+          ),
+        ),
+        'grouping' => 'parentcase',
+      ),
+      'civicrm_parent_case' =>
+      array(
+        'dao' => 'CRM_Case_DAO_Case',
+        'fields' =>
+        array(
+          'id' =>
+          array('title' => ts('Case ID'),
+            'required' => TRUE,
+            'no_display' => TRUE,
+          ),
+          'subject' => array(
+            'title' => ts('Case Subject (Parent case)'), 'default' => FALSE,
+          ),
+          'status_id' => array(
+            'title' => ts('Status (Parent case)'), 'default' => TRUE,
+          ),
+          'case_type_id' => array(
+            'title' => ts('Case Type (Parent case)'), 'default' => FALSE,
+          ),
+        ),
+        'grouping' => 'parentcase',
       ),
        'civicrm_case_contact' =>
+      array(
+        'dao' => 'CRM_Case_DAO_CaseContact',
+      ),
+      'civicrm_parent_case_contact' =>
       array(
         'dao' => 'CRM_Case_DAO_CaseContact',
       ),
@@ -135,14 +183,22 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
   }
 
   function from() {
+    $config = CRM_Travelcase_Config::singleton();
     $cc  = $this->_aliases['civicrm_case'];
     $c2  = $this->_aliases['civicrm_contact_a'];
     $ccc = $this->_aliases['civicrm_case_contact'];
+    $pcc  = $this->_aliases['civicrm_parent_case'];
+    $pccc  = $this->_aliases['civicrm_parent_case_contact'];
+    $c3  = $this->_aliases['customer'];
 
     $this->_from = "
           FROM civicrm_case {$cc}
           inner join civicrm_case_contact {$ccc} on {$ccc}.case_id = {$cc}.id
           inner join civicrm_contact {$c2} on {$c2}.id={$ccc}.contact_id
+          left join `".$config->getCustomGroupLinkCaseTo('table_name')."` `linkcase` ON `linkcase`.`entity_id` = `{$cc}`.`id`
+          left join `civicrm_case` `{$pcc}` ON `linkcase`.`".$config->getCustomFieldCaseId('column_name')."` = `{$pcc}`.`id`
+          left join `civicrm_case_contact` `{$pccc}` ON {$pccc}.case_id = `{$pcc}`.`id`
+          left join civicrm_contact {$c3} on {$c3}.id={$pccc}.contact_id
       ";
   }
 
@@ -236,6 +292,13 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
           $entryFound = TRUE;
         }
       }
+      
+      if (array_key_exists('civicrm_parent_case_status_id', $row)) {
+        if ($value = $row['civicrm_parent_case_status_id']) {
+          $rows[$rowNum]['civicrm_parent_case_status_id'] = $this->case_statuses[$value];
+          $entryFound = TRUE;
+        }
+      }
 
       if (array_key_exists('civicrm_case_case_type_id', $row) &&
         CRM_Utils_Array::value('civicrm_case_case_type_id', $rows[$rowNum])
@@ -252,11 +315,34 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
         $entryFound = TRUE;
       }
       
+      if (array_key_exists('civicrm_parent_case_case_type_id', $row) &&
+        CRM_Utils_Array::value('civicrm_parent_case_case_type_id', $rows[$rowNum])
+      ) {
+        $value   = $row['civicrm_parent_case_case_type_id'];
+        $typeIds = explode(CRM_Core_DAO::VALUE_SEPARATOR, $value);
+        $value   = array();
+        foreach ($typeIds as $typeId) {
+          if ($typeId) {
+            $value[$typeId] = $this->case_types[$typeId];
+          }
+        }
+        $rows[$rowNum]['civicrm_parent_case_case_type_id'] = implode(', ', $value);
+        $entryFound = TRUE;
+      }
+      
       // convert Client ID to contact page
       if (CRM_Utils_Array::value('civicrm_contact_a_client_name', $rows[$rowNum])) {
         $url = CRM_Utils_System::url("civicrm/contact/view?action=view&reset=1&cid". $row['civicrm_contact_a_id'], $this->_absoluteUrl);
         $rows[$rowNum]['civicrm_contact_a_client_name_link'] = $url;
         $rows[$rowNum]['civicrm_contact_a_client_name_hover'] = ts("View client");
+        $entryFound = TRUE;
+      }
+      
+      // convert Client ID to contact page
+      if (CRM_Utils_Array::value('customer_customer_name', $rows[$rowNum])) {
+        $url = CRM_Utils_System::url("civicrm/contact/view?action=view&reset=1&cid". $row['customer_id'], $this->_absoluteUrl);
+        $rows[$rowNum]['customer_customer_name_link'] = $url;
+        $rows[$rowNum]['customer_customer_name_hover'] = ts("View client");
         $entryFound = TRUE;
       }
       
