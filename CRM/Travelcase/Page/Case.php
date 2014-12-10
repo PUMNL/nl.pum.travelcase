@@ -56,13 +56,8 @@ class CRM_Travelcase_Page_Case extends CRM_Core_Page {
     $this->assign('travel_cases', $cases);    
     $this->assign('permission', 'edit');
     
-    $relationships_to_check = array (
-      $config->getRelationshipTypeExpert('id'),
-      $config->getRelationshipTypeCC('id'),
-      $config->getRelationshipTypeRep('id'),
-      $config->getRelationshipTypeProjOff('id'),
-      $config->getRelationshipTypeMtMember('id'),
-    );
+    $case_type_id = civicrm_api3('Case', 'getvalue', array('id' => $this->caseId, 'return' => 'case_type_id'));
+    $relationships_to_check = $config->getTravelCaseRelationshipsForCaseType($case_type_id);
     
     $related_contacts = array();
     foreach($relationships_to_check as $rtype_id) {

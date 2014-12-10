@@ -116,4 +116,37 @@ class CRM_Travelcase_Config {
   public function getRelationshipTypeMtMember($key='id') {
     return $this->mt_member_relationship_type[$key];
   }
+  
+  public function getTravelCaseRelationshipsForCaseType($case_type_id) {
+    $case_type_option_group_id = civicrm_api3('OptionGroup', 'getvalue', array('name' => 'case_type', 'return' => 'id'));
+    $case_type = civicrm_api3('OptionValue', 'getvalue', array('value' => $case_type_id, 'option_group_id' => $case_type_option_group_id, 'return' => 'name'));
+    switch ($case_type) {      
+      case 'Advice':
+        return array(
+          $this->getRelationshipTypeExpert('id'),
+        );
+        break;
+      case 'Seminar':
+        return array(
+          $this->getRelationshipTypeExpert('id'),
+        );
+        break;
+      case 'PDV':
+        return array(
+          $this->getRelationshipTypeCC('id'),
+          $this->getRelationshipTypeProjOff('id'),
+          $this->getRelationshipTypeMtMember('id'),
+        );
+        break;
+      case 'CTM':
+        return array(
+          $this->getRelationshipTypeCC('id'),
+          $this->getRelationshipTypeRep('id'),
+          $this->getRelationshipTypeProjOff('id'),
+          $this->getRelationshipTypeMtMember('id'),
+        );
+        break;
+    }
+    return array();
+  }
 }
