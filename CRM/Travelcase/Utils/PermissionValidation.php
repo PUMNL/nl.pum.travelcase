@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Travelcase_Utils_ApplicantPaysValidation {
+class CRM_Travelcase_Utils_PermissionValidation {
   
   public static function validateForm( $formName, &$fields, &$files, &$form, &$errors ) {
     if ($formName == 'CRM_Case_Form_Activity') {
@@ -15,12 +15,16 @@ class CRM_Travelcase_Utils_ApplicantPaysValidation {
   protected static function validateCaseView( $formName, &$fields, &$files, &$form, &$errors ) {
     $caseId = $form->getVar('_caseID');
     
-    if (!self::hasParentCaseApplicantPays($caseId)) {
+    if (!self::hasParentCaseApplicantPays($caseId) && self::hasPermission($caseId)) {
       return;
     }
     
     if (isset($fields['timeline_id']) == 'Visa') {
-      $errors['timeline_id'] = ts('Applicant Pays restriction in place on parent case');
+      if (!self::hasPermission($caseId)) {
+        $errors['timeline_id'] = ts('You do not have the permission for this timeline');
+      } else {
+        $errors['timeline_id'] = ts('Applicant Pays restriction in place on parent case');
+      }
     }
   }
   
@@ -33,12 +37,16 @@ class CRM_Travelcase_Utils_ApplicantPaysValidation {
       return;
     }
     
-    if (!self::hasParentCaseApplicantPays($caseId)) {
+    if (!self::hasParentCaseApplicantPays($caseId) && self::hasPermission($caseId)) {
       return;
     }
     
     foreach($fields as $fieldName => $value) {
-      $errors[$fieldName] = ts('Applicant Pays restriction in place on parent case');
+      if (!self::hasPermission($caseId)) {
+        $errors[$fieldName] = ts('You do not have the permission to edit this activity');
+      } else {
+        $errors[$fieldName] = ts('Applicant Pays restriction in place on parent case');
+      }
     }
     
   }
@@ -52,7 +60,11 @@ class CRM_Travelcase_Utils_ApplicantPaysValidation {
     }
     
     $caseId = $form->getVar('_entityID');
-    if (self::hasParentCaseApplicantPays($caseId)) {
+    if (!self::hasPermission($caseId)) {
+      foreach($fields as $fieldName => $value) {
+        $errors[$fieldName] = ts('You do not have the permission to edit this information on the travelcase');
+      }
+    } elseif (self::hasParentCaseApplicantPays($caseId)) {
       foreach($fields as $fieldName => $value) {
         $errors[$fieldName] = ts('Applicant Pays restriction in place on parent case');
       }
@@ -60,6 +72,15 @@ class CRM_Travelcase_Utils_ApplicantPaysValidation {
   }
   
   protected static function hasParentCaseApplicantPays($child_case_id) {
+    $parent_case_id = self::getParentCaseId($child_case_id);
+    if (!$parent_case_id) {
+      return false;
+    }
+    
+    return self::hasCaseApplicantPays($parent_case_id);
+  }
+  
+  protected static function getParentCaseId($child_case_id) {
     $config = CRM_Travelcase_Config::singleton();    
     
     $case_id_field = $config->getCustomFieldCaseId('id');
@@ -69,7 +90,7 @@ class CRM_Travelcase_Utils_ApplicantPaysValidation {
       return false;
     }
     
-    return self::hasCaseApplicantPays($custom_values[$case_id_field]);
+    return $custom_values[$case_id_field];
   }
   
   protected static function hasCaseApplicantPays($case_id) {
@@ -90,6 +111,48 @@ class CRM_Travelcase_Utils_ApplicantPaysValidation {
     if ($dao->fetch()) {
       return true;
     }
+    return false;
+  }
+  
+  protected static function hasPermission($case_id) {
+    if (CRM_Core_Permission::check('manage all travel cases')) {
+      return true;
+    }
+    
+    //check wether the user has CC relationship on the parent case
+    $parent_case_id = self::getParentCaseId($case_id);
+    if (!$parent_case_id) {
+      return false;
+    }
+    
+    $session = CRM_Core_Session::singleton();
+    $config = CRM_Travelcase_Config::singleton();
+        
+    try {
+      $case_type_id = civicrm_api3('Case', 'getvalue', array(
+        'id' => $parent_case_id,
+        'return' => 'case_type_id',
+      ));
+      $relationships_to_check = $config->getTravelCaseManagerByParentCaseRole($case_type_id);
+      foreach($relationships_to_check as $relationship_type_id) {
+        try {
+          $contact_id = civicrm_api3('Relationship', 'getvalue', array(
+            'relationship_type_id' => $relationship_type_id,
+            'case_id' => $parent_case_id,
+            'return' => 'contact_id_b',
+          ));
+          
+          if ($contact_id == $session->get('userID')) {
+            return true;
+          }
+        } catch (Exception $ex) {
+          //do nothing
+        }
+      }
+    } catch (Exception $ex) {
+      //do nothing
+    }
+    
     return false;
   }
   

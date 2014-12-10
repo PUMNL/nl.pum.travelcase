@@ -149,4 +149,26 @@ class CRM_Travelcase_Config {
     }
     return array();
   }
+  
+  public function getTravelCaseManagerByParentCaseRole($case_type_id) {
+    $case_type_option_group_id = civicrm_api3('OptionGroup', 'getvalue', array('name' => 'case_type', 'return' => 'id'));
+    $case_type = civicrm_api3('OptionValue', 'getvalue', array('value' => $case_type_id, 'option_group_id' => $case_type_option_group_id, 'return' => 'name'));
+    switch ($case_type) {      
+      case 'Advice':
+        return array();
+        break;
+      case 'Seminar':
+        return array();
+        break;
+      case 'PDV':
+        return array(
+          $this->getRelationshipTypeCC('id'),
+        );
+        break;
+      case 'CTM':
+        return array();
+        break;
+    }
+    return array();
+  }
 }

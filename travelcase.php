@@ -22,8 +22,16 @@ function travelcase_civicrm_caseSummary($caseId) {
   );
 }
 
+function travelcase_civicrm_permission( &$permissions ) {
+  $prefix = ts('CiviCRM Travelcase') . ': ';
+  if (!is_array($permissions)) {
+    $permissions = array();
+  }
+  $permissions['manage all travel cases'] = $prefix . ts('Manage all travelcase (activities)');
+}
+
 function travelcase_civicrm_validateForm( $formName, &$fields, &$files, &$form, &$errors ) {
-  CRM_Travelcase_Utils_ApplicantPaysValidation::validateForm($formName, $fields, $files, $form, $errors);
+  CRM_Travelcase_Utils_PermissionValidation::validateForm($formName, $fields, $files, $form, $errors);
 }
 
 function travelcase_civicrm_buildForm($formName, &$form) {
@@ -47,7 +55,6 @@ function travelcase_civicrm_postSave_civicrm_donor_link($dao) {
 function travelcase_civicrm_pre( $op, $objectName, $id, &$params ) {
   if ($objectName == 'Case' && $op == 'create') {
     CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::pre($op, $objectName, $id, $params);
-    CRM_Travelcase_Utils_CopyDonorCode::pre($op, $objectName, $id, $params);
     CRM_Travelcase_Utils_CopyDsaInfo::pre($op, $objectName, $id, $params);
   }
 }
@@ -70,7 +77,6 @@ function travelcase_civicrm_post( $op, $objectName, $id, &$objectRef ) {
 function travelcase_civicrm_custom( $op, $groupID, $entityID, &$params ) {
   $config = CRM_Travelcase_Config::singleton();
   CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::custom($op, $groupID, $entityID, $params);
-  CRM_Travelcase_Utils_CopyDonorCode::custom($op, $groupID, $entityID, $params);
   CRM_Travelcase_Utils_AddDonorFromParentCase::custom($op, $groupID, $entityID, $params);
   CRM_Travelcase_Utils_CopyDsaInfo::custom($op, $groupID, $entityID, $params);
   CRM_Travelcase_Utils_CopyPumCaseNumber::custom($op, $groupID, $entityID, $params);
