@@ -119,6 +119,16 @@ class CRM_Travelcase_Utils_PermissionValidation {
       return true;
     }
     
+    $config = CRM_Travelcase_Config::singleton();
+    $case_type_id = civicrm_api3('Case', 'getvalue', array(
+      'id' => $case_id,
+      'return' => 'case_type_id',
+    ));
+    
+    if ($case_type_id != $config->getCaseType('value')) {
+      return true; //this is not a travel case so user has permission
+    }
+    
     //check wether the user has CC relationship on the parent case
     $parent_case_id = self::getParentCaseId($case_id);
     if (!$parent_case_id) {
@@ -126,14 +136,14 @@ class CRM_Travelcase_Utils_PermissionValidation {
     }
     
     $session = CRM_Core_Session::singleton();
-    $config = CRM_Travelcase_Config::singleton();
+    
         
     try {
-      $case_type_id = civicrm_api3('Case', 'getvalue', array(
+      $parent_case_type_id = civicrm_api3('Case', 'getvalue', array(
         'id' => $parent_case_id,
         'return' => 'case_type_id',
       ));
-      $relationships_to_check = $config->getTravelCaseManagerByParentCaseRole($case_type_id);
+      $relationships_to_check = $config->getTravelCaseManagerByParentCaseRole($parent_case_type_id);
       foreach($relationships_to_check as $relationship_type_id) {
         try {
           $contact_id = civicrm_api3('Relationship', 'getvalue', array(
