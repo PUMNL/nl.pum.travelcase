@@ -15,11 +15,11 @@ class CRM_Travelcase_Utils_PermissionValidation {
   protected static function validateCaseView( $formName, &$fields, &$files, &$form, &$errors ) {
     $caseId = _travelcase_retrieve_case_id_from_url($form->_submitValues['entryURL']);
     
-    if (!self::hasParentCaseApplicantPays($caseId) && self::hasPermission($caseId)) {
+    if (!empty($caseId) && !self::hasParentCaseApplicantPays($caseId) && self::hasPermission($caseId)) {
       return;
     }
     
-    if (isset($fields['timeline_id']) == 'Visa') {
+    if (isset($fields['timeline_id']) && $fields['timeline_id'] == 'Visa') {
       if (!self::hasPermission($caseId)) {
         $errors['timeline_id'] = ts('You do not have the permission for this timeline');
       } else {
@@ -37,7 +37,7 @@ class CRM_Travelcase_Utils_PermissionValidation {
       return;
     }
     
-    if (!self::hasParentCaseApplicantPays($caseId) && self::hasPermission($caseId)) {
+    if (!empty($caseId) && !self::hasParentCaseApplicantPays($caseId) && self::hasPermission($caseId)) {
       return;
     }
     
