@@ -13,7 +13,7 @@ class CRM_Travelcase_Utils_PermissionValidation {
   }
   
   protected static function validateCaseView( $formName, &$fields, &$files, &$form, &$errors ) {
-    $caseId = $form->getVar('_caseID');
+    $caseId = _travelcase_retrieve_case_id_from_url();
     
     if (!self::hasParentCaseApplicantPays($caseId) && self::hasPermission($caseId)) {
       return;
@@ -30,7 +30,7 @@ class CRM_Travelcase_Utils_PermissionValidation {
   
   protected static function validateCaseActivityForm( $formName, &$fields, &$files, &$form, &$errors ) {
     $config = CRM_Travelcase_ApplicantPaysConfig::singleton();
-    $caseId = $form->getVar('_caseId');
+    $caseId = _travelcase_retrieve_case_id_from_url();
     $activityTypeId = $form->getVar('_activityTypeId');
     
     if (!in_array($activityTypeId, $config->getRestrictiedActivites())) {

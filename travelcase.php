@@ -135,6 +135,15 @@ function travelcase_civicrm_customFieldOptions( $fieldID, &$options, $detailedFo
 }
 
 /**
+ * Function to retrieve the case Id from url (required for issue 1071)
+ * 
+ * @return int $case_id
+ */
+function _travelcase_retrieve_case_id_from_url() {
+  return CRM_Utils_Request::retrieve('id', 'Integer');
+}
+
+/**
  * Implementation of hook_civicrm_config
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
