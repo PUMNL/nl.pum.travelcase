@@ -37,7 +37,7 @@ class CRM_Travelcase_Utils_PermissionValidation {
       return;
     }
     
-    if (!empty($caseId) && !self::hasParentCaseApplicantPays($caseId) && self::hasPermission($caseId)) {
+    if (empty($caseId) || (!self::hasParentCaseApplicantPays($caseId) && self::hasPermission($caseId))) {
       return;
     }
     
