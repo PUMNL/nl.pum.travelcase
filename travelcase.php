@@ -140,7 +140,7 @@ function travelcase_civicrm_customFieldOptions( $fieldID, &$options, $detailedFo
  * @param string $url
  * @return int $case_id
  */
-function _threepeas_retrieve_case_id_from_url($url) {
+function _travelcase_retrieve_case_id_from_url($url) {
   $case_id = 0;
   $query_str = parse_url($url, PHP_URL_QUERY);
   parse_str($query_str, $url_params);
