@@ -137,10 +137,19 @@ function travelcase_civicrm_customFieldOptions( $fieldID, &$options, $detailedFo
 /**
  * Function to retrieve the case Id from url (required for issue 1071)
  * 
+ * @param string $url
  * @return int $case_id
  */
-function _travelcase_retrieve_case_id_from_url() {
-  return CRM_Utils_Request::retrieve('id', 'Integer');
+function _threepeas_retrieve_case_id_from_url($url) {
+  $case_id = 0;
+  $query_str = parse_url($url, PHP_URL_QUERY);
+  parse_str($query_str, $url_params);
+  foreach ($url_params as $key => $value) {
+    if ($key == 'id' || $key == 'amp;id') {
+      $case_id = $value;
+    }
+  }
+  return $case_id;
 }
 
 /**
