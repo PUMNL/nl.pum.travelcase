@@ -11,6 +11,7 @@ class CRM_Travelcase_Utils_AddDonorFromParentCase {
       return;
     }
         
+    $parent_case_id = false;
     $config = CRM_Travelcase_Config::singleton();
     $sql = "SELECT `".$config->getCustomFieldCaseId('column_name')."` AS `case_id` FROM `".$config->getCustomGroupLinkCaseTo('table_name')."` WHERE `entity_id` = %1";
     $dao = CRM_Core_DAO::executeQuery($sql, array(1 => array($objectId, 'Integer')));
