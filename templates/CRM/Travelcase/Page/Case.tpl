@@ -11,11 +11,17 @@
 {if $permission EQ 'edit' && count($related_contacts)}
 <div class="action-link">
     {foreach from=$related_contacts item=related_contact}
-        {capture assign=newTravelCaseUrl}{crmURL p="civicrm/case/add" q="reset=1&action=add&cid=`$related_contact.id`&context=case&parent_case_id=`$caseId`"}{/capture}
-        
+        {if ($related_contact == 'additional_person')} 
+            {capture assign=newTravelCaseUrl}{crmURL p="civicrm/case/add" q="reset=1&action=add&context=standalone&parent_case_id=`$caseId`"}{/capture}
+            <a accesskey="N" href="{$newTravelCaseUrl}" class="button">
+                <span><div class="icon add-icon"></div>{ts}New travel case for another person{/ts}</span>
+            </a>
+        {else}
+            {capture assign=newTravelCaseUrl}{crmURL p="civicrm/case/add" q="reset=1&action=add&cid=`$related_contact.id`&context=case&parent_case_id=`$caseId`"}{/capture}
             <a accesskey="N" href="{$newTravelCaseUrl}" class="button">
                 <span><div class="icon add-icon"></div>{ts}New travel case for{/ts} {$related_contact.display_name}</span>
             </a>
+        {/if}
     {/foreach}
         </div>
 {/if}

@@ -144,6 +144,7 @@ class CRM_Travelcase_Config {
           $this->getRelationshipTypeRep('id'),
           $this->getRelationshipTypeProjOff('id'),
           $this->getRelationshipTypeMtMember('id'),
+          'additional_person',
         );
         break;
     }

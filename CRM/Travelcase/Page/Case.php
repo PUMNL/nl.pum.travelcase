@@ -61,14 +61,18 @@ class CRM_Travelcase_Page_Case extends CRM_Core_Page {
     
     $related_contacts = array();
     foreach($relationships_to_check as $rtype_id) {
-      $relationship = new CRM_Contact_BAO_Relationship();
-      $relationship->relationship_type_id = $rtype_id;
-      $relationship->case_id = $this->caseId;
-      if ($relationship->find(TRUE) && $session->get('userID') != $relationship->contact_id_b) {
-        $contact =  array();
-        $params = array('id' => $relationship->contact_id_b);
-        CRM_Contact_BAO_Contact::retrieve($params, $contact);
-        $related_contacts[] = $contact;
+      if ($rtype_id == 'additional_person') {
+        $related_contacts[] = 'additional_person';
+      } else {
+        $relationship = new CRM_Contact_BAO_Relationship();
+        $relationship->relationship_type_id = $rtype_id;
+        $relationship->case_id = $this->caseId;
+        if ($relationship->find(TRUE) && $session->get('userID') != $relationship->contact_id_b) {
+          $contact =  array();
+          $params = array('id' => $relationship->contact_id_b);
+          CRM_Contact_BAO_Contact::retrieve($params, $contact);
+          $related_contacts[] = $contact;
+        }
       }
     }
     $this->assign('related_contacts', $related_contacts);
