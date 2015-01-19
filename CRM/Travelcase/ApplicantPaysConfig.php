@@ -15,7 +15,7 @@ class CRM_Travelcase_ApplicantPaysConfig {
      $ma_applicantpaysconfig = CRM_Mainactivity_ApplicantPaysConfig::singleton();
      $this->activity_type_id = $ma_applicantpaysconfig->getActivityTypeId();
     } else {
-      $this->activity_type_id = civicrm_api3('OptionValue', 'getvalue', array('name' => 'Condition: Applicant Pays', 'option_group_id' => 2, 'return' => 'value'));
+      $this->activity_type_id = civicrm_api3('OptionValue', 'getvalue', array('name' => 'Condition: Customer Contribution.', 'option_group_id' => 2, 'return' => 'value'));
     }
     $this->loadCustomGroupIds();
     $this->loadRestrictedActivities();
