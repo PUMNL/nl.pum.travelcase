@@ -25,7 +25,7 @@ function civicrm_api3_info_for_dsa_autofill($params) {
   $returnValues = array();
 
   $limit = !empty($params['limit']) ? $params['limit'] : 1000;
-  $debug = !isset($params['debug']) ? $params['debug'] : false;
+  $debug = isset($params['debug']) ? $params['debug'] : false;
   
   $autofill = new CRM_Travelcase_InfoForDsa_Autofill();
   $autofill->run($limit, $debug);
