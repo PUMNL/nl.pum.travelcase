@@ -100,17 +100,17 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
   }
 
     public function upgrade_1013() {
-        $this->executeCustomDataFile('xml/travelcase_status.xml');
+        $this->removeCustomField('visa', 'travelcase_status');
+        $this->removeCustomField('invitation', 'travelcase_status');
+        $this->removeCustomField('ticket', 'travelcase_status');
+        $this->removeCustomField('pickup', 'travelcase_status');
+        $this->removeCustomField('accomodation', 'travelcase_status');
+        $this->removeCustomField('dsa', 'travelcase_status');
         return true;
     }
 
     public function upgrade_1014() {
-        $this->updateCustomField('visa', 'travelcase_status', array('weight' => 1, 'is_active' => 1, 'is_searchable' => 1));
-        $this->updateCustomField('invitation', 'travelcase_status', array('weight' => 2, 'is_active' => 1, 'is_searchable' => 1));
-        $this->updateCustomField('ticket', 'travelcase_status', array('weight' => 3, 'is_active' => 1, 'is_searchable' => 1));
-        $this->updateCustomField('pickup', 'travelcase_status', array('weight' => 4, 'is_active' => 1, 'is_searchable' => 1));
-        $this->updateCustomField('accomodation', 'travelcase_status', array('weight' => 5, 'is_active' => 1, 'is_searchable' => 1));
-        $this->updateCustomField('dsa', 'travelcase_status', array('weight' => 6, 'is_active' => 1, 'is_searchable' => 1));
+        $this->executeCustomDataFile('xml/travelcase_status.xml');
         return true;
     }
   
