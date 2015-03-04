@@ -332,7 +332,7 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
       
       // convert Client ID to contact page
       if (CRM_Utils_Array::value('civicrm_contact_a_client_name', $rows[$rowNum])) {
-        $url = CRM_Utils_System::url("civicrm/contact/view?action=view&reset=1&cid". $row['civicrm_contact_a_id'], $this->_absoluteUrl);
+        $url = CRM_Utils_System::url("civicrm/contact/view", "action=view&reset=1&cid=". $row['civicrm_contact_a_id'], $this->_absoluteUrl);
         $rows[$rowNum]['civicrm_contact_a_client_name_link'] = $url;
         $rows[$rowNum]['civicrm_contact_a_client_name_hover'] = ts("View client");
         $entryFound = TRUE;
@@ -340,7 +340,7 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
       
       // convert Client ID to contact page
       if (CRM_Utils_Array::value('customer_customer_name', $rows[$rowNum])) {
-        $url = CRM_Utils_System::url("civicrm/contact/view?action=view&reset=1&cid". $row['customer_id'], $this->_absoluteUrl);
+        $url = CRM_Utils_System::url("civicrm/contact/view", "action=view&reset=1&cid=". $row['customer_customer_id'], $this->_absoluteUrl);
         $rows[$rowNum]['customer_customer_name_link'] = $url;
         $rows[$rowNum]['customer_customer_name_hover'] = ts("View client");
         $entryFound = TRUE;

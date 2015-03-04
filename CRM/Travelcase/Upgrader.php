@@ -98,6 +98,21 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     $this->updateCustomField('accomodation', 'travelcase_status', array('weight' => 5, 'is_active' => 1));
     return true;
   }
+
+    public function upgrade_1013() {
+        $this->executeCustomDataFile('xml/travelcase_status.xml');
+        return true;
+    }
+
+    public function upgrade_1014() {
+        $this->updateCustomField('visa', 'travelcase_status', array('weight' => 1, 'is_active' => 1, 'is_searchable' => 1));
+        $this->updateCustomField('invitation', 'travelcase_status', array('weight' => 2, 'is_active' => 1, 'is_searchable' => 1));
+        $this->updateCustomField('ticket', 'travelcase_status', array('weight' => 3, 'is_active' => 1, 'is_searchable' => 1));
+        $this->updateCustomField('pickup', 'travelcase_status', array('weight' => 4, 'is_active' => 1, 'is_searchable' => 1));
+        $this->updateCustomField('accomodation', 'travelcase_status', array('weight' => 5, 'is_active' => 1, 'is_searchable' => 1));
+        $this->updateCustomField('dsa', 'travelcase_status', array('weight' => 6, 'is_active' => 1, 'is_searchable' => 1));
+        return true;
+    }
   
   protected function addActivityTYpes() {
     if (empty($this->activity_type)) {
