@@ -120,18 +120,23 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
         'dao' => 'CRM_Case_DAO_Case',
         'fields' =>
         array(
-          'id' =>
-          array('title' => ts('Case ID'),
+          'parent_id' =>
+          array(
+              'title' => ts('Case ID'),
+              'name' => 'id',
             'required' => TRUE,
             'no_display' => TRUE,
           ),
-          'subject' => array(
+          'parent_subject' => array(
+              'name' => 'subject',
             'title' => ts('Case Subject (Parent case)'), 'default' => FALSE,
           ),
-          'status_id' => array(
+          'parent_status_id' => array(
+              'name' => 'status_id',
             'title' => ts('Status (Parent case)'), 'default' => TRUE,
           ),
-          'case_type_id' => array(
+          'parent_case_type_id' => array(
+            'name' => 'case_type_id',
             'title' => ts('Case Type (Parent case)'), 'default' => FALSE,
           ),
         ),
@@ -150,6 +155,25 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
     $this->_tagFilter = FALSE;
     parent::__construct();
   }
+
+    function addCustomDataToColumns($addFields = TRUE, $permCustomGroupIds = array()) {
+        parent::addCustomDataToColumns($addFields, $permCustomGroupIds);
+        //add order bys for custom fields
+        $ma_config = CRM_Travelcase_MainActivityConfig::singleton();
+        $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['order_bys'][$ma_config->getCustomFieldStartDate('column_name')] = array(
+            'title' => $ma_config->getCustomFieldStartDate('label')
+        );
+        $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['order_bys'][$ma_config->getCustomFieldEndDate('column_name')] = array(
+            'title' => $ma_config->getCustomFieldEndDate('label')
+        );
+        $config = CRM_Travelcase_Config::singleton();
+        $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['order_bys'][$config->getCustomFieldDepartureDate('column_name')] = array(
+            'title' => $config->getCustomFieldDepartureDate('label')
+        );
+        $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['order_bys'][$config->getCustomFieldReturnDate('column_name')] = array(
+            'title' => $config->getCustomFieldReturnDate('label')
+        );
+    }
 
   function preProcess() {
     $this->assign('reportTitle', ts('Membership Detail Report'));
@@ -292,10 +316,10 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
           $entryFound = TRUE;
         }
       }
-      
-      if (array_key_exists('civicrm_parent_case_status_id', $row)) {
-        if ($value = $row['civicrm_parent_case_status_id']) {
-          $rows[$rowNum]['civicrm_parent_case_status_id'] = $this->case_statuses[$value];
+
+      if (array_key_exists('civicrm_parent_case_parent_status_id', $row)) {
+        if ($value = $row['civicrm_parent_case_parent_status_id']) {
+          $rows[$rowNum]['civicrm_parent_case_parent_status_id'] = $this->case_statuses[$value];
           $entryFound = TRUE;
         }
       }
@@ -391,17 +415,6 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
         );
         $rows[$rowNum]['civicrm_case_case_type_id_link'] = $url;
         $rows[$rowNum]['civicrm_case_case_type_id_hover'] = ts("Manage Case");
-        $entryFound = TRUE;
-      }
-      if (array_key_exists('civicrm_case_status_id', $row) &&
-        CRM_Utils_Array::value('civicrm_contact_a_id', $rows[$rowNum])
-      ) {
-        $url = CRM_Utils_System::url("civicrm/contact/view/case",
-          'reset=1&action=view&cid=' . $row['civicrm_contact_a_id'] . '&id=' . $row['civicrm_case_id'],
-          $this->_absoluteUrl
-        );
-        $rows[$rowNum]['civicrm_case_status_id_link'] = $url;
-        $rows[$rowNum]['civicrm_case_status_id_hover'] = ts("Manage Case");
         $entryFound = TRUE;
       }
 
