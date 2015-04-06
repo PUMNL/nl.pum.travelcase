@@ -120,10 +120,14 @@ class CRM_Travelcase_Utils_PermissionValidation {
     }
     
     $config = CRM_Travelcase_Config::singleton();
-    $case_type_id = civicrm_api3('Case', 'getvalue', array(
+    $caseParams = array(
       'id' => $case_id,
-      'return' => 'case_type_id',
-    ));
+      'return' => 'case_type_id');
+    try {
+      $case_type_id = civicrm_api3('Case', 'getvalue', $caseParams);
+    } catch (CiviCRM_API3_Exception $ex) {
+      return true;
+    }
     
     if ($case_type_id != $config->getCaseType('value')) {
       return true; //this is not a travel case so user has permission
