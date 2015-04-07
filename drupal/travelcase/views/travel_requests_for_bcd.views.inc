@@ -86,6 +86,14 @@ $handler->display->display_options['style_options']['info'] = array(
     'empty_column' => 0,
   ),
 );
+/* No results behavior: Global: Text area */
+$handler->display->display_options['empty']['area']['id'] = 'area';
+$handler->display->display_options['empty']['area']['table'] = 'views';
+$handler->display->display_options['empty']['area']['field'] = 'area';
+$handler->display->display_options['empty']['area']['label'] = 'Explenation';
+$handler->display->display_options['empty']['area']['empty'] = TRUE;
+$handler->display->display_options['empty']['area']['content'] = 'There are no travel requests';
+$handler->display->display_options['empty']['area']['format'] = 'filtered_html';
 /* Relationship: CiviCRM Case Contact: Case Contact's Contact ID */
 $handler->display->display_options['relationships']['contact_id']['id'] = 'contact_id';
 $handler->display->display_options['relationships']['contact_id']['table'] = 'civicrm_case_contact';
@@ -143,7 +151,7 @@ $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
 $handler->display->display_options['fields']['nothing']['label'] = '';
 $handler->display->display_options['fields']['nothing']['alter']['text'] = 'Remove from list';
 $handler->display->display_options['fields']['nothing']['alter']['make_link'] = TRUE;
-$handler->display->display_options['fields']['nothing']['alter']['path'] = 'bcd/travel-request/remove?cid2=[contact_id]&caseid=[id]';
+$handler->display->display_options['fields']['nothing']['alter']['path'] = 'bcd/remove-travel-request/[contact_id]/[id]';
 $handler->display->display_options['fields']['nothing']['alter']['absolute'] = TRUE;
 $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
 /* Filter criterion: CiviCRM Custom: Info for travel agency: Request travel agency to book ticket */

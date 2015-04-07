@@ -1,5 +1,64 @@
 <?php
 
+function travelcase_menu() {
+  $items = array();
+
+  $items['bcd/remove-travel-request/%/%'] = array( //this creates a URL that will call this form at "examples/form-example"
+    'title' => 'Remove travelrequest', //page title
+    'description' => 'Remove travelrequest',
+    'page callback' => 'drupal_get_form', //this is the function that will be called when the page is accessed.  for a form, use drupal_get_form
+    'page arguments' => array('travelcase_bcd_remove_travel_request', 2, 3), //put the name of the form here
+    'access callback' => 'travelcase_user_has_role',
+    'access arguments' => array(array('BCD')), // arg 1 loads the user, arg 2 is the role name
+  );
+
+  return $items;
+}
+
+function travelcase_bcd_remove_travel_request($form, &$form_state, $contact_id, $case_id) {
+  $form['contact_id']['#type'] = 'hidden';
+  $form['contact_id']['#name'] = 'contact_id';
+  $form['contact_id']['#value'] = $contact_id;
+
+  $form['case_id']['#type'] = 'hidden';
+  $form['case_id']['#name'] = 'case_id';
+  $form['case_id']['#value'] = $case_id;
+
+  $form['condition_subject']['#type'] = 'markup';
+  $form['condition_subject']['#markup'] = '<p>Are you sure to remove this travel request?</p>';
+
+  $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Remove travel request'),
+  );
+
+  return $form;
+}
+
+function travelcase_bcd_remove_travel_request_submit($form, &$form_state) {
+  civicrm_initialize();
+  $case_id = $form_state['values']['case_id'];
+  $ta_info = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'info_for_travel_agency'));
+  $request_for_booking = civicrm_api3('CustomField', 'getsingle', array('name' => 'request_for_booking', 'custom_group_id' => $ta_info['id']));
+
+  $sql = "UPDATE `".$ta_info['table_name']."` SET `".$request_for_booking['column_name']."` = '0' WHERE `entity_id` = %1";
+  $params[1] = array($case_id, 'Integer');
+  CRM_Core_DAO::executeQuery($sql, $params);
+
+  $form_state['redirect'] = 'bcd/travel-requests';
+}
+
+function travelcase_user_has_role($roles = array())
+{
+  global $user;
+  foreach ($roles as $role) {
+    if (in_array($role, $user->roles)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
 function travelcase_views_api() {
   return array('api' => 3.0);
 }
