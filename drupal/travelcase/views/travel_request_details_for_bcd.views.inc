@@ -249,27 +249,6 @@ $handler->display->display_options['fields']['display_name']['relationship'] = '
 $handler->display->display_options['fields']['display_name']['label'] = 'Proj. officer';
 $handler->display->display_options['fields']['display_name']['link_to_civicrm_contact'] = 0;
 $handler->display->display_options['fields']['display_name']['element_label_type'] = 'strong';
-/* Field: CiviCRM Email: Email Address */
-$handler->display->display_options['fields']['email']['id'] = 'email';
-$handler->display->display_options['fields']['email']['table'] = 'civicrm_email';
-$handler->display->display_options['fields']['email']['field'] = 'email';
-$handler->display->display_options['fields']['email']['relationship'] = 'contact_id_b_';
-$handler->display->display_options['fields']['email']['label'] = 'E-mail (Proj. officer)';
-$handler->display->display_options['fields']['email']['location_type'] = '0';
-$handler->display->display_options['fields']['email']['location_op'] = '0';
-$handler->display->display_options['fields']['email']['is_primary'] = 1;
-$handler->display->display_options['fields']['email']['element_label_type'] = 'strong';
-/* Field: CiviCRM Phone Details: Phone Number */
-$handler->display->display_options['fields']['phone']['id'] = 'phone';
-$handler->display->display_options['fields']['phone']['table'] = 'civicrm_phone';
-$handler->display->display_options['fields']['phone']['field'] = 'phone';
-$handler->display->display_options['fields']['phone']['relationship'] = 'contact_id_b_';
-$handler->display->display_options['fields']['phone']['label'] = 'Phone (Proj. officer)';
-$handler->display->display_options['fields']['phone']['location_type'] = '0';
-$handler->display->display_options['fields']['phone']['location_op'] = '0';
-$handler->display->display_options['fields']['phone']['is_primary'] = 1;
-$handler->display->display_options['fields']['phone']['phone_type'] = '0';
-$handler->display->display_options['fields']['phone']['element_label_type'] = 'strong';
 /* Sort criterion: CiviCRM Custom: Info for travel agency: Requested departure date */
 $handler->display->display_options['sorts']['requested_departure_date']['id'] = 'requested_departure_date';
 $handler->display->display_options['sorts']['requested_departure_date']['table'] = $ta_info['table_name'];
