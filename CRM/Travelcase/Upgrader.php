@@ -12,8 +12,7 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
   public function install() {
     $this->addCaseTypes();
     $this->addActivityTYpes();
-    
-    $this->executeCustomDataFile('xml/traveler_information.xml');
+
     $this->executeCustomDataFile('xml/travelinformation.xml');
     $this->executeCustomDataFile('xml/travelcase.xml');
     $this->executeCustomDataFile('xml/info_for_travel_agency.xml');
@@ -112,6 +111,13 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
         $this->executeCustomDataFile('xml/travelcase_status.xml');
         return true;
     }
+
+  public function upgrade_1015() {
+    $this->removeCustomField('traveler_agrees_with_travel', 'traveler_information');
+    $gid = civicrm_api3('CustomGroup', 'getvalue', array('name' => 'traveler_information', 'return' => 'id'));
+    civicrm_api3('CustomGroup', 'delete', array('id' => $gid));
+    return true;
+  }
   
   protected function addActivityTYpes() {
     if (empty($this->activity_type)) {
