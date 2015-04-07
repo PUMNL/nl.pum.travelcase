@@ -5,7 +5,7 @@ class CRM_Travelcase_Utils_CopyDsaInfo {
   public static function getMAInfo($case_id) {
     $ma = CRM_Travelcase_MainActivityConfig::singleton();
     
-    $sql = "SELECT `ma`.`start_date` AS `start_date`, `ma`.`end_date` AS `end_date`"
+    $sql = "SELECT `ma`.`".$ma->getCustomFieldStartDate('column_name')."` AS `start_date`, `ma`.`".$ma->getCustomFieldEndDate('column_name')."` AS `end_date`"
         . "FROM `".$ma->getCustomGroupMainActivityInfo('table_name')."` `ma`"
         . "WHERE `entity_id` = %1";
     
