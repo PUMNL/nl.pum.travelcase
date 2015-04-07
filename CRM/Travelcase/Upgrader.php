@@ -19,7 +19,6 @@ class CRM_Travelcase_Upgrader extends CRM_Travelcase_Upgrader_Base {
     $this->executeCustomDataFile('xml/info_for_travel_agency.xml');
     $this->executeCustomDataFile('xml/info_for_dsa.xml');
     $this->executeCustomDataFile('xml/travelcase_status.xml');
-    $this->executeCustomDataFile('xml/sponsor_code.xml');
     $this->executeCustomDataFile('xml/pickup.xml');
   }
   
