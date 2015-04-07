@@ -8,7 +8,6 @@ class CRM_Travelcase_Utils_CopyDsaInfo {
     $sql = "SELECT `ma`.`start_date` AS `start_date`, `ma`.`end_date` AS `end_date`"
         . "FROM `".$ma->getCustomGroupMainActivityInfo('table_name')."` `ma`"
         . "WHERE `entity_id` = %1";
-    
     $dao = CRM_Core_DAO::executeQuery($sql, array(1 => array($case_id, 'Integer')));
     $return = false;
     if($dao->fetch()) {

@@ -40,6 +40,12 @@ function travelcase_civicrm_buildForm($formName, &$form) {
     CRM_Travelcase_Utils_SetDefaultValues::buildForm($formName, $form);
     CRM_Travelcase_Utils_AddDonorFromParentCase::buildForm($formName, $form);
   }
+  /*
+   * issue 1693 Erik Hommel <erik.hommel@civicoop.org>
+   */
+  if ($formName == 'CRM_Case_Form_CaseView') {
+    CRM_Travelcase_Utils_CustomerContributionValidation::buildForm($form);
+  }
 }
 
 function travelcase_civicrm_postSave_civicrm_donor_link($dao) {
