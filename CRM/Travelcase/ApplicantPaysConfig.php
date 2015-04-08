@@ -41,7 +41,6 @@ class CRM_Travelcase_ApplicantPaysConfig {
     $this->custom_group_ids[] = $dsa_config->getCustomGroupInfoForDsa('id');
     $this->custom_group_ids[] = civicrm_api3('CustomGroup', 'getvalue', array('name' => 'travel_parent', 'return' => 'id'));
     $this->custom_group_ids[] = civicrm_api3('CustomGroup', 'getvalue', array('name' => 'travel_data', 'return' => 'id'));
-    $this->custom_group_ids[] = civicrm_api3('CustomGroup', 'getvalue', array('name' => 'traveler_information', 'return' => 'id'));
     $this->custom_group_ids[] = civicrm_api3('CustomGroup', 'getvalue', array('name' => 'pickup', 'return' => 'id'));
   }
   
