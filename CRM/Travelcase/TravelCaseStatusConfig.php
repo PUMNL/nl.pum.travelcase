@@ -13,6 +13,10 @@ class CRM_Travelcase_TravelCaseStatusConfig {
   protected $pickup;
   
   protected $accomodation;
+
+  protected $dsa;
+
+  protected $invitation;
   
   
   protected function __construct() {
@@ -20,6 +24,8 @@ class CRM_Travelcase_TravelCaseStatusConfig {
     $this->visa = civicrm_api3('CustomField', 'getsingle', array('name' => 'visa', 'custom_group_id' => $this->case_status['id']));
     $this->ticket = civicrm_api3('CustomField', 'getsingle', array('name' => 'ticket', 'custom_group_id' => $this->case_status['id']));
     $this->pickup = civicrm_api3('CustomField', 'getsingle', array('name' => 'pickup', 'custom_group_id' => $this->case_status['id']));
+    $this->invitation = civicrm_api3('CustomField', 'getsingle', array('name' => 'invitation', 'custom_group_id' => $this->case_status['id']));
+    $this->dsa = civicrm_api3('CustomField', 'getsingle', array('name' => 'dsa', 'custom_group_id' => $this->case_status['id']));
     $this->accomodation = civicrm_api3('CustomField', 'getsingle', array('name' => 'accomodation', 'custom_group_id' => $this->case_status['id']));
   }
   
@@ -31,6 +37,14 @@ class CRM_Travelcase_TravelCaseStatusConfig {
       self::$_singleton = new CRM_Travelcase_TravelCaseStatusConfig();
     }
     return self::$_singleton;
+  }
+
+  public function getCustomFieldDsa($key='id') {
+    return $this->dsa[$key];
+  }
+
+  public function getCustomFieldInvitation($key='id') {
+    return $this->invitation[$key];
   }
   
   public function getCustomFieldVisa($key='id') {

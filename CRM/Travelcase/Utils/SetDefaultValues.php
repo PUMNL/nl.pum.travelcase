@@ -18,6 +18,8 @@ class CRM_Travelcase_Utils_SetDefaultValues {
     $defaults['custom_'.$config->getCustomFieldTicket('id').'_-1'] = $defaultStatus;
     $defaults['custom_'.$config->getCustomFieldVisa('id').'_-1'] = $defaultStatus;
     $defaults['custom_'.$config->getCustomFieldAccomodation('id').'_-1'] = $defaultStatus;
+    $defaults['custom_'.$config->getCustomFieldDsa('id').'_-1'] = $defaultStatus;
+    $defaults['custom_'.$config->getCustomFieldInvitation('id').'_-1'] = $defaultStatus;
     $form->setDefaults($defaults);
   }
   
