@@ -385,10 +385,10 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
         $entryFound = TRUE;
       }
       
-      if (array_key_exists('civicrm_parent_case_case_type_id', $row) &&
-        CRM_Utils_Array::value('civicrm_parent_case_case_type_id', $rows[$rowNum])
+      if (array_key_exists('civicrm_parent_case_parent_case_type_id', $row) &&
+        CRM_Utils_Array::value('civicrm_parent_case_parent_case_type_id', $rows[$rowNum])
       ) {
-        $value   = $row['civicrm_parent_case_case_type_id'];
+        $value   = $row['civicrm_parent_case_parent_case_type_id'];
         $typeIds = explode(CRM_Core_DAO::VALUE_SEPARATOR, $value);
         $value   = array();
         foreach ($typeIds as $typeId) {
@@ -396,7 +396,7 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
             $value[$typeId] = $this->case_types[$typeId];
           }
         }
-        $rows[$rowNum]['civicrm_parent_case_case_type_id'] = implode(', ', $value);
+        $rows[$rowNum]['civicrm_parent_case_parent_case_type_id'] = implode(', ', $value);
         $entryFound = TRUE;
       }
       
