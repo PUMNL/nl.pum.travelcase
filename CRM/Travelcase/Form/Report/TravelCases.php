@@ -13,7 +13,9 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
   protected $_add2groupSupported = FALSE;
   
   function __construct() {
-    
+    $session = CRM_Core_Session::singleton();
+    $project_officers = $this->getAllProjectOfficers();
+
     $this->case_types    = CRM_Case_PseudoConstant::caseType();
     $this->case_statuses = CRM_Case_PseudoConstant::caseStatus();
     $this->deleted_labels = array('' => ts('- select -'), 0 => ts('No'), 1 => ts('Yes'));
@@ -115,6 +117,20 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
         ),
         'grouping' => 'parentcase',
       ),
+      'customer_address' =>
+        array(
+          'dao' => 'CRM_Core_DAO_Address',
+          'fields' =>
+            array(
+              'customer_country' =>
+                array(
+                  'name' => 'country_id',
+                  'title' => ts('Country of Client (parent case)'),
+                  'default' => TRUE,
+                ),
+            ),
+          'grouping' => 'parentcase',
+        ),
       'civicrm_parent_case' =>
       array(
         'dao' => 'CRM_Case_DAO_Case',
@@ -133,11 +149,11 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
           ),
           'parent_status_id' => array(
               'name' => 'status_id',
-            'title' => ts('Status (Parent case)'), 'default' => TRUE,
+            'title' => ts('Status (Parent case)'), 'default' => FALSE,
           ),
           'parent_case_type_id' => array(
             'name' => 'case_type_id',
-            'title' => ts('Case Type (Parent case)'), 'default' => FALSE,
+            'title' => ts('Case Type (Parent case)'), 'default' => TRUE,
           ),
         ),
         'grouping' => 'parentcase',
@@ -149,6 +165,30 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
       'civicrm_parent_case_contact' =>
       array(
         'dao' => 'CRM_Case_DAO_CaseContact',
+      ),
+      'proj_officer' => array(
+        'dao' => 'CRM_Contact_DAO_Contact',
+        'fields' =>
+          array(
+            'proj_officer_name' =>
+              array(
+                'name' => 'display_name',
+                'title' => ts('Project officer (travel case)'),
+                'default' => TRUE,
+              ),
+          ),
+        'filters' => array(
+          'proj_officer_id' => array(
+            'name' => 'id',
+            'title' => ts('Project officer'),
+            'type' => CRM_Report_Form::OP_INT,
+            'operatorType' => CRM_Report_Form::OP_MULTISELECT,
+            'options' => $project_officers,
+            'default' => $session->get('userID'),
+          )
+
+        ),
+        'grouping' => 'travelcase',
       ),
     );
     $this->_groupFilter = FALSE;
@@ -214,15 +254,21 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
     $pcc  = $this->_aliases['civicrm_parent_case'];
     $pccc  = $this->_aliases['civicrm_parent_case_contact'];
     $c3  = $this->_aliases['customer'];
+    $c3_address  = $this->_aliases['customer_address'];
+    $proff = $this->_aliases['proj_officer'];
+    $proff_rel = $this->_aliases['proj_officer'].'_relationship';
 
     $this->_from = "
           FROM civicrm_case {$cc}
           inner join civicrm_case_contact {$ccc} on {$ccc}.case_id = {$cc}.id
-          inner join civicrm_contact {$c2} on {$c2}.id={$ccc}.contact_id
+          inner join civicrm_contact {$c2} on {$c2}.id = {$ccc}.contact_id
+          left join civicrm_relationship {$proff_rel} ON {$proff_rel}.case_id = {$cc}.id AND {$proff_rel}.relationship_type_id = '".$config->getRelationshipTypeProjOff('id')."' AND is_active = 1
+          left join civicrm_contact {$proff} ON {$proff_rel}.contact_id_b = {$proff}.id
           left join `".$config->getCustomGroupLinkCaseTo('table_name')."` `linkcase` ON `linkcase`.`entity_id` = `{$cc}`.`id`
           left join `civicrm_case` `{$pcc}` ON `linkcase`.`".$config->getCustomFieldCaseId('column_name')."` = `{$pcc}`.`id`
           left join `civicrm_case_contact` `{$pccc}` ON {$pccc}.case_id = `{$pcc}`.`id`
           left join civicrm_contact {$c3} on {$c3}.id={$pccc}.contact_id
+          left join civicrm_address {$c3_address} on {$c3}.id = {$c3_address}.contact_id and is_primary = 1
       ";
   }
 
@@ -369,6 +415,10 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
         $rows[$rowNum]['customer_customer_name_hover'] = ts("View client");
         $entryFound = TRUE;
       }
+
+      if (CRM_Utils_Array::value('customer_address_customer_country', $rows[$rowNum])) {
+        $rows[$rowNum]['customer_address_customer_country'] = CRM_Core_PseudoConstant::country($rows[$rowNum]['customer_address_customer_country']);
+      }
       
       if (array_key_exists('civicrm_case_id', $row) &&
         CRM_Utils_Array::value('civicrm_contact_a_id', $rows[$rowNum])
@@ -428,5 +478,22 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
         break;
       }
     }
+  }
+
+  protected function getAllProjectOfficers() {
+    $config = CRM_Travelcase_Config::singleton();
+    $return = array();
+    $sql = "SELECT c.id, c.display_name
+            from civicrm_contact c
+            inner join civicrm_relationship cr on cr.contact_id_b = c.id
+            where cr.case_id is not NULL
+            and cr.relationship_type_id = %1
+            order by c.sort_name";
+    $params[1] = array($config->getRelationshipTypeProjOff('id'), 'Integer');
+    $dao = CRM_Core_DAO::executeQuery($sql, $params);
+    while($dao->fetch()) {
+      $return[$dao->id] = $dao->display_name;
+    }
+    return $return;
   }
 }
