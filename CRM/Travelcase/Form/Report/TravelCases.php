@@ -212,7 +212,7 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
     parent::preProcess();
   }
 
-  function select() {
+  /*function select() {
     $select = $this->_columnHeaders = array();
 
     foreach ($this->_columns as $tableName => $table) {
@@ -236,7 +236,7 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
     }
 
     $this->_select = "SELECT " . implode(', ', $select) . " ";
-  }
+  }*/
 
   function from() {
     $config = CRM_Travelcase_Config::singleton();
@@ -254,13 +254,13 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
           FROM civicrm_case {$cc}
           inner join civicrm_case_contact {$ccc} on {$ccc}.case_id = {$cc}.id
           inner join civicrm_contact {$c2} on {$c2}.id = {$ccc}.contact_id
-          left join civicrm_relationship {$proff_rel} ON {$proff_rel}.case_id = {$cc}.id AND {$proff_rel}.relationship_type_id = '".$config->getRelationshipTypeProjOff('id')."' AND is_active = 1
-          left join civicrm_contact {$proff} ON {$proff_rel}.contact_id_b = {$proff}.id
           left join `".$config->getCustomGroupLinkCaseTo('table_name')."` `linkcase` ON `linkcase`.`entity_id` = `{$cc}`.`id`
           left join `civicrm_case` `{$pcc}` ON `linkcase`.`".$config->getCustomFieldCaseId('column_name')."` = `{$pcc}`.`id`
           left join `civicrm_case_contact` `{$pccc}` ON {$pccc}.case_id = `{$pcc}`.`id`
           left join civicrm_contact {$c3} on {$c3}.id={$pccc}.contact_id
           left join civicrm_address {$c3_address} on {$c3}.id = {$c3_address}.contact_id and is_primary = 1
+          left join civicrm_relationship {$proff_rel} ON {$proff_rel}.case_id = {$pcc}.id AND {$proff_rel}.relationship_type_id = '".$config->getRelationshipTypeProjOff('id')."' AND is_active = 1
+          left join civicrm_contact {$proff} ON {$proff_rel}.contact_id_b = {$proff}.id
       ";
   }
 
@@ -314,6 +314,39 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
 
     if ($this->_aclWhere) {
       $this->_where .= " AND {$this->_aclWhere} ";
+    }
+  }
+
+  function customDataFrom() {
+    if (empty($this->_customGroupExtends)) {
+      return;
+    }
+    $mapper = CRM_Core_BAO_CustomQuery::$extendsMap;
+
+    foreach ($this->_columns as $table => $prop) {
+      if (isset($prop['extends']) && !empty($prop['extends'])) {
+        $extendsTable = $mapper[$prop['extends']];
+
+        // check field is in params
+        if (!$this->isFieldSelected($prop)) {
+          continue;
+        }
+        $baseJoin = CRM_Utils_Array::value($prop['extends'], $this->_customGroupExtendsJoin, "{$this->_aliases[$extendsTable]}.id");
+
+        $customJoin   = is_array($this->_customGroupJoin) ? $this->_customGroupJoin[$table] : $this->_customGroupJoin;
+        $this->_from .= "
+{$customJoin} {$table} {$this->_aliases[$table]} ON {$this->_aliases[$table]}.entity_id = {$baseJoin}";
+        // handle for ContactReference
+        if (array_key_exists('fields', $prop)) {
+          foreach ($prop['fields'] as $fieldName => $field) {
+            if (CRM_Utils_Array::value('dataType', $field) == 'ContactReference') {
+              $columnName = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_CustomField', CRM_Core_BAO_CustomField::getKeyID($fieldName), 'column_name');
+              $this->_from .= "
+LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_aliases[$table]}.{$columnName} ";
+            }
+          }
+        }
+      }
     }
   }
 
