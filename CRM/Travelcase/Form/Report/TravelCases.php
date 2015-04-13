@@ -200,19 +200,11 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
         parent::addCustomDataToColumns($addFields, $permCustomGroupIds);
         //add order bys for custom fields
         $ma_config = CRM_Travelcase_MainActivityConfig::singleton();
-        $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['order_bys'][$ma_config->getCustomFieldStartDate('column_name')] = array(
-            'title' => $ma_config->getCustomFieldStartDate('label')
-        );
-        $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['order_bys'][$ma_config->getCustomFieldEndDate('column_name')] = array(
-            'title' => $ma_config->getCustomFieldEndDate('label')
-        );
+        $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['order_bys']['custom_'.$ma_config->getCustomFieldStartDate('id')] = $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['fields']['custom_'.$ma_config->getCustomFieldStartDate('id')];
+        $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['order_bys']['custom_'.$ma_config->getCustomFieldEndDate('id')] = $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['fields']['custom_'.$ma_config->getCustomFieldEndDate('id')];
         $config = CRM_Travelcase_Config::singleton();
-        $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['order_bys'][$config->getCustomFieldDepartureDate('column_name')] = array(
-            'title' => $config->getCustomFieldDepartureDate('label')
-        );
-        $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['order_bys'][$config->getCustomFieldReturnDate('column_name')] = array(
-            'title' => $config->getCustomFieldReturnDate('label')
-        );
+        $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['order_bys']['custom_'.$config->getCustomFieldDepartureDate('id')] = $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_'.$config->getCustomFieldDepartureDate('id')];
+        $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['order_bys']['custom_'.$config->getCustomFieldReturnDate('id')] = $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_'.$config->getCustomFieldReturnDate('id')];
     }
 
   function preProcess() {
