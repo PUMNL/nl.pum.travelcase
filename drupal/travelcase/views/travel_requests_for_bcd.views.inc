@@ -168,6 +168,83 @@ $handler->display->display_options['menu']['title'] = 'Travel requests';
 $handler->display->display_options['menu']['weight'] = '0';
 $handler->display->display_options['menu']['context'] = 0;
 $handler->display->display_options['menu']['context_only_inline'] = 0;
+/* Display: My Work Count Item - Block */
+$handler = $view->new_display('block', 'My Work Count Item - Block', 'block_1');
+$handler->display->display_options['defaults']['pager'] = FALSE;
+$handler->display->display_options['pager']['type'] = 'none';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['defaults']['style_plugin'] = FALSE;
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['defaults']['style_options'] = FALSE;
+$handler->display->display_options['defaults']['row_plugin'] = FALSE;
+$handler->display->display_options['row_plugin'] = 'fields';
+$handler->display->display_options['defaults']['row_options'] = FALSE;
+$handler->display->display_options['defaults']['header'] = FALSE;
+/* Header: Global: Result summary */
+$handler->display->display_options['header']['result']['id'] = 'result';
+$handler->display->display_options['header']['result']['table'] = 'views';
+$handler->display->display_options['header']['result']['field'] = 'result';
+$handler->display->display_options['header']['result']['content'] = '<a href="/bcd/travel-requests">Travel requests</a> (@total)';
+$handler->display->display_options['defaults']['empty'] = FALSE;
+$handler->display->display_options['defaults']['fields'] = FALSE;
+/* Field: CiviCRM Cases: Case ID */
+$handler->display->display_options['fields']['id']['id'] = 'id';
+$handler->display->display_options['fields']['id']['table'] = 'civicrm_case';
+$handler->display->display_options['fields']['id']['field'] = 'id';
+$handler->display->display_options['fields']['id']['label'] = '';
+$handler->display->display_options['fields']['id']['exclude'] = TRUE;
+$handler->display->display_options['fields']['id']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['id']['separator'] = '';
+/* Field: CiviCRM Contacts: Contact ID */
+$handler->display->display_options['fields']['contact_id']['id'] = 'contact_id';
+$handler->display->display_options['fields']['contact_id']['table'] = 'civicrm_contact';
+$handler->display->display_options['fields']['contact_id']['field'] = 'id';
+$handler->display->display_options['fields']['contact_id']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['contact_id']['label'] = '';
+$handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
+$handler->display->display_options['fields']['contact_id']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['contact_id']['separator'] = '';
+/* Field: CiviCRM Contacts: Display Name */
+$handler->display->display_options['fields']['display_name']['id'] = 'display_name';
+$handler->display->display_options['fields']['display_name']['table'] = 'civicrm_contact';
+$handler->display->display_options['fields']['display_name']['field'] = 'display_name';
+$handler->display->display_options['fields']['display_name']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['display_name']['label'] = 'Client';
+$handler->display->display_options['fields']['display_name']['exclude'] = TRUE;
+$handler->display->display_options['fields']['display_name']['alter']['make_link'] = TRUE;
+$handler->display->display_options['fields']['display_name']['alter']['path'] = 'bcd/travel-request/[id]';
+$handler->display->display_options['fields']['display_name']['alter']['absolute'] = TRUE;
+$handler->display->display_options['fields']['display_name']['link_to_civicrm_contact'] = 0;
+/* Field: CiviCRM Custom: Info for travel agency: Destination */
+$handler->display->display_options['fields']['destination']['id'] = 'destination';
+$handler->display->display_options['fields']['destination']['table'] = $ta_info['table_name'];
+$handler->display->display_options['fields']['destination']['field'] = $destination;
+$handler->display->display_options['fields']['destination']['exclude'] = TRUE;
+$handler->display->display_options['fields']['destination']['alter']['strip_tags'] = TRUE;
+/* Field: CiviCRM Custom: Info for travel agency: Requested departure date */
+$handler->display->display_options['fields']['requested_departure_date']['id'] = 'requested_departure_date';
+$handler->display->display_options['fields']['requested_departure_date']['table'] = $ta_info['table_name'];
+$handler->display->display_options['fields']['requested_departure_date']['field'] = $dep_date;
+$handler->display->display_options['fields']['requested_departure_date']['label'] = 'Departure date';
+$handler->display->display_options['fields']['requested_departure_date']['exclude'] = TRUE;
+$handler->display->display_options['fields']['requested_departure_date']['date_format'] = 'long';
+$handler->display->display_options['fields']['requested_departure_date']['second_date_format'] = 'long';
+/* Field: CiviCRM Custom: Info for travel agency: Requested return date */
+$handler->display->display_options['fields']['requested_return_date']['id'] = 'requested_return_date';
+$handler->display->display_options['fields']['requested_return_date']['table'] = $ta_info['table_name'];
+$handler->display->display_options['fields']['requested_return_date']['field'] = $return_date;
+$handler->display->display_options['fields']['requested_return_date']['label'] = 'Return date';
+$handler->display->display_options['fields']['requested_return_date']['exclude'] = TRUE;
+$handler->display->display_options['fields']['requested_return_date']['date_format'] = 'long';
+$handler->display->display_options['fields']['requested_return_date']['second_date_format'] = 'long';
+/* Field: Global: Custom text */
+$handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+$handler->display->display_options['fields']['nothing']['table'] = 'views';
+$handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+$handler->display->display_options['fields']['nothing']['label'] = '';
+$handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['nothing']['hide_empty'] = TRUE;
+
 $translatables['travel_requests_for_bcd_'] = array(
   t('Master'),
   t('Travel requests'),
