@@ -83,14 +83,18 @@ $handler->display->display_options['fields']['requested_departure_date']['id'] =
 $handler->display->display_options['fields']['requested_departure_date']['table'] = $ta_info['table_name'];
 $handler->display->display_options['fields']['requested_departure_date']['field'] = $dep_date;
 $handler->display->display_options['fields']['requested_departure_date']['label'] = 'Departure date';
-$handler->display->display_options['fields']['requested_departure_date']['date_format'] = 'd_m_y';
+$handler->display->display_options['fields']['requested_departure_date']['date_format'] = 'custom';
+$handler->display->display_options['fields']['requested_departure_date']['custom_date_format'] = 'd-m-Y';
+$handler->display->display_options['fields']['requested_departure_date']['second_date_format'] = 'long';
 $handler->display->display_options['fields']['requested_departure_date']['element_label_type'] = 'strong';
 /* Field: CiviCRM Custom: Info for travel agency: Requested return date */
 $handler->display->display_options['fields']['requested_return_date']['id'] = 'requested_return_date';
 $handler->display->display_options['fields']['requested_return_date']['table'] = $ta_info['table_name'];
 $handler->display->display_options['fields']['requested_return_date']['field'] = $return_date;
 $handler->display->display_options['fields']['requested_return_date']['label'] = 'Return date';
-$handler->display->display_options['fields']['requested_return_date']['date_format'] = 'd_m_y';
+$handler->display->display_options['fields']['requested_return_date']['date_format'] = 'custom';
+$handler->display->display_options['fields']['requested_return_date']['custom_date_format'] = 'd-m-Y';
+$handler->display->display_options['fields']['requested_return_date']['second_date_format'] = 'long';
 $handler->display->display_options['fields']['requested_return_date']['element_label_type'] = 'strong';
 /* Field: CiviCRM Custom: Passport Information: Passport Name - First Name(s) */
 $handler->display->display_options['fields']['passport_name_60']['id'] = 'passport_name_60';
