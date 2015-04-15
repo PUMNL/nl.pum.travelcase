@@ -244,6 +244,8 @@ $handler->display->display_options['fields']['display_name_1']['element_label_ty
 $handler->display->display_options['fields']['notes']['id'] = 'notes';
 $handler->display->display_options['fields']['notes']['table'] = $ta_info['table_name'];
 $handler->display->display_options['fields']['notes']['field'] = $notes;
+$handler->display->display_options['fields']['notes']['alter']['trim_whitespace'] = TRUE;
+$handler->display->display_options['fields']['notes']['alter']['strip_tags'] = TRUE;
 $handler->display->display_options['fields']['notes']['element_label_type'] = 'strong';
 /* Field: CiviCRM Contacts: Display Name */
 $handler->display->display_options['fields']['display_name']['id'] = 'display_name';
