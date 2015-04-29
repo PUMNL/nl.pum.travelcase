@@ -179,12 +179,20 @@
     {/if}
 {/if}
 
+{strip}
+{*include activity view js file*}
+{include file="CRM/common/activityView.tpl" list='report'}
+<div id="view-activity-report">
+    <div id="activity-content-report"></div>
+</div>
+{/strip}
+
 {* Build case details*}
 {literal}
 <script type="text/javascript">
     function travelcasereportCaseDetails( caseId, contactId)
     {
-        var dataUrl = "{/literal}{crmURL p='civicrm/case/details' h=0 q='snippet=4&caseId='}{literal}" + caseId +'&cid=' + contactId;
+        var dataUrl = "{/literal}{crmURL p='civicrm/case/details' h=0 q='snippet=4&caseId='}{literal}" + caseId +'&cid=' + contactId+'&type=report';
         cj.ajax({
             url     : dataUrl,
             dataType: "html",
