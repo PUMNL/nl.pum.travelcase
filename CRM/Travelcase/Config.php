@@ -25,6 +25,8 @@ class CRM_Travelcase_Config {
   protected $rep_relationship_type;
   
   protected $travel_case_type;
+
+  protected $travel_open_case_status;
   
   protected $proj_off_relationship_type;
   
@@ -49,6 +51,9 @@ class CRM_Travelcase_Config {
     
     $case_type_id = civicrm_api3('OptionGroup', 'getvalue', array('name' => 'case_type', 'return' => 'id'));
     $this->travel_case_type = civicrm_api3('OptionValue', 'getsingle', array('name' => 'Travelcase', 'option_group_id' => $case_type_id));
+
+    $case_status_id = civicrm_api3('OptionGroup', 'getvalue', array('name' => 'case_status', 'return' => 'id'));
+    $this->travel_open_case_status = civicrm_api3('OptionValue', 'getsingle', array('name' => 'Open', 'option_group_id' => $case_status_id));
   }
   
   /**
@@ -63,6 +68,10 @@ class CRM_Travelcase_Config {
   
   public function getCaseType($key='id') {
     return $this->travel_case_type[$key];
+  }
+
+  public function getOpenCaseStatus($key='id') {
+    return $this->travel_open_case_status[$key];
   }
   
   public function getCustomFieldCaseId($key='id') {
