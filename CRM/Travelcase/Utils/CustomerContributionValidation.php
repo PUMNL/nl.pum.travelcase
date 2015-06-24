@@ -73,6 +73,9 @@ class CRM_Travelcase_Utils_CustomerContributionValidation {
     $isAllowed = TRUE;
     $customerContribution = CRM_Threepeas_Utils::getActivityTypeWithName('Condition: Customer Contribution.');
     $parentCaseId = self::getParentCaseId($caseId);
+    if (empty($parentCaseId)) {
+      return $isAllowed;
+    }
     $completedStatus = CRM_Threepeas_Utils::getActivityStatusWithName('Completed');
     $cancelledStatus = CRM_Threepeas_Utils::getActivityStatusWithName('Cancelled');
     $allowedStatus = array($completedStatus['value'], $cancelledStatus['value']);
