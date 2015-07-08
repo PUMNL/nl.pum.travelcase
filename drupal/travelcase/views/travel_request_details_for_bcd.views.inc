@@ -84,7 +84,7 @@ $handler->display->display_options['fields']['requested_departure_date']['table'
 $handler->display->display_options['fields']['requested_departure_date']['field'] = $dep_date;
 $handler->display->display_options['fields']['requested_departure_date']['label'] = 'Departure date';
 $handler->display->display_options['fields']['requested_departure_date']['date_format'] = 'custom';
-$handler->display->display_options['fields']['requested_departure_date']['custom_date_format'] = 'd-m-Y';
+$handler->display->display_options['fields']['requested_departure_date']['custom_date_format'] = 'd F Y';
 $handler->display->display_options['fields']['requested_departure_date']['second_date_format'] = 'long';
 $handler->display->display_options['fields']['requested_departure_date']['element_label_type'] = 'strong';
 /* Field: CiviCRM Custom: Info for travel agency: Requested return date */
@@ -93,7 +93,7 @@ $handler->display->display_options['fields']['requested_return_date']['table'] =
 $handler->display->display_options['fields']['requested_return_date']['field'] = $return_date;
 $handler->display->display_options['fields']['requested_return_date']['label'] = 'Return date';
 $handler->display->display_options['fields']['requested_return_date']['date_format'] = 'custom';
-$handler->display->display_options['fields']['requested_return_date']['custom_date_format'] = 'd-m-Y';
+$handler->display->display_options['fields']['requested_return_date']['custom_date_format'] = 'd F Y';
 $handler->display->display_options['fields']['requested_return_date']['second_date_format'] = 'long';
 $handler->display->display_options['fields']['requested_return_date']['element_label_type'] = 'strong';
 /* Field: CiviCRM Custom: Passport Information: Passport Name - First Name(s) */
@@ -120,6 +120,15 @@ $handler->display->display_options['fields']['passport_name_partner_last_name_53
 $handler->display->display_options['fields']['passport_name_partner_last_name_534']['label'] = 'Partner Last Name';
 $handler->display->display_options['fields']['passport_name_partner_last_name_534']['alter']['strip_tags'] = TRUE;
 $handler->display->display_options['fields']['passport_name_partner_last_name_534']['element_label_type'] = 'strong';
+/* Field: CiviCRM Custom: Birth day */
+$handler->display->display_options['fields']['birth_date']['id'] = 'birth_date';
+$handler->display->display_options['fields']['birth_date']['table'] = 'civicrm_contact';
+$handler->display->display_options['fields']['birth_date']['field'] = 'birth_date';
+$handler->display->display_options['fields']['birth_date']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['birth_date']['date_format'] = 'custom';
+$handler->display->display_options['fields']['birth_date']['custom_date_format'] = 'd F Y';
+$handler->display->display_options['fields']['birth_date']['second_date_format'] = 'long';
+$handler->display->display_options['fields']['birth_date']['element_label_type'] = 'strong';
 /* Field: CiviCRM Custom: Passport Information: Passport Number */
 $handler->display->display_options['fields']['passport_number_225']['id'] = 'passport_number_225';
 $handler->display->display_options['fields']['passport_number_225']['table'] = $passport_info['table_name'];
@@ -132,7 +141,9 @@ $handler->display->display_options['fields']['passport_valid_until_226']['id'] =
 $handler->display->display_options['fields']['passport_valid_until_226']['table'] = $passport_info['table_name'];
 $handler->display->display_options['fields']['passport_valid_until_226']['field'] = $passport_valid;
 $handler->display->display_options['fields']['passport_valid_until_226']['relationship'] = 'contact_id';
-$handler->display->display_options['fields']['passport_valid_until_226']['date_format'] = 'd_m_y';
+$handler->display->display_options['fields']['passport_valid_until_226']['date_format'] = 'custom';
+$handler->display->display_options['fields']['passport_valid_until_226']['custom_date_format'] = 'd F Y';
+$handler->display->display_options['fields']['passport_valid_until_226']['second_date_format'] = 'long';
 $handler->display->display_options['fields']['passport_valid_until_226']['element_label_type'] = 'strong';
 /* Field: CiviCRM Email: Email Address */
 $handler->display->display_options['fields']['email_1']['id'] = 'email_1';
@@ -144,6 +155,16 @@ $handler->display->display_options['fields']['email_1']['location_op'] = '0';
 $handler->display->display_options['fields']['email_1']['is_primary'] = 0;
 $handler->display->display_options['fields']['email_1']['link_to_user'] = '0';
 $handler->display->display_options['fields']['email_1']['element_label_type'] = 'strong';
+/* Field: CiviCRM Email: Email Address */
+$handler->display->display_options['fields']['phone_1']['id'] = 'phone_1';
+$handler->display->display_options['fields']['phone_1']['table'] = 'civicrm_phone';
+$handler->display->display_options['fields']['phone_1']['field'] = 'phone';
+$handler->display->display_options['fields']['phone_1']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['phone_1']['location_type'] = '0';
+$handler->display->display_options['fields']['phone_1']['location_op'] = '0';
+$handler->display->display_options['fields']['phone_1']['is_primary'] = 0;
+$handler->display->display_options['fields']['phone_1']['link_to_user'] = '0';
+$handler->display->display_options['fields']['phone_1']['element_label_type'] = 'strong';
 /* Field: CiviCRM Address: Full Street Address */
 $handler->display->display_options['fields']['street_address']['id'] = 'street_address';
 $handler->display->display_options['fields']['street_address']['table'] = 'civicrm_address';

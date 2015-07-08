@@ -117,12 +117,21 @@ $handler->display->display_options['fields']['contact_id']['label'] = '';
 $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
 $handler->display->display_options['fields']['contact_id']['element_label_colon'] = FALSE;
 $handler->display->display_options['fields']['contact_id']['separator'] = '';
+/* Field: CiviCRM Contact: First Name*/
+$handler->display->display_options['fields']['first_name']['id'] = 'first_name';
+$handler->display->display_options['fields']['first_name']['table'] = $passport_info['table_name'];
+$handler->display->display_options['fields']['first_name']['field'] = $name;
+$handler->display->display_options['fields']['first_name']['exclude'] = TRUE;
+$handler->display->display_options['fields']['first_name']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['first_name']['label'] = '';
 /* Field: CiviCRM Contact: Display Name*/
 $handler->display->display_options['fields']['display_name']['id'] = 'display_name';
-$handler->display->display_options['fields']['display_name']['table'] = 'civicrm_contact';
-$handler->display->display_options['fields']['display_name']['field'] = 'display_name';
+$handler->display->display_options['fields']['display_name']['table'] = $passport_info['table_name'];
+$handler->display->display_options['fields']['display_name']['field'] = $last_name;
 $handler->display->display_options['fields']['display_name']['relationship'] = 'contact_id';
 $handler->display->display_options['fields']['display_name']['label'] = 'Client';
+$handler->display->display_options['fields']['display_name']['alter']['alter_text'] = TRUE;
+$handler->display->display_options['fields']['display_name']['alter']['text'] = '[display_name], [first_name]';
 $handler->display->display_options['fields']['display_name']['alter']['make_link'] = TRUE;
 $handler->display->display_options['fields']['display_name']['alter']['path'] = 'bcd/travel-request/[id]';
 $handler->display->display_options['fields']['display_name']['alter']['absolute'] = TRUE;
@@ -138,7 +147,7 @@ $handler->display->display_options['fields']['requested_departure_date']['table'
 $handler->display->display_options['fields']['requested_departure_date']['field'] = $dep_date;
 $handler->display->display_options['fields']['requested_departure_date']['label'] = 'Departure date';
 $handler->display->display_options['fields']['requested_departure_date']['date_format'] = 'custom';
-$handler->display->display_options['fields']['requested_departure_date']['custom_date_format'] = 'd-m-Y';
+$handler->display->display_options['fields']['requested_departure_date']['custom_date_format'] = 'd F Y';
 $handler->display->display_options['fields']['requested_departure_date']['second_date_format'] = 'long';
 /* Field: CiviCRM Custom: Info for travel agency: Requested return date */
 $handler->display->display_options['fields']['requested_return_date']['id'] = 'requested_return_date';
@@ -146,7 +155,7 @@ $handler->display->display_options['fields']['requested_return_date']['table'] =
 $handler->display->display_options['fields']['requested_return_date']['field'] = $return_date;
 $handler->display->display_options['fields']['requested_return_date']['label'] = 'Return date';
 $handler->display->display_options['fields']['requested_return_date']['date_format'] = 'custom';
-$handler->display->display_options['fields']['requested_return_date']['custom_date_format'] = 'd-m-Y';
+$handler->display->display_options['fields']['requested_return_date']['custom_date_format'] = 'd F Y';
 $handler->display->display_options['fields']['requested_return_date']['second_date_format'] = 'long';
 /* Field: Global: Custom text */
 $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
