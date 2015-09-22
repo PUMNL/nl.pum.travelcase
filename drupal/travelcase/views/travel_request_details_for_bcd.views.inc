@@ -152,7 +152,7 @@ $handler->display->display_options['fields']['email_1']['field'] = 'email';
 $handler->display->display_options['fields']['email_1']['relationship'] = 'contact_id';
 $handler->display->display_options['fields']['email_1']['location_type'] = '0';
 $handler->display->display_options['fields']['email_1']['location_op'] = '0';
-$handler->display->display_options['fields']['email_1']['is_primary'] = 0;
+$handler->display->display_options['fields']['email_1']['is_primary'] = 1;
 $handler->display->display_options['fields']['email_1']['link_to_user'] = '0';
 $handler->display->display_options['fields']['email_1']['element_label_type'] = 'strong';
 /* Field: CiviCRM Email: Email Address */
@@ -162,7 +162,7 @@ $handler->display->display_options['fields']['phone_1']['field'] = 'phone';
 $handler->display->display_options['fields']['phone_1']['relationship'] = 'contact_id';
 $handler->display->display_options['fields']['phone_1']['location_type'] = '0';
 $handler->display->display_options['fields']['phone_1']['location_op'] = '0';
-$handler->display->display_options['fields']['phone_1']['is_primary'] = 0;
+$handler->display->display_options['fields']['phone_1']['is_primary'] = 1;
 $handler->display->display_options['fields']['phone_1']['link_to_user'] = '0';
 $handler->display->display_options['fields']['phone_1']['element_label_type'] = 'strong';
 /* Field: CiviCRM Address: Full Street Address */
@@ -195,7 +195,7 @@ $handler->display->display_options['fields']['city']['relationship'] = 'contact_
 $handler->display->display_options['fields']['city']['label'] = 'City';
 $handler->display->display_options['fields']['city']['location_type'] = '0';
 $handler->display->display_options['fields']['city']['location_op'] = '0';
-$handler->display->display_options['fields']['city']['is_primary'] = 0;
+$handler->display->display_options['fields']['city']['is_primary'] = 1;
 $handler->display->display_options['fields']['city']['is_billing'] = 0;
 $handler->display->display_options['fields']['city']['element_label_type'] = 'strong';
 /* Field: CiviCRM Address: Country */
