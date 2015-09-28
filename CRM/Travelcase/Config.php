@@ -11,8 +11,14 @@ class CRM_Travelcase_Config {
   protected $event_id;
   
   protected $travel_agency_info;
+
+  protected $travelData;
   
   protected $departure_date;
+
+  protected $travelDataDepartureDate;
+  protected $travelDataReturnDate;
+  protected $travelDataDestination;
   
   protected $return_date;
   
@@ -36,6 +42,14 @@ class CRM_Travelcase_Config {
     $this->link_case_to = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'travel_parent'));
     $this->case_id = civicrm_api3('CustomField', 'getsingle', array('name' => 'case_id', 'custom_group_id' => $this->link_case_to['id']));
     $this->event_id = civicrm_api3('CustomField', 'getsingle', array('name' => 'event_id', 'custom_group_id' => $this->link_case_to['id']));
+
+    $this->travelData = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'travel_data'));
+    $this->travelDataDepartureDate = civicrm_api3('CustomField', 'getsingle',
+      array('name' => 'departure_time', 'custom_group_id' => $this->travelData['id']));
+    $this->travelDataReturnDate = civicrm_api3('CustomField', 'getsingle',
+      array('name' => 'return_departure_time', 'custom_group_id' => $this->travelData['id']));
+    $this->travelDataDestination = civicrm_api3('CustomField', 'getsingle',
+      array('name' => 'destination', 'custom_group_id' => $this->travelData['id']));
 
     $this->travel_agency_info = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'info_for_travel_agency'));
     $this->departure_date = civicrm_api3('CustomField', 'getsingle', array('name' => 'requested_departure_date', 'custom_group_id' => $this->travel_agency_info['id']));
@@ -90,18 +104,34 @@ class CRM_Travelcase_Config {
     return $this->travel_agency_info[$key];
   }
   
+  public function getCustomGroupTravelData($key='id') {
+    return $this->travelData[$key];
+  }
+
   public function getCustomFieldDepartureDate($key='id') {
     return $this->departure_date[$key];
   }
-  
+
+  public function getCustomFieldTravelDataDepartureDate($key='id') {
+    return $this->travelDataDepartureDate[$key];
+  }
+
   public function getCustomFieldReturnDate($key='id') {
     return $this->return_date[$key];
+  }
+
+  public function getCustomFieldTravelDataReturnDate($key='id') {
+    return $this->travelDataReturnDate[$key];
   }
   
   public function getCustomFieldDestination($key='id') {
     return $this->destination[$key];
   }
-  
+
+  public function getCustomFieldTravelDataDestination($key='id') {
+    return $this->travelDataDestination[$key];
+  }
+
   public function getRelationshipTypeExpert($key='id') {
     return $this->expert_relationship_type[$key];
   }

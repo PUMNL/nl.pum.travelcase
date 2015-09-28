@@ -428,7 +428,6 @@ ORDER BY cg.weight, cf.weight";
   }
 
   function preProcess() {
-    $this->assign('reportTitle', ts('Membership Detail Report'));
     parent::preProcess();
   }
 
