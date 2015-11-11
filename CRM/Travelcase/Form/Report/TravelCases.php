@@ -13,7 +13,6 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
   protected $_add2groupSupported = FALSE;
 
   function __construct() {
-    $session = CRM_Core_Session::singleton();
     $project_officers = $this->getAllProjectOfficers();
     $this->case_types = CRM_Case_PseudoConstant::caseType();
     $this->case_statuses = CRM_Case_PseudoConstant::caseStatus();
@@ -196,6 +195,7 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
             'name' => 'id',
             'title' => ts('Project officer'),
             'type' => CRM_Report_Form::OP_INT,
+            'default' => 0,
             'operatorType' => CRM_Report_Form::OP_MULTISELECT,
             'options' => $project_officers,
           )
@@ -394,8 +394,6 @@ ORDER BY cg.weight, cf.weight";
 
     //add order bys for custom fields
     $config = CRM_Travelcase_Config::singleton();
-    $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['order_bys']['custom_' . $config->getCustomFieldDepartureDate('id')] = $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_' . $config->getCustomFieldDepartureDate('id')];
-    $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['order_bys']['custom_' . $config->getCustomFieldReturnDate('id')] = $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_' . $config->getCustomFieldReturnDate('id')];
     $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_' . $config->getCustomFieldDepartureDate('id')]['default'] = true;
     $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_' . $config->getCustomFieldReturnDate('id')]['default'] = true;
     $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_' . $config->getCustomFieldDestination('id')]['default'] = true;
@@ -768,5 +766,25 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
     } catch (CiviCRM_API3_Exception $ex) {
       return "None";
     }
+  }
+
+  /**
+   * Overridden parent method order_by
+   */
+  function orderBy() {
+    $this->_orderBy  = "";
+    $this->_sections = array();
+    $this->storeOrderByArray();
+    $mainActivityCustomGroup = CRM_Threepeas_Utils::getCustomGroup('main_activity_info');
+    if (!empty($mainActivityCustomGroup)) {
+      $mainActivityStartDate = CRM_Threepeas_Utils::getCustomField($mainActivityCustomGroup['id'], 'main_activity_start_date');
+      if (!empty($mainActivityStartDate)) {
+        $this->_orderByArray[] = $this->_aliases[$mainActivityCustomGroup['table_name']].".".$mainActivityStartDate['column_name'];
+      }
+    }
+    if(!empty($this->_orderByArray) && !$this->_rollup == 'WITH ROLLUP'){
+      $this->_orderBy = "ORDER BY " . implode(', ', $this->_orderByArray);
+    }
+    $this->assign('sections', $this->_sections);
   }
 }
