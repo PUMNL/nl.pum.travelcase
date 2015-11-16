@@ -52,7 +52,7 @@ class CRM_Travelcase_Page_CaseLink extends CRM_Core_Page {
       $label = $dao->case_type_label.'::'.$dao->display_name.'::'.$dao->subject . ' ('.$dao->case_status_label.')';
       $case = array(
         'url' => $url,
-        'label' => $label,
+        'label' => htmlentities($label, ENT_QUOTES),
        );
     }
     
@@ -70,7 +70,7 @@ class CRM_Travelcase_Page_CaseLink extends CRM_Core_Page {
       $label = $dao->title . ' - ' . CRM_Utils_Date::customFormat($dao->start_date);
       $event = array(
         'url' => $url,
-        'label' => $label,
+        'label' => htmlentities($label, ENT_QUOTES),
        );
     }
     
