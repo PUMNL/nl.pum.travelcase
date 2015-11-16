@@ -11,11 +11,9 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
   protected $_customGroupExtends = array('Case');
   protected $_customGroupGroupBy = FALSE;
   protected $_add2groupSupported = FALSE;
-  
-  function __construct() {
-    $session = CRM_Core_Session::singleton();
-    $project_officers = $this->getAllProjectOfficers();
 
+  function __construct() {
+    $project_officers = $this->getAllProjectOfficers();
     $this->case_types = CRM_Case_PseudoConstant::caseType();
     $this->case_statuses = CRM_Case_PseudoConstant::caseStatus();
     $this->deleted_labels = array(
@@ -197,11 +195,10 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
             'name' => 'id',
             'title' => ts('Project officer'),
             'type' => CRM_Report_Form::OP_INT,
+            'default' => 0,
             'operatorType' => CRM_Report_Form::OP_MULTISELECT,
             'options' => $project_officers,
-            'default' => $session->get('userID'),
           )
-
         ),
         'grouping' => 'travelcase',
       ),
@@ -255,9 +252,6 @@ ORDER BY cg.weight, cf.weight";
           }
         }
       }
-
-      $defaultField = false;
-
       $fieldName = 'custom_' . $customDAO->cf_id;
 
       if ($addFields) {
@@ -398,25 +392,11 @@ ORDER BY cg.weight, cf.weight";
       }
     }
 
-
     //add order bys for custom fields
-    $ma_config = CRM_Travelcase_MainActivityConfig::singleton();
-    $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['order_bys']['custom_' . $ma_config->getCustomFieldStartDate('id')] = $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['fields']['custom_' . $ma_config->getCustomFieldStartDate('id')];
-    $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['order_bys']['custom_' . $ma_config->getCustomFieldEndDate('id')] = $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['fields']['custom_' . $ma_config->getCustomFieldEndDate('id')];
-    $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['fields']['custom_' . $ma_config->getCustomFieldStartDate('id')]['default'] = true;
-    $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['fields']['custom_' . $ma_config->getCustomFieldEndDate('id')]['default'] = true;
-    $this->_columns[$ma_config->getCustomGroupMainActivityInfo('table_name')]['order_bys']['custom_' . $ma_config->getCustomFieldStartDate('id')]['default'] = true;
-
     $config = CRM_Travelcase_Config::singleton();
-    $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['order_bys']['custom_' . $config->getCustomFieldDepartureDate('id')] = $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_' . $config->getCustomFieldDepartureDate('id')];
-    $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['order_bys']['custom_' . $config->getCustomFieldReturnDate('id')] = $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_' . $config->getCustomFieldReturnDate('id')];
     $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_' . $config->getCustomFieldDepartureDate('id')]['default'] = true;
     $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_' . $config->getCustomFieldReturnDate('id')]['default'] = true;
     $this->_columns[$config->getCustomGroupTravelAgencyInfo('table_name')]['fields']['custom_' . $config->getCustomFieldDestination('id')]['default'] = true;
-
-
-    $pumCaseNumberConfig = CRM_Travelcase_PumCaseNumberConfig::singleton();
-    $this->_columns[$pumCaseNumberConfig->getCustomGroupPumCaseNumber('table_name')]['fields']['custom_'.$pumCaseNumberConfig->getCustomFieldSequence('id')]['default'] = true;
 
     $status_config = CRM_Travelcase_TravelCaseStatusConfig::singleton();
     $this->_columns[$status_config->getCustomGroupTravelCaseStatus('table_name')]['fields']['custom_'.$status_config->getCustomFieldAccomodation('id')]['default'] = true;
@@ -465,32 +445,34 @@ ORDER BY cg.weight, cf.weight";
     foreach ($this->_columns as $tableName => $table) {
       if (array_key_exists('filters', $table)) {
         foreach ($table['filters'] as $fieldName => $field) {
-          $clause = NULL;
-          if (CRM_Utils_Array::value('operatorType', $field) & CRM_Utils_Type::T_DATE) {
-            $relative = CRM_Utils_Array::value("{$fieldName}_relative", $this->_params);
-            $from = CRM_Utils_Array::value("{$fieldName}_from", $this->_params);
-            $to = CRM_Utils_Array::value("{$fieldName}_to", $this->_params);
+          if ($fieldName != "user_id") {
+            $clause = NULL;
+            if (CRM_Utils_Array::value('operatorType', $field) & CRM_Utils_Type::T_DATE) {
+              $relative = CRM_Utils_Array::value("{$fieldName}_relative", $this->_params);
+              $from = CRM_Utils_Array::value("{$fieldName}_from", $this->_params);
+              $to = CRM_Utils_Array::value("{$fieldName}_to", $this->_params);
 
-            $clause = $this->dateClause($field['name'], $relative, $from, $to, $field['type']);
-          }
-          else {
-            
-            $op = CRM_Utils_Array::value("{$fieldName}_op", $this->_params);
-            if ($fieldName == 'case_type_id') {
-              $value = CRM_Utils_Array::value("{$fieldName}_value", $this->_params);
-              if (!empty($value)) {
-                $clause = "( {$field['dbAlias']} REGEXP '[[:<:]]" . implode('[[:>:]]|[[:<:]]', $value) . "[[:>:]]' )";
-              }
-              $op = NULL;
+              $clause = $this->dateClause($field['name'], $relative, $from, $to, $field['type']);
             }
-            
-            if ($op) {
-              $clause = $this->whereClause($field,
-                $op,
-                CRM_Utils_Array::value("{$fieldName}_value", $this->_params),
-                CRM_Utils_Array::value("{$fieldName}_min", $this->_params),
-                CRM_Utils_Array::value("{$fieldName}_max", $this->_params)
-              );
+            else {
+
+              $op = CRM_Utils_Array::value("{$fieldName}_op", $this->_params);
+              if ($fieldName == 'case_type_id') {
+                $value = CRM_Utils_Array::value("{$fieldName}_value", $this->_params);
+                if (!empty($value)) {
+                  $clause = "( {$field['dbAlias']} REGEXP '[[:<:]]" . implode('[[:>:]]|[[:<:]]', $value) . "[[:>:]]' )";
+                }
+                $op = NULL;
+              }
+
+              if ($op) {
+                $clause = $this->whereClause($field,
+                  $op,
+                  CRM_Utils_Array::value("{$fieldName}_value", $this->_params),
+                  CRM_Utils_Array::value("{$fieldName}_min", $this->_params),
+                  CRM_Utils_Array::value("{$fieldName}_max", $this->_params)
+                );
+              }
             }
           }
 
@@ -502,6 +484,7 @@ ORDER BY cg.weight, cf.weight";
     }
 
     $clauses[] = "{$cc}.case_type_id = '".$config->getCaseType('value')."'";
+    //$clauses[] = $this->setUserClause();
 
     if (empty($clauses)) {
       $this->_where = "WHERE ( 1 ) ";
@@ -566,6 +549,7 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
   }
   
   function modifyColumnHeaders() {
+    $this->_columnHeaders['pick_up'] = array('title' => ts('Pick Up Information'), 'type' => CRM_Utils_Type::T_STRING);
     $this->_columnHeaders['manage_case'] = array(
       'title' => '',
       'type' => CRM_Utils_Type::T_STRING,
@@ -575,6 +559,8 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
   function postProcess() {
 
     $this->beginPostProcess();
+    // issue 2996 set 0 in $this->_params to current user
+    $this->fixCurrentUser();
 
     // get the acl clauses built before we assemble the query
     $this->buildACLClause($this->_aliases['civicrm_contact_a']);
@@ -590,8 +576,10 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
 
   function alterDisplay(&$rows) {
     $entryFound = FALSE;
-    $activityTypes = CRM_Core_PseudoConstant::activityType(TRUE, TRUE);
     foreach ($rows as $rowNum => $row) {
+      if (array_key_exists('civicrm_case_id', $row)) {
+        $rows[$rowNum]['pick_up'] = $this->getPickUpInfo($row['civicrm_case_id']);
+      }
       if (array_key_exists('civicrm_case_status_id', $row)) {
         if ($value = $row['civicrm_case_status_id']) {
           $rows[$rowNum]['civicrm_case_status_id'] = $this->case_statuses[$value];
@@ -719,6 +707,7 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
   protected function getAllProjectOfficers() {
     $config = CRM_Travelcase_Config::singleton();
     $return = array();
+    $return[0] = 'current user';
     $sql = "SELECT c.id, c.display_name
             from civicrm_contact c
             inner join civicrm_relationship cr on cr.contact_id_b = c.id
@@ -731,5 +720,71 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
       $return[$dao->id] = $dao->display_name;
     }
     return $return;
+  }
+
+  /**
+   * Method to set the $this->_params to current user if current user (element 0) was selected
+   *
+   * @access private
+   */
+  private function fixCurrentUser() {
+    if (isset($this->_params['proj_officer_id_value']) && !empty($this->_params['proj_officer_id_value'])) {
+      foreach ($this->_params['proj_officer_id_value'] as $projectOfficerKey => $projectOfficerValue) {
+        if ($projectOfficerValue == 0) {
+          $session = CRM_Core_Session::singleton();
+          $this->_params['proj_officer_id_value'][$projectOfficerKey] = $session->get('userID');
+        }
+      }
+    }
+  }
+
+  /**
+   * Method to get the status of the Pick Up Information activity
+   * (issue 2996)
+   *
+   * @param int $caseId
+   * @return string
+   * @access private
+   */
+  private function getPickUpInfo($caseId) {
+    $pickUpInfoActivityType = CRM_Threepeas_Utils::getActivityTypeWithName('Pick Up Information');
+    $pickUpInfoActivityTypeId = $pickUpInfoActivityType['value'];
+    $activityStatus = CRM_Core_PseudoConstant::activityStatus();
+
+    $caseActivityParams = array(
+      'case_id' => $caseId,
+      'activity_type_id' => $pickUpInfoActivityTypeId
+    );
+    try {
+      $caseActivities = civicrm_api3('CaseActivity', 'Get', $caseActivityParams);
+      if ($caseActivities['count'] == 0) {
+        return "None";
+      }
+      foreach ($caseActivities['values'] as $caseActivity) {
+        return $activityStatus[$caseActivity['status_id']];
+      }
+    } catch (CiviCRM_API3_Exception $ex) {
+      return "None";
+    }
+  }
+
+  /**
+   * Overridden parent method order_by
+   */
+  function orderBy() {
+    $this->_orderBy  = "";
+    $this->_sections = array();
+    $this->storeOrderByArray();
+    $mainActivityCustomGroup = CRM_Threepeas_Utils::getCustomGroup('main_activity_info');
+    if (!empty($mainActivityCustomGroup)) {
+      $mainActivityStartDate = CRM_Threepeas_Utils::getCustomField($mainActivityCustomGroup['id'], 'main_activity_start_date');
+      if (!empty($mainActivityStartDate)) {
+        $this->_orderByArray[] = $this->_aliases[$mainActivityCustomGroup['table_name']].".".$mainActivityStartDate['column_name'];
+      }
+    }
+    if(!empty($this->_orderByArray) && !$this->_rollup == 'WITH ROLLUP'){
+      $this->_orderBy = "ORDER BY " . implode(', ', $this->_orderByArray);
+    }
+    $this->assign('sections', $this->_sections);
   }
 }
