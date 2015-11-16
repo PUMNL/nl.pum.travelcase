@@ -779,7 +779,9 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
     if (!empty($mainActivityCustomGroup)) {
       $mainActivityStartDate = CRM_Threepeas_Utils::getCustomField($mainActivityCustomGroup['id'], 'main_activity_start_date');
       if (!empty($mainActivityStartDate)) {
-        $this->_orderByArray[] = $this->_aliases[$mainActivityCustomGroup['table_name']].".".$mainActivityStartDate['column_name'];
+        if (array_key_exists("custom_".$mainActivityStartDate['id'], $this->_params['fields'])) {
+          $this->_orderByArray[] = $this->_aliases[$mainActivityCustomGroup['table_name']] . "." . $mainActivityStartDate['column_name'];
+        }
       }
     }
     if(!empty($this->_orderByArray) && !$this->_rollup == 'WITH ROLLUP'){
