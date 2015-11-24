@@ -559,8 +559,6 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
   function postProcess() {
 
     $this->beginPostProcess();
-    // issue 2996 set 0 in $this->_params to current user
-    $this->fixCurrentUser();
 
     // get the acl clauses built before we assemble the query
     $this->buildACLClause($this->_aliases['civicrm_contact_a']);
@@ -720,22 +718,6 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
       $return[$dao->id] = $dao->display_name;
     }
     return $return;
-  }
-
-  /**
-   * Method to set the $this->_params to current user if current user (element 0) was selected
-   *
-   * @access private
-   */
-  private function fixCurrentUser() {
-    if (isset($this->_params['proj_officer_id_value']) && !empty($this->_params['proj_officer_id_value'])) {
-      foreach ($this->_params['proj_officer_id_value'] as $projectOfficerKey => $projectOfficerValue) {
-        if ($projectOfficerValue == 0) {
-          $session = CRM_Core_Session::singleton();
-          $this->_params['proj_officer_id_value'][$projectOfficerKey] = $session->get('userID');
-        }
-      }
-    }
   }
 
   /**
