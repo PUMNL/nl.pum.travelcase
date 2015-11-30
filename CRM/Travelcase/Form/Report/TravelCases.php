@@ -445,34 +445,38 @@ ORDER BY cg.weight, cf.weight";
     foreach ($this->_columns as $tableName => $table) {
       if (array_key_exists('filters', $table)) {
         foreach ($table['filters'] as $fieldName => $field) {
-          if ($fieldName != "user_id") {
-            $clause = NULL;
-            if (CRM_Utils_Array::value('operatorType', $field) & CRM_Utils_Type::T_DATE) {
-              $relative = CRM_Utils_Array::value("{$fieldName}_relative", $this->_params);
-              $from = CRM_Utils_Array::value("{$fieldName}_from", $this->_params);
-              $to = CRM_Utils_Array::value("{$fieldName}_to", $this->_params);
+          $clause = NULL;
+          if (CRM_Utils_Array::value('operatorType', $field) & CRM_Utils_Type::T_DATE) {
+            $relative = CRM_Utils_Array::value("{$fieldName}_relative", $this->_params);
+            $from = CRM_Utils_Array::value("{$fieldName}_from", $this->_params);
+            $to = CRM_Utils_Array::value("{$fieldName}_to", $this->_params);
 
-              $clause = $this->dateClause($field['name'], $relative, $from, $to, $field['type']);
+            $clause = $this->dateClause($field['name'], $relative, $from, $to, $field['type']);
+          } else {
+
+            $op = CRM_Utils_Array::value("{$fieldName}_op", $this->_params);
+            if ($fieldName == 'case_type_id') {
+              $value = CRM_Utils_Array::value("{$fieldName}_value", $this->_params);
+              if (!empty($value)) {
+                $clause = "( {$field['dbAlias']} REGEXP '[[:<:]]" . implode('[[:>:]]|[[:<:]]', $value) . "[[:>:]]' )";
+              }
+              $op = NULL;
             }
-            else {
-
-              $op = CRM_Utils_Array::value("{$fieldName}_op", $this->_params);
-              if ($fieldName == 'case_type_id') {
-                $value = CRM_Utils_Array::value("{$fieldName}_value", $this->_params);
-                if (!empty($value)) {
-                  $clause = "( {$field['dbAlias']} REGEXP '[[:<:]]" . implode('[[:>:]]|[[:<:]]', $value) . "[[:>:]]' )";
+            if ($fieldName == 'proj_officer_id') {
+              foreach ($this->_params['proj_officer_id_value'] as $projOfficerKey => $projOfficerValue) {
+                if ($projOfficerValue == 0) {
+                  $session = CRM_Core_Session::singleton();
+                  $this->_params['proj_officer_id_value'][$projOfficerKey] = $session->get("userID");
                 }
-                $op = NULL;
               }
-
-              if ($op) {
-                $clause = $this->whereClause($field,
-                  $op,
-                  CRM_Utils_Array::value("{$fieldName}_value", $this->_params),
-                  CRM_Utils_Array::value("{$fieldName}_min", $this->_params),
-                  CRM_Utils_Array::value("{$fieldName}_max", $this->_params)
-                );
-              }
+            }
+            if ($op) {
+              $clause = $this->whereClause($field,
+                $op,
+                CRM_Utils_Array::value("{$fieldName}_value", $this->_params),
+                CRM_Utils_Array::value("{$fieldName}_min", $this->_params),
+                CRM_Utils_Array::value("{$fieldName}_max", $this->_params)
+              );
             }
           }
 
