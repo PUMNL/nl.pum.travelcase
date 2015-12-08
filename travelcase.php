@@ -9,6 +9,10 @@ require_once 'travelcase.civix.php';
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_caseSummary
  */
 function travelcase_civicrm_caseSummary($caseId) {
+  // issue 2567 default Case Manager to Project Officer of parent case
+  // 8 dec 2015, Erik Hommel <erik.hommel@civicoop.org>
+  CRM_Travelcase_Utils_AddCaseManagerFromParentCase::caseSummary($caseId);
+
   $page = new CRM_Travelcase_Page_Case($caseId);
   $content = $page->run();
   $page2 = new CRM_Travelcase_Page_CaseLink($caseId);
