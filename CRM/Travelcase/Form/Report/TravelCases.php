@@ -463,11 +463,20 @@ ORDER BY cg.weight, cf.weight";
               $op = NULL;
             }
             if ($fieldName == 'proj_officer_id') {
+              $changedValues = array();
               foreach ($this->_params['proj_officer_id_value'] as $projOfficerKey => $projOfficerValue) {
+
                 if ($projOfficerValue == 0) {
                   $session = CRM_Core_Session::singleton();
-                  $this->_params['proj_officer_id_value'][$projOfficerKey] = $session->get("userID");
+                  $changedValues[$projOfficerKey] = $session->get("userID");
+                } else {
+                  $changedValues[$projOfficerKey] = $projOfficerValue;
                 }
+                $clause = $this->whereClause($field, $op, $changedValues,
+                  CRM_Utils_Array::value("{$fieldName}_min", $this->_params),
+                  CRM_Utils_Array::value("{$fieldName}_max", $this->_params)
+                );
+                $op = NULL;
               }
             }
             if ($op) {
@@ -479,7 +488,6 @@ ORDER BY cg.weight, cf.weight";
               );
             }
           }
-
           if (!empty($clause)) {
             $clauses[] = $clause;
           }
