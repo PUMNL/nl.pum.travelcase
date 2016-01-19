@@ -84,7 +84,9 @@ function travelcase_civicrm_custom( $op, $groupID, $entityID, &$params ) {
   $config = CRM_Travelcase_Config::singleton();
   CRM_Travelcase_Utils_AddPumCaseNumberToInvoice::custom($op, $groupID, $entityID, $params);
   CRM_Travelcase_Utils_AddDonorFromParentCase::custom($op, $groupID, $entityID, $params);
-  CRM_Travelcase_Utils_CopyDsaInfo::custom($op, $groupID, $entityID, $params);
+  CRM_Travelcase_Utils_CopyDsaInfo::custom_info_for_dsa($op, $groupID, $entityID, $params);
+  CRM_Travelcase_Utils_CopyDsaInfo::custom_link_case_to($op, $groupID, $entityID, $params);
+  CRM_Travelcase_Utils_CopyDsaInfo::custom_ma_info($op, $groupID, $entityID, $params);
   CRM_Travelcase_Utils_CopyPumCaseNumber::custom($op, $groupID, $entityID, $params);
 }
 
