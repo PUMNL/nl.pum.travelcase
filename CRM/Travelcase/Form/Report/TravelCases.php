@@ -445,37 +445,49 @@ ORDER BY cg.weight, cf.weight";
     foreach ($this->_columns as $tableName => $table) {
       if (array_key_exists('filters', $table)) {
         foreach ($table['filters'] as $fieldName => $field) {
-          if ($fieldName != "user_id") {
-            $clause = NULL;
-            if (CRM_Utils_Array::value('operatorType', $field) & CRM_Utils_Type::T_DATE) {
-              $relative = CRM_Utils_Array::value("{$fieldName}_relative", $this->_params);
-              $from = CRM_Utils_Array::value("{$fieldName}_from", $this->_params);
-              $to = CRM_Utils_Array::value("{$fieldName}_to", $this->_params);
+          $clause = NULL;
+          if (CRM_Utils_Array::value('operatorType', $field) & CRM_Utils_Type::T_DATE) {
+            $relative = CRM_Utils_Array::value("{$fieldName}_relative", $this->_params);
+            $from = CRM_Utils_Array::value("{$fieldName}_from", $this->_params);
+            $to = CRM_Utils_Array::value("{$fieldName}_to", $this->_params);
 
-              $clause = $this->dateClause($field['name'], $relative, $from, $to, $field['type']);
-            }
-            else {
+            $clause = $this->dateClause($field['name'], $relative, $from, $to, $field['type']);
+          } else {
 
-              $op = CRM_Utils_Array::value("{$fieldName}_op", $this->_params);
-              if ($fieldName == 'case_type_id') {
-                $value = CRM_Utils_Array::value("{$fieldName}_value", $this->_params);
-                if (!empty($value)) {
-                  $clause = "( {$field['dbAlias']} REGEXP '[[:<:]]" . implode('[[:>:]]|[[:<:]]', $value) . "[[:>:]]' )";
-                }
-                $op = NULL;
+            $op = CRM_Utils_Array::value("{$fieldName}_op", $this->_params);
+            if ($fieldName == 'case_type_id') {
+              $value = CRM_Utils_Array::value("{$fieldName}_value", $this->_params);
+              if (!empty($value)) {
+                $clause = "( {$field['dbAlias']} REGEXP '[[:<:]]" . implode('[[:>:]]|[[:<:]]', $value) . "[[:>:]]' )";
               }
+              $op = NULL;
+            }
+            if ($fieldName == 'proj_officer_id') {
+              $changedValues = array();
+              foreach ($this->_params['proj_officer_id_value'] as $projOfficerKey => $projOfficerValue) {
 
-              if ($op) {
-                $clause = $this->whereClause($field,
-                  $op,
-                  CRM_Utils_Array::value("{$fieldName}_value", $this->_params),
+                if ($projOfficerValue == 0) {
+                  $session = CRM_Core_Session::singleton();
+                  $changedValues[$projOfficerKey] = $session->get("userID");
+                } else {
+                  $changedValues[$projOfficerKey] = $projOfficerValue;
+                }
+                $clause = $this->whereClause($field, $op, $changedValues,
                   CRM_Utils_Array::value("{$fieldName}_min", $this->_params),
                   CRM_Utils_Array::value("{$fieldName}_max", $this->_params)
                 );
+                $op = NULL;
               }
             }
+            if ($op) {
+              $clause = $this->whereClause($field,
+                $op,
+                CRM_Utils_Array::value("{$fieldName}_value", $this->_params),
+                CRM_Utils_Array::value("{$fieldName}_min", $this->_params),
+                CRM_Utils_Array::value("{$fieldName}_max", $this->_params)
+              );
+            }
           }
-
           if (!empty($clause)) {
             $clauses[] = $clause;
           }
@@ -559,8 +571,6 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
   function postProcess() {
 
     $this->beginPostProcess();
-    // issue 2996 set 0 in $this->_params to current user
-    $this->fixCurrentUser();
 
     // get the acl clauses built before we assemble the query
     $this->buildACLClause($this->_aliases['civicrm_contact_a']);
@@ -723,22 +733,6 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
   }
 
   /**
-   * Method to set the $this->_params to current user if current user (element 0) was selected
-   *
-   * @access private
-   */
-  private function fixCurrentUser() {
-    if (isset($this->_params['proj_officer_id_value']) && !empty($this->_params['proj_officer_id_value'])) {
-      foreach ($this->_params['proj_officer_id_value'] as $projectOfficerKey => $projectOfficerValue) {
-        if ($projectOfficerValue == 0) {
-          $session = CRM_Core_Session::singleton();
-          $this->_params['proj_officer_id_value'][$projectOfficerKey] = $session->get('userID');
-        }
-      }
-    }
-  }
-
-  /**
    * Method to get the status of the Pick Up Information activity
    * (issue 2996)
    *
@@ -779,7 +773,9 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
     if (!empty($mainActivityCustomGroup)) {
       $mainActivityStartDate = CRM_Threepeas_Utils::getCustomField($mainActivityCustomGroup['id'], 'main_activity_start_date');
       if (!empty($mainActivityStartDate)) {
-        $this->_orderByArray[] = $this->_aliases[$mainActivityCustomGroup['table_name']].".".$mainActivityStartDate['column_name'];
+        if (array_key_exists("custom_".$mainActivityStartDate['id'], $this->_params['fields'])) {
+          $this->_orderByArray[] = $this->_aliases[$mainActivityCustomGroup['table_name']] . "." . $mainActivityStartDate['column_name'];
+        }
       }
     }
     if(!empty($this->_orderByArray) && !$this->_rollup == 'WITH ROLLUP'){
