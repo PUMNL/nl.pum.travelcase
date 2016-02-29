@@ -27,11 +27,13 @@ class CRM_Travelcase_Utils_SetDefaultValues {
     $parent_case_id = CRM_Utils_Request::retrieve('parent_case_id', 'Positive', $form);
     if (!empty($parent_case_id)) {
       $config = CRM_Travelcase_Config::singleton();
+      $dsa = CRM_Travelcase_InfoForDsaConfig::singleton();
       $defaults['case_type_id'] = $config->getCaseType('value');
       try {
         $case = civicrm_api3('Case', 'getsingle', array('id' => $parent_case_id));
         $defaults['custom_'.$config->getCustomFieldCaseId('id').'_-1_id'] = $parent_case_id;
         $defaults['custom_'.$config->getCustomFieldCaseId('id').'_-1'] = $case['subject'];
+        $defaults['custom_'.$autofill_field = $dsa->getCustomFieldFillFromLinkedEntity('id').'_-1'] = '1';
       } catch (Exception $ex) {
           //do nothing
       }
