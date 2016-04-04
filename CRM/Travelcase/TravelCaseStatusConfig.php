@@ -17,9 +17,6 @@ class CRM_Travelcase_TravelCaseStatusConfig {
   protected $dsa;
 
   protected $invitation;
-
-  protected $to_be_arranged_status;
-  
   
   protected function __construct() {
     $this->case_status = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'travelcase_status'));
@@ -47,10 +44,6 @@ class CRM_Travelcase_TravelCaseStatusConfig {
     return self::$_singleton;
   }
   
-  public function getToBeArrangedStatus() {
-    return $this->to_be_arranged_status;
-  }
-
   public function getCustomFieldDsa($key='id') {
     return $this->dsa[$key];
   }

@@ -36,14 +36,7 @@ class CRM_Travelcase_Utils_AddCaseManagerFromParentCase {
    */
   private static function updateCaseManager($caseId, $parentCaseId) {
     if (method_exists('CRM_Threepeas_BAO_PumCaseRelation', 'getRelationContactIdByCaseId')) {
-      $businessCaseType = CRM_Threepeas_Utils::getCaseTypeWithName('Business');
-      $parentCaseTypeId = civicrm_api3('Case', 'Getvalue', array('id' => $parentCaseId, 'return' => 'case_type_id'));
-      // if business then add authorized contact and set status for custom fields correctly else project officer
-      if ($parentCaseTypeId == $businessCaseType['value']) {
-        $caseCoordinatorId = CRM_Threepeas_BAO_PumCaseRelation::getRelationContactIdByCaseId($parentCaseId, 'authorised_contact');
-      } else {
-        $caseCoordinatorId = CRM_Threepeas_BAO_PumCaseRelation::getRelationContactIdByCaseId($parentCaseId, 'project_officer');
-      }
+      $caseCoordinatorId = CRM_Threepeas_BAO_PumCaseRelation::getRelationContactIdByCaseId($parentCaseId, 'project_officer');
       $caseManagerRelationshipTypeId = civicrm_api3('RelationshipType', 'Getvalue', array('name_a_b' => 'Case Coordinator is', 'return' => 'id'));
       $caseClientId = CRM_Threepeas_Utils::getCaseClientId($caseId);
       $query = "UPDATE civicrm_relationship SET contact_id_b = %1 WHERE contact_id_a = %2 AND case_id = %3 AND relationship_type_id = %4";
