@@ -39,5 +39,58 @@ class CRM_Travelcase_Utils_SetDefaultValues {
       $form->setDefaults($defaults);
     }
   }
+
+  /**
+   * Method to create default travel case status
+   *
+   * @param $caseId
+   * @param $caseTypeId
+   */
+  public static function businessTravelStatus($caseId, $caseTypeId) {
+    $config = CRM_Travelcase_Config::singleton();
+    $travelCaseTypeId = $config->getCaseType('value');
+    if ($caseTypeId == $travelCaseTypeId) {
+      $travelStatusConfig = CRM_Travelcase_TravelCaseStatusConfig::singleton();
+      if (self::travelCaseStatusExists($caseId) == FALSE) {
+        $defaultStatus = "-1";
+        $columns = array(
+          $travelStatusConfig->getCustomFieldAccomodation('column_name'),
+          $travelStatusConfig->getCustomFieldDsa('column_name'),
+          $travelStatusConfig->getCustomFieldInvitation('column_name'),
+          $travelStatusConfig->getCustomFieldPickup('column_name'),
+          $travelStatusConfig->getCustomFieldTicket('column_name'),
+          $travelStatusConfig->getCustomFieldVisa('column_name')
+        );
+        $clauses = array();
+        foreach ($columns as $column) {
+          $clauses[] = $column.' = %2';
+        }
+        $insert = "INSERT INTO ".$travelStatusConfig->getCustomGroupTravelCaseStatus('table_name')
+          ." SET entity_id = %1, ".implode(', ', $clauses);
+        $params = array(
+          1 => array($caseId, 'Integer'),
+          2 => array($defaultStatus, 'String')
+        );
+        CRM_Core_DAO::executeQuery($insert, $params);
+      }
+    }
+  }
+
+  /**
+   * Method to check if there is already travel status for travel case
+   *
+   * @param $caseId
+   * @return bool
+   */
+  private static function travelCaseStatusExists($caseId) {
+    $config = CRM_Travelcase_TravelCaseStatusConfig::singleton();
+    $query = 'SELECT COUNT(*) FROM '.$config->getCustomGroupTravelCaseStatus('table_name').' WHERE entity_id = %1';
+    $count = CRM_Core_DAO::singleValueQuery($query, array(1 => array($caseId, 'Integer')));
+    if ($count > 0) {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
   
 }
