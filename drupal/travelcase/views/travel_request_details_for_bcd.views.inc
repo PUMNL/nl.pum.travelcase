@@ -13,6 +13,10 @@ $invoice = civicrm_api3('CustomField', 'getvalue', array('name' => 'invoice_info
 
 $seat = civicrm_api3('CustomField', 'getvalue', array('name' => 'Seat', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
 $diet = civicrm_api3('CustomField', 'getvalue', array('name' => 'Diet_preference', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
+$ff_1_airline = civicrm_api3('CustomField', 'getvalue', array('name' => 'FF_Card_1_Airline_Company', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
+$ff_1_number = civicrm_api3('CustomField', 'getvalue', array('name' => 'FF_Card_1_Number', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
+$ff_2_airline = civicrm_api3('CustomField', 'getvalue', array('name' => 'FF_Card_2_Airline_Company', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
+$ff_2_number = civicrm_api3('CustomField', 'getvalue', array('name' => 'FF_Card_2_Number', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
 
 $name = civicrm_api3('CustomField', 'getvalue', array('name' => 'Passport_Name', 'return' => 'column_name', 'custom_group_id' => $passport_info['id']));
 $last_name = civicrm_api3('CustomField', 'getvalue', array('name' => 'Passport_Name_Last_Name', 'return' => 'column_name', 'custom_group_id' => $passport_info['id']));
@@ -221,6 +225,30 @@ $handler->display->display_options['fields']['seat_640']['table'] = $flight_pref
 $handler->display->display_options['fields']['seat_640']['field'] = $seat;
 $handler->display->display_options['fields']['seat_640']['relationship'] = 'contact_id';
 $handler->display->display_options['fields']['seat_640']['element_label_type'] = 'strong';
+/* Field: CiviCRM Custom: Flight Preferences: ff_1_airline */
+$handler->display->display_options['fields']['ff_1_airline']['id'] = 'ff_1_airline';
+$handler->display->display_options['fields']['ff_1_airline']['table'] = $flight_pref['table_name'];
+$handler->display->display_options['fields']['ff_1_airline']['field'] = $ff_1_airline;
+$handler->display->display_options['fields']['ff_1_airline']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['ff_1_airline']['element_label_type'] = 'strong';
+/* Field: CiviCRM Custom: Flight Preferences: ff_1_number */
+$handler->display->display_options['fields']['ff_1_number']['id'] = 'ff_1_number';
+$handler->display->display_options['fields']['ff_1_number']['table'] = $flight_pref['table_name'];
+$handler->display->display_options['fields']['ff_1_number']['field'] = $ff_1_number;
+$handler->display->display_options['fields']['ff_1_number']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['ff_1_number']['element_label_type'] = 'strong';
+/* Field: CiviCRM Custom: Flight Preferences: ff_2_airline */
+$handler->display->display_options['fields']['ff_2_airline']['id'] = 'ff_2_airline';
+$handler->display->display_options['fields']['ff_2_airline']['table'] = $flight_pref['table_name'];
+$handler->display->display_options['fields']['ff_2_airline']['field'] = $ff_2_airline;
+$handler->display->display_options['fields']['ff_2_airline']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['ff_2_airline']['element_label_type'] = 'strong';
+/* Field: CiviCRM Custom: Flight Preferences: ff_2_number */
+$handler->display->display_options['fields']['ff_2_number']['id'] = 'ff_2_number';
+$handler->display->display_options['fields']['ff_2_number']['table'] = $flight_pref['table_name'];
+$handler->display->display_options['fields']['ff_2_number']['field'] = $ff_2_number;
+$handler->display->display_options['fields']['ff_2_number']['relationship'] = 'contact_id';
+$handler->display->display_options['fields']['ff_2_number']['element_label_type'] = 'strong';
 /* Field: CiviCRM Custom: Info for travel agency: Invoice Info */
 $handler->display->display_options['fields']['invoice']['id'] = 'invoice';
 $handler->display->display_options['fields']['invoice']['table'] = $ta_info['table_name'];
