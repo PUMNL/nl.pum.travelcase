@@ -18,7 +18,6 @@ class CRM_Travelcase_TravelCaseStatusConfig {
 
   protected $invitation;
   
-  
   protected function __construct() {
     $this->case_status = civicrm_api3('CustomGroup', 'getsingle', array('name' => 'travelcase_status'));
     $this->visa = civicrm_api3('CustomField', 'getsingle', array('name' => 'visa', 'custom_group_id' => $this->case_status['id']));
@@ -27,6 +26,12 @@ class CRM_Travelcase_TravelCaseStatusConfig {
     $this->invitation = civicrm_api3('CustomField', 'getsingle', array('name' => 'invitation', 'custom_group_id' => $this->case_status['id']));
     $this->dsa = civicrm_api3('CustomField', 'getsingle', array('name' => 'dsa', 'custom_group_id' => $this->case_status['id']));
     $this->accomodation = civicrm_api3('CustomField', 'getsingle', array('name' => 'accomodation', 'custom_group_id' => $this->case_status['id']));
+    $option_value_params = array(
+      'option_group_id' => $this->visa['option_group_id'],
+      'name' => 'To be arranged',
+      'return' => 'value'
+    );
+    $this->to_be_arranged_status = civicrm_api3('OptionValue', 'Getvalue', $option_value_params);
   }
   
   /**
@@ -38,7 +43,7 @@ class CRM_Travelcase_TravelCaseStatusConfig {
     }
     return self::$_singleton;
   }
-
+  
   public function getCustomFieldDsa($key='id') {
     return $this->dsa[$key];
   }
