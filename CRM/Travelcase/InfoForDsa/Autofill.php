@@ -32,7 +32,7 @@ class CRM_Travelcase_InfoForDsa_Autofill {
           CRM_Core_DAO::executeQuery($update, array(1 => array($dao->dsa_id, 'Integer')));
         } else {
           $insert = "INSERT INTO `".$dsa->getCustomGroupInfoForDsa('table_name')."`"
-              . " (`entity_id`, `".$dsa->getCustomFieldStartDate('column_name')."`,`".$dsa->getCustomFieldEndDate('column_name')."`, `".$dsa->getCustomFieldFillFromLinkedEntity('column_name').")"
+              . " (`entity_id`, `".$dsa->getCustomFieldStartDate('column_name')."`,`".$dsa->getCustomFieldEndDate('column_name')."`, `".$dsa->getCustomFieldFillFromLinkedEntity('column_name')."`)"
               . " VALUES (%1, '".$dao->start_date."', '".$dao->end_date."', '1');";
           
           CRM_Core_DAO::executeQuery($insert, array(1 => array($dao->case_id, 'Integer')));  
