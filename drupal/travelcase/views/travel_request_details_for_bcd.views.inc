@@ -14,7 +14,7 @@ $invoice = civicrm_api3('CustomField', 'getvalue', array('name' => 'invoice_info
 $seat = civicrm_api3('CustomField', 'getvalue', array('name' => 'Seat', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
 $diet = civicrm_api3('CustomField', 'getvalue', array('name' => 'Diet_preference', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
 $ff_1_airline = civicrm_api3('CustomField', 'getvalue', array('name' => 'FF_Card_1_Airline_Company', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
-$ff_1_number = civicrm_api3('CustomField', 'getvalue', array('name' => 'FF_Card_1_Number', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
+$ff_1_number = civicrm_api3('CustomField', 'getvalue', array('name' => 'Number', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
 $ff_2_airline = civicrm_api3('CustomField', 'getvalue', array('name' => 'FF_Card_2_Airline_Company', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
 $ff_2_number = civicrm_api3('CustomField', 'getvalue', array('name' => 'FF_Card_2_Number', 'return' => 'column_name', 'custom_group_id' => $flight_pref['id']));
 
