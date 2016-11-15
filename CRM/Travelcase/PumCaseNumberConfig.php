@@ -61,7 +61,7 @@ class CRM_Travelcase_PumCaseNumberConfig {
       $seq_field = $this->getCustomFieldSequence('column_name');
       $type_field = $this->getCustomFieldType('column_name');
       $country_field = $this->getCustomFieldCountry('column_name');
-      $return = $dao->$seq_field."-".$dao->$type_field."-".$dao->$country_field;      
+      $return = $dao->$country_field."-".$dao->$seq_field."-".$dao->$type_field;
     }
     return $return;
   }
