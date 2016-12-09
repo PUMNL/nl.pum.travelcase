@@ -42,7 +42,7 @@ class CRM_Travelcase_Page_Case extends CRM_Core_Page {
         . "INNER JOIN `civicrm_contact` ON `civicrm_case_contact`.`contact_id`  = `civicrm_contact`.`id`"
         . "LEFT JOIN `" . $config->getCustomGroupTravelData('table_name') . "` `ta` ON `civicrm_case`.`id` = `ta`.`entity_id`"
         . "LEFT JOIN  civicrm_option_value ov ON ( civicrm_case.status_id=ov.value AND ov.option_group_id='" . $case_status['id'] . "')"
-        . "WHERE `case_link`.`" . $config->getCustomFieldCaseId('column_name') . "` = '" . $this->caseId . "'";
+        . "WHERE `case_link`.`" . $config->getCustomFieldCaseId('column_name') . "` = '" . $this->caseId . "' AND civicrm_case.is_deleted = '0'";
 
       $dao = CRM_Core_DAO::executeQuery($sql);
       $cases = array();
