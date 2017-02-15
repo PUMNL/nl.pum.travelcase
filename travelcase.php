@@ -40,7 +40,12 @@ function travelcase_civicrm_validateForm( $formName, &$fields, &$files, &$form, 
 }
 
 function travelcase_civicrm_buildForm($formName, &$form) {
-  if ($formName == 'CRM_Case_Form_Case') {
+  // issue 3747 default assignee authorised contact for pick up information
+  if ($formName == "CRM_Case_Form_Activity") {
+    CRM_Travelcase_PickupInformation::buildForm($form);
+  }
+
+    if ($formName == 'CRM_Case_Form_Case') {
     //set default values
     CRM_Travelcase_Utils_SetDefaultValues::buildForm($formName, $form);
     CRM_Travelcase_Utils_AddDonorFromParentCase::buildForm($formName, $form);
