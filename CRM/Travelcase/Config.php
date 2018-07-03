@@ -177,6 +177,13 @@ class CRM_Travelcase_Config {
           $this->getRelationshipTypeMtMember('id'),
         );
         break;
+      case 'FactFinding':
+        return array(
+          $this->getRelationshipTypeCC('id'),
+          $this->getRelationshipTypeProjOff('id'),
+          'additional_person',
+        );
+        break;
       case 'CTM':
         return array(
           $this->getRelationshipTypeCC('id'),
@@ -204,6 +211,9 @@ class CRM_Travelcase_Config {
         return array(
           $this->getRelationshipTypeCC('id'),
         );
+        break;
+      case 'FactFinding';
+        return array();
         break;
       case 'CTM':
         return array();
