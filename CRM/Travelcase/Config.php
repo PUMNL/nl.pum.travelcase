@@ -179,8 +179,7 @@ class CRM_Travelcase_Config {
         break;
       case 'FactFinding':
         return array(
-          $this->getRelationshipTypeCC('id'),
-          $this->getRelationshipTypeProjOff('id'),
+          $this->getRelationshipTypeExpert('id'),
           'additional_person',
         );
         break;
