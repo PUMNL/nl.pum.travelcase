@@ -11,9 +11,11 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
   protected $_customGroupExtends = array('Case');
   protected $_customGroupGroupBy = FALSE;
   protected $_add2groupSupported = FALSE;
+  protected $_userSelectList = array();
 
   function __construct() {
-    $project_officers = $this->getAllProjectOfficers();
+    $this->setUserSelectList();
+    $project_officers = $this->_userSelectList;
     $this->case_types = CRM_Case_PseudoConstant::caseType();
     $this->case_statuses = CRM_Case_PseudoConstant::caseStatus();
     $this->deleted_labels = array(
@@ -714,22 +716,17 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
     }
   }
 
-  protected function getAllProjectOfficers() {
-    $config = CRM_Travelcase_Config::singleton();
-    $return = array();
-    $return[0] = 'current user';
-    $sql = "SELECT c.id, c.display_name
-            from civicrm_contact c
-            inner join civicrm_relationship cr on cr.contact_id_b = c.id
-            where cr.case_id is not NULL
-            and cr.relationship_type_id = %1
-            order by c.sort_name";
-    $params[1] = array($config->getRelationshipTypeProjOff('id'), 'Integer');
-    $dao = CRM_Core_DAO::executeQuery($sql, $params);
-    while ($dao->fetch()) {
-      $return[$dao->id] = $dao->display_name;
+  protected function setUserSelectList() {
+    if (method_exists('CRM_Groupsforreports_GroupReport', 'getGroupMembersForReport')) {
+      $allContacts = CRM_Groupsforreports_GroupReport::getGroupMembersForReport(__CLASS__);
+      $sortedContacts = array();
+      foreach ($allContacts as $contact) {
+        $sortedContacts[$contact] = CRM_Threepeas_Utils::getContactName($contact);
+      }
+      asort($sortedContacts);
+      $this->_userSelectList = array(0 => 'current user') + $sortedContacts;
     }
-    return $return;
+    return;
   }
 
   /**
