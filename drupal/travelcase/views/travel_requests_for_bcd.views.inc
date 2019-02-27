@@ -108,7 +108,7 @@ $handler->display->display_options['fields']['id']['label'] = '';
 $handler->display->display_options['fields']['id']['exclude'] = TRUE;
 $handler->display->display_options['fields']['id']['element_label_colon'] = FALSE;
 $handler->display->display_options['fields']['id']['separator'] = '';
-/* Field: CiviCRM Cases: Contact ID */
+/* Field: CiviCRM Contacts: Contact ID */
 $handler->display->display_options['fields']['contact_id']['id'] = 'contact_id';
 $handler->display->display_options['fields']['contact_id']['table'] = 'civicrm_contact';
 $handler->display->display_options['fields']['contact_id']['relationship'] = 'contact_id';
@@ -117,14 +117,14 @@ $handler->display->display_options['fields']['contact_id']['label'] = '';
 $handler->display->display_options['fields']['contact_id']['exclude'] = TRUE;
 $handler->display->display_options['fields']['contact_id']['element_label_colon'] = FALSE;
 $handler->display->display_options['fields']['contact_id']['separator'] = '';
-/* Field: CiviCRM Contact: First Name*/
+/* Field: CiviCRM Custom: Passport Information: Passport Name - First Name(s) */
 $handler->display->display_options['fields']['first_name']['id'] = 'first_name';
 $handler->display->display_options['fields']['first_name']['table'] = $passport_info['table_name'];
 $handler->display->display_options['fields']['first_name']['field'] = $name;
-$handler->display->display_options['fields']['first_name']['exclude'] = TRUE;
 $handler->display->display_options['fields']['first_name']['relationship'] = 'contact_id';
 $handler->display->display_options['fields']['first_name']['label'] = '';
-/* Field: CiviCRM Contact: Display Name*/
+$handler->display->display_options['fields']['first_name']['exclude'] = TRUE;
+/* Field: CiviCRM Custom: Passport Information: Passport Name - Last Name(s) */
 $handler->display->display_options['fields']['display_name']['id'] = 'display_name';
 $handler->display->display_options['fields']['display_name']['table'] = $passport_info['table_name'];
 $handler->display->display_options['fields']['display_name']['field'] = $last_name;
@@ -135,7 +135,6 @@ $handler->display->display_options['fields']['display_name']['alter']['text'] = 
 $handler->display->display_options['fields']['display_name']['alter']['make_link'] = TRUE;
 $handler->display->display_options['fields']['display_name']['alter']['path'] = 'bcd/travel-request/[id]';
 $handler->display->display_options['fields']['display_name']['alter']['absolute'] = TRUE;
-$handler->display->display_options['fields']['display_name']['link_to_civicrm_contact'] = 0;
 /* Field: CiviCRM Custom: Info for travel agency: Destination */
 $handler->display->display_options['fields']['destination']['id'] = 'destination';
 $handler->display->display_options['fields']['destination']['table'] = $ta_info['table_name'];
