@@ -40,12 +40,17 @@ class CRM_Travelcase_Utils_AddCaseManagerFromParentCase {
       $caseManagerRelationshipTypeId = civicrm_api3('RelationshipType', 'Getvalue', array('name_a_b' => 'Case Coordinator is', 'return' => 'id'));
       $caseClientId = CRM_Threepeas_Utils::getCaseClientId($caseId);
       $query = "UPDATE civicrm_relationship SET contact_id_b = %1 WHERE contact_id_a = %2 AND case_id = %3 AND relationship_type_id = %4";
-      $params = array(
-        1 => array($caseCoordinatorId, 'Integer'),
-        2 => array($caseClientId, 'Integer'),
-        3 => array($caseId, 'Integer'),
-        4 => array($caseManagerRelationshipTypeId, 'Integer'));
-      CRM_Core_DAO::executeQuery($query, $params);
+      try {
+        $params = array(
+          1 => array((int)$caseCoordinatorId, 'Integer'),
+          2 => array((int)$caseClientId, 'Integer'),
+          3 => array((int)$caseId, 'Integer'),
+          4 => array((int)$caseManagerRelationshipTypeId, 'Integer'));
+        CRM_Core_DAO::executeQuery($query, $params);
+        CRM_Core_Error::debug_log_message('Case Manager for caseId: '.$caseId.' updated');
+      } catch (Exception $ex) {
+        CRM_Core_Error::debug_log_message('Unable to update case manager for travel caseId: '.$caseId.', parentCaseId: '.$parentCaseId.', caseCoordinatorId: '.$caseCoordinatorId.', relationshipTypeId: '.$caseManagerRelationshipTypeId.', message: '.$ex->getMessage());
+      }
     }
   }
 
