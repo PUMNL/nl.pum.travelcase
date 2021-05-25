@@ -23,7 +23,7 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
       0 => ts('No'),
       1 => ts('Yes')
     );
-    
+
     $this->_columns = array(
       'civicrm_contact_a' =>
         array(
@@ -233,6 +233,7 @@ WHERE cg.extends IN ('" . implode("','", $this->_customGroupExtends) . "') AND
       cf.is_active = 1 AND
       cf.is_searchable = 1
 ORDER BY cg.weight, cf.weight";
+
     $customDAO = CRM_Core_DAO::executeQuery($sql);
 
     $curTable = NULL;
@@ -407,6 +408,7 @@ ORDER BY cg.weight, cf.weight";
     $this->_columns[$status_config->getCustomGroupTravelCaseStatus('table_name')]['fields']['custom_'.$status_config->getCustomFieldPickup('id')]['default'] = true;
     $this->_columns[$status_config->getCustomGroupTravelCaseStatus('table_name')]['fields']['custom_'.$status_config->getCustomFieldTicket('id')]['default'] = true;
     $this->_columns[$status_config->getCustomGroupTravelCaseStatus('table_name')]['fields']['custom_'.$status_config->getCustomFieldVisa('id')]['default'] = true;
+    $this->_columns[$status_config->getCustomGroupTravelCaseStatus('table_name')]['fields']['custom_'.$status_config->getCustomFieldPreTravelCheck('id')]['default'] = true;
   }
 
   function preProcess() {
@@ -561,8 +563,9 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
   function groupBy() {
     $this->_groupBy = "";
   }
-  
+
   function modifyColumnHeaders() {
+    $this->_columnHeaders['pre_travel_check'] = array('title' => ts('Pre Travel Check'), 'type' => CRM_Utils_Type::T_STRING);
     $this->_columnHeaders['pick_up'] = array('title' => ts('Pick Up Information'), 'type' => CRM_Utils_Type::T_STRING);
     $this->_columnHeaders['manage_case'] = array(
       'title' => '',
@@ -588,6 +591,7 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
 
   function alterDisplay(&$rows) {
     $entryFound = FALSE;
+
     foreach ($rows as $rowNum => $row) {
       if (array_key_exists('civicrm_case_id', $row)) {
         $rows[$rowNum]['pick_up'] = $this->getPickUpInfo($row['civicrm_case_id']);
@@ -620,7 +624,7 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
         $rows[$rowNum]['civicrm_case_case_type_id'] = implode(', ', $value);
         $entryFound = TRUE;
       }
-      
+
       if (array_key_exists('civicrm_parent_case_parent_case_type_id', $row) &&
         CRM_Utils_Array::value('civicrm_parent_case_parent_case_type_id', $rows[$rowNum])
       ) {
@@ -635,7 +639,7 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
         $rows[$rowNum]['civicrm_parent_case_parent_case_type_id'] = implode(', ', $value);
         $entryFound = TRUE;
       }
-      
+
       // convert Client ID to contact page
       if (CRM_Utils_Array::value('civicrm_contact_a_client_name', $rows[$rowNum])) {
         $url = CRM_Utils_System::url("civicrm/contact/view", "action=view&reset=1&cid=" . $row['civicrm_contact_a_id'], $this->_absoluteUrl);
@@ -643,7 +647,7 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
         $rows[$rowNum]['civicrm_contact_a_client_name_hover'] = ts("View client");
         $entryFound = TRUE;
       }
-      
+
       // convert Client ID to contact page
       if (CRM_Utils_Array::value('customer_customer_name', $rows[$rowNum])) {
         $url = CRM_Utils_System::url("civicrm/contact/view", "action=view&reset=1&cid=" . $row['customer_customer_id'], $this->_absoluteUrl);
@@ -655,7 +659,7 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
       if (CRM_Utils_Array::value('customer_address_customer_country', $rows[$rowNum])) {
         $rows[$rowNum]['customer_address_customer_country'] = CRM_Core_PseudoConstant::country($rows[$rowNum]['customer_address_customer_country']);
       }
-      
+
       if (array_key_exists('civicrm_case_id', $row) &&
         CRM_Utils_Array::value('civicrm_contact_a_id', $rows[$rowNum])
       ) {
@@ -710,6 +714,10 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
         $entryFound = TRUE;
       }
 
+      if (array_key_exists('civicrm_case_id', $row)) {
+        $rows[$rowNum]['pre_travel_check'] = $this->getPreTravelCheck($row['civicrm_case_id']);
+      }
+
       if (!$entryFound) {
         break;
       }
@@ -756,6 +764,56 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
       }
     } catch (CiviCRM_API3_Exception $ex) {
       return "None";
+    }
+  }
+
+  /**
+   * Method to get the status of Pre Travel Check
+   * (issue 5876)
+   *
+   * @param int $caseId
+   * @return string
+   * @access private
+   */
+  private function getPreTravelCheck($caseId) {
+    try {
+      $config = CRM_Travelcase_TravelCaseStatusConfig::singleton();
+      $travelcase_status_options = array();
+
+      $cg_travelcase_status = civicrm_api('CustomGroup', 'getsingle', array('version' => 3, 'sequential' => 1, 'name' => 'travelcase_status'));
+      $cf_travelcase_status = civicrm_api('CustomField', 'getsingle', array('version' => 3, 'sequential' => 1, 'name' => 'pre_travel_check'));
+      $ov_travelcase_status_options = $config->getTravelcaseStatusOptions()['values'];
+
+      foreach($ov_travelcase_status_options as $key => $value) {
+        $travelcase_status_options[$value['value']] = $value['label'];
+      }
+    } catch (CiviCRM_API3_Exception $ex) {
+      return "N/A";
+    }
+
+    try {
+      $dao = CRM_Core_DAO::executeQuery("SELECT ".$cf_travelcase_status['column_name']." FROM ".$cg_travelcase_status['table_name']." WHERE entity_id = %1", array(
+        1 => array(
+          (int)$caseId,
+          'Integer'
+        )
+      ));
+
+      $pre_travel_check = '';
+
+      while ($dao->fetch()) {
+        if (!empty($dao->pre_travel_check)){
+          $pre_travel_check = $dao->pre_travel_check;
+        }
+      }
+
+      if(isset($travelcase_status_options[$pre_travel_check])) {
+        return $travelcase_status_options[$pre_travel_check];
+      } else {
+        return "N/A";
+      }
+    } catch (Exception $e) {
+      return "N/A";
     }
   }
 
