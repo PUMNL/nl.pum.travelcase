@@ -18,6 +18,13 @@ class CRM_Travelcase_Form_Report_TravelCases extends CRM_Report_Form {
     $project_officers = $this->_userSelectList;
     $this->case_types = CRM_Case_PseudoConstant::caseType();
     $this->case_statuses = CRM_Case_PseudoConstant::caseStatus();
+
+    $travelcase_status_options = civicrm_api('OptionValue', 'get', array('version' => 3, 'sequential' => 1, 'option_group_id' => 'travelcase_status_options'));
+    $this->travelcase_status_options = array();
+    foreach($travelcase_status_options['values'] as $key => $value){
+      $this->travelcase_status_options[$value['value']] = $value['label'];
+    }
+
     $this->deleted_labels = array(
       '' => ts('- select -'),
       0 => ts('No'),
@@ -565,7 +572,6 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
   }
 
   function modifyColumnHeaders() {
-    $this->_columnHeaders['pre_travel_check'] = array('title' => ts('Pre Travel Check'), 'type' => CRM_Utils_Type::T_STRING);
     $this->_columnHeaders['pick_up'] = array('title' => ts('Pick Up Information'), 'type' => CRM_Utils_Type::T_STRING);
     $this->_columnHeaders['manage_case'] = array(
       'title' => '',
@@ -715,7 +721,22 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
       }
 
       if (array_key_exists('civicrm_case_id', $row)) {
-        $rows[$rowNum]['pre_travel_check'] = $this->getPreTravelCheck($row['civicrm_case_id']);
+        $params_cf_travelcasestatus = array(
+          'version' => 3,
+          'sequential' => 1,
+          'custom_group_id' => 'travelcase_status',
+          'name' => 'pre_travel_check',
+        );
+        $result_cf_travelcasestatus = civicrm_api('CustomField', 'getsingle', $params_cf_travelcasestatus);
+
+        if (is_null($rows[$rowNum]['civicrm_value_'.$params_cf_travelcasestatus['custom_group_id'].'_custom_'.$result_cf_travelcasestatus['id']])){
+          foreach($this->travelcase_status_options as $key => $value){
+            if($value == 'N/A'){
+              $rows[$rowNum]['civicrm_value_'.$params_cf_travelcasestatus['custom_group_id'].'_custom_'.$result_cf_travelcasestatus['id']] = $key;
+            }
+          }
+          $entryFound = TRUE;
+        }
       }
 
       if (!$entryFound) {
@@ -808,7 +829,11 @@ LEFT JOIN civicrm_contact {$field['alias']} ON {$field['alias']}.id = {$this->_a
       }
 
       if(isset($travelcase_status_options[$pre_travel_check])) {
-        return $travelcase_status_options[$pre_travel_check];
+        if(empty($travelcase_status_options[$pre_travel_check])) {
+          return "N/A";
+        } else {
+          return $travelcase_status_options[$pre_travel_check];
+        }
       } else {
         return "N/A";
       }
